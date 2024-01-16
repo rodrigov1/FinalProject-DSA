@@ -3,12 +3,14 @@
 #include <sstream>
 #include <stdlib.h>
 #include <string>
-#include <Lista.h>
-#include <Nodo.h>
+#include "Nodo.h"
+#include "Lista.h"
 
 using namespace std;
 
 int main()
 {
+    cout << "funciona" << endl;
+    
     return 0;
 }
