@@ -1,7 +1,6 @@
 #ifndef LISTA_H
 #define LISTA_H
-#include <iostream>
-#include <string>
+
 #include "Nodo.h"
 
 using namespace std;
