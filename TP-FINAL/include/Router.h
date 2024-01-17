@@ -9,7 +9,7 @@ class Router {
     byte terminal;
 
     public:
-    Router(){;};
+    Router(int id, int terminal){this->id = byte(id); this->terminal = byte(terminal);};
     //~Router();
     void setId();
     byte getId();
