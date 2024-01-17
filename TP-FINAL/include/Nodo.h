@@ -1,6 +1,8 @@
 #ifndef NODO_H
 #define NODO_H
 
+#include <cstddef>
+
 using namespace std;
 
 template <class T>
