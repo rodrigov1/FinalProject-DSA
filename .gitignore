@@ -2,3 +2,8 @@
 .vscode
 
 #output
+
+
+#Executables
+*.exe
+*.out
