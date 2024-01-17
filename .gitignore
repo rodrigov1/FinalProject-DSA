@@ -1,8 +1,6 @@
 #Directories
 .vscode
-
-#output
-
+.output
 
 #Executables
 *.exe
