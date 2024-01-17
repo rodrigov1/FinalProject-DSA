@@ -1,4 +1,3 @@
-#include <string>
 #include "../include/Nodo.h"
 #include "../include/Lista.h"
 
