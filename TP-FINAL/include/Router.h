@@ -1,23 +1,29 @@
+#ifndef ROUTER_H
+#define POUTER_H
+
 #include <string>
 #include "Cola.h"
 #include "Paquetes.h"
+#include "Pagina.h"
 
 using namespace std;
 
 class Router {
 private:
-    byte id;
-    byte terminal;
+    int id;
+    int terminal;
     Cola<Paquetes*> incomingPackages;
     Cola<Paquetes*> outgoingPackages;
 
 public:
     Router(int id, int terminal) {
-        this->id = byte(id); 
-        this->terminal = byte(terminal);
+        this->id = id; 
+        this->terminal = terminal;
         };
     //~Router();
     void setId();
     byte getId();
     
 };
+
+#endif

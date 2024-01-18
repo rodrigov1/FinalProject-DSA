@@ -1,4 +1,6 @@
-#include "Nodo.h"
+#ifndef COLA_H
+#define COLA_H
+
 #include "Lista.h"
 
 using namespace std;
@@ -19,3 +21,5 @@ public:
     return 1 + this->resto()->size();
   };
 };
+
+#endif
