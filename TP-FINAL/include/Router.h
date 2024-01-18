@@ -22,8 +22,8 @@ public:
         };
     //~Router();
     void setId();
-    byte getId();
-    
+    int getId();
+    Cola<Paquetes*> dividePage(Pagina page);
 };
 
 #endif

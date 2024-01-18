@@ -17,9 +17,10 @@ int generateRandomNumbers()
     return randomNumbers;
 }
 
+/*
 int main()
 {
     // int cant_pages = generateRandomNumbers();
     // cout << cant_pages << endl;
     return 0;
-}
+} */
