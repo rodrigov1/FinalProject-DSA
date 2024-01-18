@@ -1,17 +1,17 @@
 #include <string>
 #include "Cola.h"
-#include "Packages.h"
+#include "Paquetes.h"
 
 using namespace std;
 
 class Router {
-    private:
+private:
     byte id;
     byte terminal;
-    Cola<Packages*> incomingPackages;
-    Cola<Packages*> outgoingPackages;
+    Cola<Paquetes*> incomingPackages;
+    Cola<Paquetes*> outgoingPackages;
 
-    public:
+public:
     Router(int id, int terminal) {
         this->id = byte(id); 
         this->terminal = byte(terminal);

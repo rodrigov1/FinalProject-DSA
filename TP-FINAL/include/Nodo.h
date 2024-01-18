@@ -6,16 +6,14 @@
 using namespace std;
 
 template <class T>
-class Nodo
-{
+class Nodo {
 private:
     T dato;
     Nodo *next;
 
 public:
     Nodo() { next = NULL; };
-    Nodo(T a)
-    {
+    Nodo(T a) {
         dato = a;
         next = NULL;
     };

@@ -7,8 +7,7 @@
 #include <sstream>
 
 template <class T>
-class Lista
-{
+class Lista {
 private:
   Nodo<T> *czo;
   void addO(T d, Nodo<T> *ant);
@@ -40,6 +39,7 @@ public:
   };        // sumar nodos a la lista Ordenados de menor a MAYOR
   T last(); // retorna el dato del ultimo nodo
 };
+
 template <class T>
 T Lista<T>::last()
 {
@@ -59,8 +59,10 @@ void Lista<T>::add(T d) // 100
   nuevo->set_next(czo);
   czo = nuevo;
 }
+
 template <class T>
 bool Lista<T>::esvacia(void) { return czo->es_vacio(); }
+
 template <class T>
 T Lista<T>::cabeza(void)
 {
