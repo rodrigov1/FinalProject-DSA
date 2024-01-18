@@ -1,4 +1,3 @@
-#include <iostream>
 #include <string>
 #include "../include/Router.h"
 #include "../include/Lista.h"
