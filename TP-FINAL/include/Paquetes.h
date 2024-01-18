@@ -4,10 +4,20 @@
 using namespace std;
 
 class Paquetes {
-    private:
+private:
     int id;
+    Pagina page;
 
-    public:
+public:
+    Paquetes(int id, Pagina page) {
+        this->id = id; 
+        this->page = page;
+        };
+    ~Paquetes();
+    void setId();
+    int getId();
+    void setPage();
+    Pagina getPage();
 };
 
 #endif
