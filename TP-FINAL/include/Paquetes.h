@@ -1,5 +1,6 @@
 #ifndef PAQUETES_H
 #define PAQUETES_H
+#include "Pagina.h"
 
 using namespace std;
 
