@@ -22,7 +22,7 @@ public:
     Administrador(){};
     //~Administrador();
     void crearPagina();
-    void crearRouters(int cant_routers);
+    void crear_routers(int cant_routers);
     int get_routers() { return cant_routers; }
     int get_terminals() { return cant_terminals; }
     void conectar_terminales(int t);
@@ -75,8 +75,8 @@ void Administrador::leer_config()
     // Skips the next line
     getline(config_file, line);
 
-    // crearRouters(cant_routers);           // llama al generador de routers
-    // conectarTerminales(terminalesPorRouter); // conecta txr por cada router
+    crear_routers(cant_routers);         // crea los routers
+    conectar_terminales(cant_terminals); // llama al conector de terminales a routers
     int origen, destino, ancho;
     config_file >> origen;
     while (!config_file.eof()) // mientras no sea el final del archivo
@@ -89,7 +89,7 @@ void Administrador::leer_config()
     config_file.close();
 }
 
-void Administrador::crearRouters(int cant_routers)
+void Administrador::crear_routers(int cant_routers)
 {
     for (int i = 0; i < cant_routers; i++)
     {
