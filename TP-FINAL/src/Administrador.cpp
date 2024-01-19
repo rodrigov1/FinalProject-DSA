@@ -7,28 +7,9 @@
 #include "../include/Router.h"
 #include "../include/Pagina.h"
 #include "../include/Terminal.h"
+#include "../include/Administrador.h"
 
 using namespace std;
-
-class Administrador
-{
-private:
-    Lista<Router *> *routers_disponibles;
-    // Lista<Terminal*> terminals;
-    int cant_terminals;
-    int cant_routers;
-
-public:
-    Administrador(){};
-    //~Administrador();
-    void crearPagina();
-    void crear_routers(int cant_routers);
-    int get_routers() { return cant_routers; }
-    int get_terminals() { return cant_terminals; }
-    void conectar_terminales(int t);
-    void leer_config();
-    int generateRandomNumbers();
-};
 
 /*Deber´a utilizar n´umeros aleatorios para simular la generaci´on de p´aginas a
 ser enviadas, el destino y el tama˜no de cada p´agina.*/
@@ -45,10 +26,9 @@ int generateRandomNumbers()
 
 void Administrador::leer_config()
 {
-    ifstream config_file("../config.txt");
+    ifstream config_file("config.txt");
     string line;
-    int num_routers, num_terminals, num_bandwidth;
-
+    int num_routers, num_terminals;
     // Skip the first line
     getline(config_file, line);
 
@@ -59,24 +39,14 @@ void Administrador::leer_config()
     getline(config_file, line);
     getline(config_file, line);
 
-    // Read the number of terminals
     config_file >> num_terminals;
 
-    // Skipsthe next line
-    getline(config_file, line);
-    getline(config_file, line);
+    cout << "Numero de routers: " << num_routers << endl;
+    cout << "Numero de terminales: " << num_terminals << endl;
 
-    // Read the bandwidth
-    config_file >> num_bandwidth;
+    crear_routers(num_routers); // crea los routers
 
-    cant_routers = num_routers;
-    cant_terminals = num_terminals;
-
-    // Skips the next line
-    getline(config_file, line);
-
-    crear_routers(cant_routers);         // crea los routers
-    conectar_terminales(cant_terminals); // llama al conector de terminales a routers
+    /*conectar_terminales(cant_terminals); // llama al conector de terminales a routers
     int origen, destino, ancho;
     config_file >> origen;
     while (!config_file.eof()) // mientras no sea el final del archivo
@@ -86,16 +56,20 @@ void Administrador::leer_config()
         // establecer_conexion(origen, destino, ancho);
         config_file >> origen; // lee el siguiente origen
     }
-    config_file.close();
+    config_file.close();*/
 }
 
-void Administrador::crear_routers(int cant_routers)
+void Administrador::crear_routers(int c)
 {
-    for (int i = 0; i < cant_routers; i++)
+    this->cant_routers = c;
+    for (int i = 0; i < c; i++)
     {
         Router *router = new Router(i);
-        routers_disponibles->add(router);
+        routers_disponibles->addFinal(router);
+        cout << "Router creado con id: " << router->getId() << endl;
     }
+    cout << "Cantidad de routers creados: " << routers_disponibles->size() << endl;
+    this->print_r();
 }
 
 /*                                   Conector de terminales a routers           */
@@ -115,5 +89,15 @@ void Administrador::conectar_terminales(int t)
             aux->get_dato()->add_terminal(terminal);
         }
         aux = aux->get_next(); // Paso al siguiente router de la lista
+    }
+}
+
+void Administrador::print_r()
+{
+    Nodo<Router *> *aux = this->routers_disponibles->get_czo();
+    for (int i = 0; i < this->routers_disponibles->size(); i++)
+    {
+        cout << "Router: " << aux->get_dato()->getId() << endl;
+        aux = aux->get_next();
     }
 }

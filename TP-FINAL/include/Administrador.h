@@ -3,31 +3,31 @@
 #define ADMINISTRADOR_H
 
 #include "Router.h"
+#include "Terminal.h"
+#include "Lista.h"
+#include "Pagina.h"
 
 class Administrador
 {
 private:
-    Lista<Router *> *routers_disponibles;
-    Lista<Terminal *> *terminales_disponibles;
+    Lista<Router *> *routers_disponibles = new Lista<Router *>();
+    Lista<Terminal *> *terminales_disponibles = new Lista<Terminal *>();
     int cant_terminals;
     int cant_routers;
+    int id_paginas = 0;
 
 public:
-    Administrador()
-    {
-        cant_terminals = 0;
-        cant_routers = 0;
-        routers_disponibles = new Lista<Router *>();
-        terminales_disponibles = new Lista<Terminal *>();
-    };
+    Administrador(){};
     //~Administrador();
-    void crearPagina();
-    void crear_routers(int cant_routers);
+    void crear_pagina();
+    void crear_routers(int c);
     int get_routers() { return cant_routers; }
     int get_terminals() { return cant_terminals; }
+    void establecer_conexion(int origen, int destino, int bw);
     void conectar_terminales(int t);
     void leer_config();
     int generateRandomNumbers();
+    void print_r();
 };
 
 #endif

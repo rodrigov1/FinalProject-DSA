@@ -24,6 +24,7 @@ public:
         terminals_conectados = new Lista<Terminal *>();
     }
     void add_terminal(Terminal *t);
+    int getId() { return id; };
     //~Router();
 };
 

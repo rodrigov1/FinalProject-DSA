@@ -37,7 +37,10 @@ private:
   void borrarD(T d, Nodo<T> *ant);
 
 public:
-  Lista() { czo = new Nodo<T>(); };
+  Lista()
+  {
+    czo = new Nodo<T>();
+  };
   Lista(Nodo<T> *n) { czo = n; };
   //~Lista(void);
   void add(T d); // sumar nodos a la lista
@@ -83,25 +86,6 @@ void Lista<T>::add(T d) // 100
   Nodo<T> *nuevo = new Nodo<T>(d);
   nuevo->set_next(czo);
   czo = nuevo;
-}
-
-template <class T>
-void Lista<T>::addFinal(T d)
-{
-  Nodo<T> *nuevo = new Nodo<T>(d);
-  if (this->esvacia())
-  {
-    czo = nuevo;
-  }
-  else
-  {
-    Nodo<T> *aux = czo;
-    while (aux->get_next() != nullptr)
-    {
-      aux = aux->get_next();
-    }
-    aux->set_next(nuevo);
-  }
 }
 
 template <class T>
@@ -267,6 +251,25 @@ void Lista<T>::addO(T d, Nodo<T> *ant)
   }
 }
 
+template <class T>
+void Lista<T>::addFinal(T d)
+{
+  if (this->esvacia())
+  { // el primero
+    this->add(d);
+  }
+  else
+  {
+    if ((czo->get_next())->get_next() == nullptr)
+    { // al final
+      Nodo<T> *nuevo = new Nodo<T>(d);
+      nuevo->set_next(czo->get_next());
+      czo->set_next(nuevo);
+    }
+    else
+      this->resto()->addFinal(d);
+  }
+}
 template <class T>
 bool Lista<T>::esta(T d)
 { // busca d en la lista

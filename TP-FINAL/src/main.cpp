@@ -1,8 +1,10 @@
-#include "../include/Nodo.h"
-#include "../include/Lista.h" 
+#include "../include/Lista.h"
+#include "../include/Administrador.h"
 
 int main()
 {
-    cout << "funciona" << endl;
+
+    Administrador *admin = new Administrador();
+    admin->leer_config();
     return 0;
 }
