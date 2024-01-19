@@ -39,7 +39,9 @@ public:
     addO(d, NULL);
   };        // sumar nodos a la lista Ordenados de menor a MAYOR
   T last(); // retorna el dato del ultimo nodo
+  Nodo<T> *get_czo() { return czo; };
 };
+
 template <class T>
 T Lista<T>::last()
 {

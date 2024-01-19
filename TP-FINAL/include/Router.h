@@ -18,6 +18,7 @@ public:
     {
         this->id = id;
     }
+    void add_terminal(Terminal *t);
     //~Router();
 };
 

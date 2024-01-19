@@ -6,13 +6,14 @@
 #include "../include/Lista.h"
 #include "../include/Router.h"
 #include "../include/Pagina.h"
+#include "../include/Terminal.h"
 
 using namespace std;
 
 class Administrador
 {
 private:
-    Lista<Router *> routers_disponibles;
+    Lista<Router *> *routers_disponibles;
     // Lista<Terminal*> terminals;
     int cant_terminals;
     int cant_routers;
@@ -24,6 +25,7 @@ public:
     void crearRouters(int cant_routers);
     int get_routers() { return cant_routers; }
     int get_terminals() { return cant_terminals; }
+    void conectar_terminales(int t);
     void leer_config();
     int generateRandomNumbers();
 };
@@ -81,7 +83,7 @@ void Administrador::leer_config()
     {
         config_file >> destino;
         config_file >> ancho;
-        // establecerLazo(origen, destino, ancho);
+        // establecer_conexion(origen, destino, ancho);
         config_file >> origen; // lee el siguiente origen
     }
     config_file.close();
@@ -92,7 +94,27 @@ void Administrador::crearRouters(int cant_routers)
     for (int i = 0; i < cant_routers; i++)
     {
         Router *router = new Router(i);
-        routers_disponibles.add(router);
+        routers_disponibles->add(router);
+    }
+}
+
+/*                                   Conector de terminales a routers           */
+void Administrador::conectar_terminales(int t)
+{
+    this->cant_terminals = t;
+    int routers = this->cant_routers;
+    Nodo<Router *> *aux = routers_disponibles->get_czo();
+
+    for (int i = 0; i < routers; i++)
+    {
+        // Creo la cantidad "t" de terminales para cada router
+        for (int j = 0; j < t; j++)
+        {
+            int v[2] = {i, j};
+            Terminal *terminal = new Terminal(v);
+            aux->get_dato()->add_terminal(terminal);
+        }
+        aux = aux->get_next(); // Paso al siguiente router de la lista
     }
 }
 

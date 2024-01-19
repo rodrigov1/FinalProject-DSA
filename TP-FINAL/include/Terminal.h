@@ -8,7 +8,7 @@ private:
 
 public:
     Terminal(){};
-    Terminal(); // constructor, getters
+    Terminal(int[2]); // constructor, getters
     int *getIP() { return ip; };
 };
 
