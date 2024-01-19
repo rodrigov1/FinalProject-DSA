@@ -1,0 +1,9 @@
+----------Cantidad de Routers-------------
+5
+---------Cantidad de Terminales-----------
+5
+-------------Conexion y ancho de banda ( [R_orig] [R_vecino] [BW] )---------------
+2 3 4
+3 5 2
+1 5 3
+0 3 4
