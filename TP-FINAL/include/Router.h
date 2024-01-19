@@ -1,23 +1,24 @@
-#include <string>
-#include "Cola.h"
-#include "Packages.h"
+#ifndef ROUTER_H
+#define ROUTER_H
 
-using namespace std;
+class Router
+{
+private:
+    int id;
+    int terminal;
+    Lista<Router *> routers_vecinos;
+    Lista<Terminal *> terminals_conectados;
 
-class Router {
-    private:
-    byte id;
-    byte terminal;
-    Cola<Packages*> incomingPackages;
-    Cola<Packages*> outgoingPackages;
+    // Cola<Packages *> incomingPackages;
+    // Cola<Packages *> outgoingPackages;
 
-    public:
-    Router(int id, int terminal) {
-        this->id = byte(id); 
-        this->terminal = byte(terminal);
-        };
+public:
+    Router(){};
+    Router(int id)
+    {
+        this->id = id;
+    }
     //~Router();
-    void setId();
-    byte getId();
-    
 };
+
+#endif
