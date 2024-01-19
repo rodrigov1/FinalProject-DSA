@@ -1,10 +1,32 @@
 #ifndef LISTA_H
 #define LISTA_H
 
-#include "Nodo.h"
 #include <iostream>
 #include <string>
 #include <sstream>
+
+using namespace std;
+
+template <class T>
+class Nodo
+{
+private:
+  T dato;
+  Nodo *next;
+
+public:
+  Nodo() { next = nullptr; };
+  Nodo(T a)
+  {
+    dato = a;
+    next = nullptr;
+  };
+  void set_dato(T a) { dato = a; };
+  void set_next(Nodo *n) { next = n; };
+  T get_dato() { return dato; };
+  Nodo *get_next() { return next; };
+  bool es_vacio() { return next == nullptr; }
+};
 
 template <class T>
 class Lista
@@ -27,19 +49,20 @@ public:
   void impre(void);
   T suma(T i);
   int size();
-  bool esta(T d);                            // detecta si d esta en la lista
-  void borrarDato(T d) { borrarD(d, NULL); } // borra el nodo que contiene d
-  void borrar(void);                         // borra la cabeza
-  void borrar_last();                        // borra el ultimo
-  void concat(Lista<T> *l1);                 // le transfiere los datos de l1 a this
-  Lista<T> *copy(void);                      // hace una copia de la lista
-  void tomar(int n);                         // deja "vivos" los n primeros nodos y borra el resto
+  bool esta(T d);                               // detecta si d esta en la lista
+  void borrarDato(T d) { borrarD(d, nullptr); } // borra el nodo que contiene d
+  void borrar(void);                            // borra la cabeza
+  void borrar_last();                           // borra el ultimo
+  void concat(Lista<T> *l1);                    // le transfiere los datos de l1 a this
+  Lista<T> *copy(void);                         // hace una copia de la lista
+  void tomar(int n);                            // deja "vivos" los n primeros nodos y borra el resto
   void addOrdenado(T d)
   {
-    addO(d, NULL);
+    addO(d, nullptr);
   };        // sumar nodos a la lista Ordenados de menor a MAYOR
   T last(); // retorna el dato del ultimo nodo
   Nodo<T> *get_czo() { return czo; };
+  void addFinal(T d); // Agrega un nodo al final de la lista
 };
 
 template <class T>
@@ -61,6 +84,26 @@ void Lista<T>::add(T d) // 100
   nuevo->set_next(czo);
   czo = nuevo;
 }
+
+template <class T>
+void Lista<T>::addFinal(T d)
+{
+  Nodo<T> *nuevo = new Nodo<T>(d);
+  if (this->esvacia())
+  {
+    czo = nuevo;
+  }
+  else
+  {
+    Nodo<T> *aux = czo;
+    while (aux->get_next() != nullptr)
+    {
+      aux = aux->get_next();
+    }
+    aux->set_next(nuevo);
+  }
+}
+
 template <class T>
 bool Lista<T>::esvacia(void) { return czo->es_vacio(); }
 template <class T>
@@ -137,10 +180,10 @@ void Lista<T>::borrar_last()
 { // borra el ultimo nodo
   if (!this->esvacia())
   {
-    if ((czo->get_next())->get_next() == NULL)
+    if ((czo->get_next())->get_next() == nullptr)
     {
       delete czo->get_next();
-      czo->set_next(NULL);
+      czo->set_next(nullptr);
     }
     else
       this->resto()->borrar_last();
@@ -181,7 +224,7 @@ void Lista<T>::impre(void)
 {
   Nodo<T> *aux;
   aux = czo;
-  while (aux->get_next() != NULL)
+  while (aux->get_next() != nullptr)
   {
     cout << aux->get_dato() << endl;
     aux = aux->get_next();
@@ -199,7 +242,7 @@ void Lista<T>::addO(T d, Nodo<T> *ant)
   {
     if (d < czo->get_dato())
     {
-      if (ant == NULL)
+      if (ant == nullptr)
       { // al principio
         this->add(d);
       }
@@ -212,7 +255,7 @@ void Lista<T>::addO(T d, Nodo<T> *ant)
     }
     else
     {
-      if ((czo->get_next())->get_next() == NULL)
+      if ((czo->get_next())->get_next() == nullptr)
       { // al final
         Nodo<T> *nuevo = new Nodo<T>(d);
         nuevo->set_next(czo->get_next());
@@ -242,7 +285,7 @@ void Lista<T>::borrarD(T d, Nodo<T> *ant)
   {
     if (d == this->cabeza())
     {
-      if (ant == NULL)
+      if (ant == nullptr)
       { // al principio
         this->borrar();
       }
