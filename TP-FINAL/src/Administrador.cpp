@@ -117,9 +117,3 @@ void Administrador::conectar_terminales(int t)
         aux = aux->get_next(); // Paso al siguiente router de la lista
     }
 }
-
-int main()
-{
-
-    return 0;
-}
