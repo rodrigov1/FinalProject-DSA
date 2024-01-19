@@ -41,13 +41,9 @@ void Administrador::leer_config()
 
     config_file >> num_terminals;
 
-    cout << "Numero de routers: " << num_routers << endl;
-    cout << "Numero de terminales: " << num_terminals << endl;
-
-    crear_routers(num_routers); // crea los routers
-
-    /*conectar_terminales(cant_terminals); // llama al conector de terminales a routers
-    int origen, destino, ancho;
+    crear_routers(num_routers);         // crea los routers
+    conectar_terminales(num_terminals); // llama al conector de terminales a routers
+    /*int origen, destino, ancho;
     config_file >> origen;
     while (!config_file.eof()) // mientras no sea el final del archivo
     {
@@ -57,6 +53,7 @@ void Administrador::leer_config()
         config_file >> origen; // lee el siguiente origen
     }
     config_file.close();*/
+    config_file.close();
 }
 
 void Administrador::crear_routers(int c)
@@ -68,7 +65,7 @@ void Administrador::crear_routers(int c)
         routers_disponibles->addFinal(router);
         cout << "Router creado con id: " << router->getId() << endl;
     }
-    cout << "Cantidad de routers creados: " << routers_disponibles->size() << endl;
+    // cout << "Cantidad de routers creados: " << routers_disponibles->size() << endl;
     this->print_r();
 }
 
@@ -77,7 +74,7 @@ void Administrador::conectar_terminales(int t)
 {
     this->cant_terminals = t;
     int routers = this->cant_routers;
-    Nodo<Router *> *aux = routers_disponibles->get_czo();
+    Nodo<Router *> *aux = this->routers_disponibles->get_czo();
 
     for (int i = 0; i < routers; i++)
     {
@@ -85,11 +82,14 @@ void Administrador::conectar_terminales(int t)
         for (int j = 0; j < t; j++)
         {
             int v[2] = {i, j};
-            Terminal *terminal = new Terminal(v);
-            aux->get_dato()->add_terminal(terminal);
+            Terminal *te = new Terminal(v);
+            aux->get_dato()->add_terminal(te);
+            terminales_disponibles->addFinal(te); // Lista de todos los terminales que ve el administrador
         }
         aux = aux->get_next(); // Paso al siguiente router de la lista
     }
+    // cout << "Cantidad de terminales creados: " << terminales_disponibles->size() << endl;
+    this->print_t();
 }
 
 void Administrador::print_r()
@@ -98,6 +98,16 @@ void Administrador::print_r()
     for (int i = 0; i < this->routers_disponibles->size(); i++)
     {
         cout << "Router: " << aux->get_dato()->getId() << endl;
+        aux = aux->get_next();
+    }
+}
+
+void Administrador::print_t()
+{
+    Nodo<Terminal *> *aux = this->terminales_disponibles->get_czo();
+    for (int i = 0; i < this->terminales_disponibles->size(); i++)
+    {
+        cout << "Terminal: " << aux->get_dato()->getIP()[0] << ":" << aux->get_dato()->getIP()[1] << endl;
         aux = aux->get_next();
     }
 }

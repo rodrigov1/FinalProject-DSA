@@ -10,7 +10,7 @@ private:
     int id;
     int terminal;
     Lista<Router *> *routers_vecinos;
-    Lista<Terminal *> *terminals_conectados;
+    Lista<Terminal *> *terminales_conectados;
 
     // Cola<Packages *> incomingPackages;
     // Cola<Packages *> outgoingPackages;
@@ -21,7 +21,7 @@ public:
     {
         this->id = id;
         routers_vecinos = new Lista<Router *>();
-        terminals_conectados = new Lista<Terminal *>();
+        terminales_conectados = new Lista<Terminal *>();
     }
     void add_terminal(Terminal *t);
     int getId() { return id; };

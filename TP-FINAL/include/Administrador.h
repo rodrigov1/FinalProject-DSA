@@ -28,6 +28,7 @@ public:
     void leer_config();
     int generateRandomNumbers();
     void print_r();
+    void print_t(); // imprime las terminales
 };
 
 #endif

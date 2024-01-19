@@ -9,5 +9,5 @@ using namespace std;
 
 void Router::add_terminal(Terminal *t)
 {
-    terminals_conectados->addFinal(t);
+    terminales_conectados->addFinal(t);
 }

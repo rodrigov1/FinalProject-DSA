@@ -8,8 +8,8 @@ private:
 
 public:
     Terminal(){};
-    Terminal(int[2]); // constructor, getters
-    int *getIP() { return ip; };
+    Terminal(int[2]);
+    int *getIP() { return this->ip; };
 };
 
 #endif
