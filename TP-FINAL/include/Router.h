@@ -6,8 +6,8 @@ class Router
 private:
     int id;
     int terminal;
-    Lista<Router *> routers_vecinos;
-    Lista<Terminal *> terminals_conectados;
+    Lista<Router *> *routers_vecinos;
+    Lista<Terminal *> *terminals_conectados;
 
     // Cola<Packages *> incomingPackages;
     // Cola<Packages *> outgoingPackages;
