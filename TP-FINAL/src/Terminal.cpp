@@ -4,8 +4,8 @@
 
 using namespace std;
 
-Terminal::Terminal(int d[2])
+void Terminal :: sendPage(int dest[2]) 
 {
-    this->ip[0] = d[0];
-    this->ip[1] = d[1];
+    Pagina* p = new Pagina(0, ip, dest);
+    // aca iría la parte donde se envia la pagina al Router pero se me fundio el cerebro
 }

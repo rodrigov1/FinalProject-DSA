@@ -3,29 +3,31 @@
 
 #include "Lista.h"
 #include "Terminal.h"
+#include "Paquetes.h"
 
-class Router
-{
+class Router {
 private:
     int id;
-    int terminal;
-    Lista<Router *> *routers_vecinos;
-    Lista<Terminal *> *terminales_conectados;
+    Lista<Router*> *routers_vecinos;
+    Lista<Terminal*> *terminales_conectados;
+    Lista<Pagina*> *paginas_enviadas;
+    Lista<Pagina*> *paginas_recibidas;
 
-    // Cola<Packages *> incomingPackages;
-    // Cola<Packages *> outgoingPackages;
+    Cola<Paquetes*> incomingPackages;
+    Cola<Paquetes*> outgoingPackages;
 
 public:
-    Router(){};
-    Router(int id)
-    {
+    Router(int id) {
         this->id = id;
         routers_vecinos = new Lista<Router *>();
         terminales_conectados = new Lista<Terminal *>();
-    }
-    void add_terminal(Terminal *t);
-    int getId() { return id; };
+    };
     //~Router();
+    void add_terminal(Terminal *t);
+    void add_neighbors(Router *r);
+    int getId() { return id; };
+    void setEnvio(Pagina* page) { paginas_enviadas->add(page); };
+    Lista<Router*>* getNeighbors() {return routers_vecinos; };
 };
 
 #endif

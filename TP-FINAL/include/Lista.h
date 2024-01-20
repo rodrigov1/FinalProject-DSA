@@ -29,8 +29,7 @@ public:
 };
 
 template <class T>
-class Lista
-{
+class Lista {
 private:
   Nodo<T> *czo;
   void addO(T d, Nodo<T> *ant);
@@ -90,6 +89,7 @@ void Lista<T>::add(T d) // 100
 
 template <class T>
 bool Lista<T>::esvacia(void) { return czo->es_vacio(); }
+
 template <class T>
 T Lista<T>::cabeza(void)
 {
