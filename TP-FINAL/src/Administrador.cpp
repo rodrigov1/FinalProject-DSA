@@ -5,24 +5,11 @@
 #include <cstdlib>
 #include "../include/Lista.h"
 #include "../include/Router.h"
-// #include "../include/Pagina.h"
+#include "../include/Pagina.h"
 #include "../include/Terminal.h"
 #include "../include/Administrador.h"
 
 using namespace std;
-
-/*Deber´a utilizar n´umeros aleatorios para simular la generaci´on de p´aginas a
-ser enviadas, el destino y el tama˜no de cada p´agina.*/
-
-// Function to generate random numbers
-int generateRandomNumbers()
-{
-    srand(time(0)); // Seed the random number generator
-    int randomNumbers;
-    // Generate random numbers between 0 and 255 without including 255 (byte)
-    randomNumbers = rand() % 255;
-    return randomNumbers;
-}
 
 void Administrador::leer_config()
 {
@@ -110,3 +97,23 @@ void Administrador::print_t()
         aux = aux->get_next();
     }
 }
+
+void Administrador::crear_pagina()
+{
+    int origen_r = rand() % cant_routers;
+    int origen_t = rand() % cant_terminals;
+    int origen[2] = {origen_r, origen_t};
+    int destino_r = rand() % cant_routers;
+    int destino_t = rand() % cant_terminals;
+    int destino[2] = {destino_r, destino_t};
+    int size = rand() % 100;
+    Pagina *pagina = new Pagina(id_paginas, size, origen, destino);
+    cout << "Pagina creada con id: " << pagina->getId() << " de tamaño: " << pagina->getSize() << endl;
+    cout << "Origen: " << pagina->getOrigin()[0] << ":" << pagina->getOrigin()[1] << endl;
+    cout << "Destino: " << pagina->getDest()[0] << ":" << pagina->getDest()[1] << endl;
+    id_paginas++;
+}
+
+// void Administrador::print_paginas()
+//{
+// }

@@ -4,14 +4,16 @@
 #include "Pagina.h"
 #include "Router.h"
 
-class Terminal {
+class Terminal
+{
 private:
     int ip[2];
 
 public:
     Terminal(){};
-    Terminal(int a, int b) { 
-        ip[0] = a, ip[1] = b; 
+    Terminal(int a, int b)
+    {
+        ip[0] = a, ip[1] = b;
     };
     //~Terminal();
     int *getIP() { return this->ip; };

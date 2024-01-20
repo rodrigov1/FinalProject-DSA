@@ -4,16 +4,18 @@
 
 using namespace std;
 
-class Paquetes {
+class Paquetes
+{
 private:
     int id;
     Pagina page;
 
 public:
-    Paquetes(int id, Pagina page) {
-        this->id = id; 
+    Paquetes(int id, Pagina page)
+    {
+        this->id = id;
         this->page = page;
-        };
+    };
     ~Paquetes();
     void setId();
     int getId();
