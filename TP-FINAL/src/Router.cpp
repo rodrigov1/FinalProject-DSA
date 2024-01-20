@@ -17,13 +17,24 @@ void Router::add_neighbors(Router *r)
     routers_vecinos->add(r);
 }
 
-void Router::recibir_pagina(Pagina *p)
+void Router::divide_page(Pagina *p)
 {
-    if (p->getDest()[0] == this->getId())
+    int n;
+    for (int i = 1; i < p->getSize(); i++)
     {
-        cout << "Pagina reciba" << endl;
+        if (p->getSize() % i == 0)
+        {
+            n = i;
+        }
+    }
+    if (n == 1)
+    {
+        cout << "El numero de paquetes es: " << p->getSize() << endl;
+        return;
     }
     else
     {
+        cout << "El numero de paquetes es: " << n << endl;
+        return;
     }
 }

@@ -112,4 +112,19 @@ void Administrador::crear_pagina()
     cout << "Origen: " << pagina->getOrigin()[0] << ":" << pagina->getOrigin()[1] << endl;
     cout << "Destino: " << pagina->getDest()[0] << ":" << pagina->getDest()[1] << endl;
     id_paginas++;
+
+    Nodo<Terminal *> *aux = this->terminales_disponibles->get_czo();
+    Nodo<Router *> *aux2;
+
+    while (aux != nullptr /*&& aux2 != nullptr*/)
+    {
+        if (aux->get_dato()->getIP()[0] == pagina->getOrigin()[0] && aux->get_dato()->getIP()[1] == pagina->getOrigin()[1])
+        {
+            aux->get_dato()->recibir_pagina(pagina);
+            // aux2->get_dato()->divide_page(pagina);
+            break;
+        }
+        // aux2 = aux2->get_next();
+        aux = aux->get_next();
+    }
 }

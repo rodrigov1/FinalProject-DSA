@@ -15,8 +15,8 @@ private:
     // Lista<Pagina *> *paginas_enviadas;
     // Lista<Pagina *> *paginas_recibidas;
 
-    Cola<Paquetes *> incomingPackages;
-    Cola<Paquetes *> outgoingPackages;
+    Cola<Paquetes *> inPackets;
+    Cola<Paquetes *> outPackets;
 
 public:
     Router(int id)
@@ -31,7 +31,7 @@ public:
     int getId() { return id; };
     // void setEnvio(Pagina *page) { paginas_enviadas->add(page); };
     Lista<Router *> *getNeighbors() { return routers_vecinos; };
-    void recibir_pagina(Pagina *page);
+    void divide_page(Pagina *p);
 };
 
 #endif
