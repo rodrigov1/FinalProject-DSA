@@ -11,3 +11,8 @@ void Router::add_terminal(Terminal *t)
 {
     terminales_conectados->addFinal(t);
 }
+
+void Router :: add_neighbors(Router *r)
+{
+    routers_vecinos->add(r);
+}

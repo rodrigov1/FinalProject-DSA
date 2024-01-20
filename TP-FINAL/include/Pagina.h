@@ -7,6 +7,7 @@ class Pagina {
 private:
     int id = 0;
     int size;
+    bool state = 0;
     int origin[2];
     int destiny[2];
 

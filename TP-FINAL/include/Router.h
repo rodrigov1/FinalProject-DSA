@@ -10,9 +10,11 @@ private:
     int id;
     Lista<Router*> *routers_vecinos;
     Lista<Terminal*> *terminales_conectados;
+    Lista<Pagina*> *paginas_enviadas;
+    Lista<Pagina*> *paginas_recibidas;
 
-    Cola<Paquetes *> incomingPackages;
-    Cola<Paquetes *> outgoingPackages;
+    Cola<Paquetes*> incomingPackages;
+    Cola<Paquetes*> outgoingPackages;
 
 public:
     Router(int id) {
@@ -22,7 +24,10 @@ public:
     };
     //~Router();
     void add_terminal(Terminal *t);
+    void add_neighbors(Router *r);
     int getId() { return id; };
+    void setEnvio(Pagina* page) { paginas_enviadas->add(page); };
+    Lista<Router*>* getNeighbors() {return routers_vecinos; };
 };
 
 #endif
