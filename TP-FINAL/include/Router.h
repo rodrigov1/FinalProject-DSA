@@ -31,6 +31,7 @@ public:
     int getId() { return id; };
     // void setEnvio(Pagina *page) { paginas_enviadas->add(page); };
     Lista<Router *> *getNeighbors() { return routers_vecinos; };
+    void recibir_pagina(Pagina *page);
 };
 
 #endif

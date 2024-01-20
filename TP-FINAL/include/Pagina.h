@@ -6,7 +6,6 @@ using namespace std;
 class Pagina
 {
 private:
-    // int id = 0;
     int id;
     int size;
     bool state = 0;
@@ -17,7 +16,6 @@ public:
     Pagina() { ; };
     Pagina(int id, int size, int origen[2], int dest[2])
     {
-        // id++;
         this->id = id;
         this->size = size;
         this->orig[0] = origen[0];

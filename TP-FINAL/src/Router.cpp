@@ -16,3 +16,14 @@ void Router::add_neighbors(Router *r)
 {
     routers_vecinos->add(r);
 }
+
+void Router::recibir_pagina(Pagina *p)
+{
+    if (p->getDest()[0] == this->getId())
+    {
+        cout << "Pagina reciba" << endl;
+    }
+    else
+    {
+    }
+}

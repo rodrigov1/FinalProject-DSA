@@ -113,7 +113,3 @@ void Administrador::crear_pagina()
     cout << "Destino: " << pagina->getDest()[0] << ":" << pagina->getDest()[1] << endl;
     id_paginas++;
 }
-
-// void Administrador::print_paginas()
-//{
-// }

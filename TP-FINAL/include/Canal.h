@@ -24,3 +24,5 @@ public:
     int getBw() { return bw; };
     // int getPeso() { return peso; };
 };
+
+#endif
