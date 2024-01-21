@@ -13,6 +13,7 @@ using namespace std;
 
 void Administrador::leer_config()
 {
+    srand(time(0)); // Seed the random number generator with the current time
     ifstream config_file("config.txt");
     string line;
     int num_routers, num_terminals;
@@ -39,7 +40,7 @@ void Administrador::leer_config()
         // establecer_conexion(origen, destino, ancho);
         config_file >> origen; // lee el siguiente origen
     }
-    config_file.close();*/
+    */
     config_file.close();
 }
 
@@ -50,10 +51,7 @@ void Administrador::crear_routers(int c)
     {
         Router *router = new Router(i);
         routers_disponibles->addFinal(router);
-        cout << "Router creado con id: " << router->getId() << endl;
     }
-    // cout << "Cantidad de routers creados: " << routers_disponibles->size() << endl;
-    this->print_r();
 }
 
 /*                                   Conector de terminales a routers           */
@@ -74,8 +72,6 @@ void Administrador::conectar_terminales(int t)
         }
         aux = aux->get_next(); // Paso al siguiente router de la lista
     }
-    // cout << "Cantidad de terminales creados: " << terminales_disponibles->size() << endl;
-    this->print_t();
 }
 
 void Administrador::print_r()
@@ -98,6 +94,9 @@ void Administrador::print_t()
     }
 }
 
+/**
+ * Creates a new page and sends it to the appropriate terminal.
+ */
 void Administrador::crear_pagina()
 {
     int origen_r = rand() % cant_routers;
@@ -108,23 +107,17 @@ void Administrador::crear_pagina()
     int destino[2] = {destino_r, destino_t};
     int size = rand() % 100;
     Pagina *pagina = new Pagina(id_paginas, size, origen, destino);
-    cout << "Pagina creada con id: " << pagina->getId() << " de tamaño: " << pagina->getSize() << endl;
-    cout << "Origen: " << pagina->getOrigin()[0] << ":" << pagina->getOrigin()[1] << endl;
-    cout << "Destino: " << pagina->getDest()[0] << ":" << pagina->getDest()[1] << endl;
     id_paginas++;
 
     Nodo<Terminal *> *aux = this->terminales_disponibles->get_czo();
-    Nodo<Router *> *aux2;
 
-    while (aux != nullptr /*&& aux2 != nullptr*/)
+    for (int i = 0; i < this->terminales_disponibles->size(); i++)
     {
         if (aux->get_dato()->getIP()[0] == pagina->getOrigin()[0] && aux->get_dato()->getIP()[1] == pagina->getOrigin()[1])
         {
             aux->get_dato()->recibir_pagina(pagina);
-            // aux2->get_dato()->divide_page(pagina);
-            break;
+            return;
         }
-        // aux2 = aux2->get_next();
         aux = aux->get_next();
     }
 }
