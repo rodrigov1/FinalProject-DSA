@@ -8,13 +8,15 @@ class Paquetes
 {
 private:
     int id;
-    Pagina page;
+    Pagina *page;
+    int indiceTotal;
 
 public:
-    Paquetes(int id, Pagina page)
+    Paquetes(int id, Pagina *page, int indiceTotal)
     {
         this->id = id;
         this->page = page;
+        this->indiceTotal = indiceTotal;
     };
     ~Paquetes();
     void setId();

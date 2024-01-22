@@ -32,7 +32,9 @@ public:
     // void setEnvio(Pagina *page) { paginas_enviadas->add(page); };
     Lista<Router *> *getNeighbors() { return routers_vecinos; };
     Lista<Terminal *> *getTerminals() { return terminales_conectados; };
-    void divide_page(Pagina *p);
+    void divide_pages(Pagina *p);
+    void receive_pages(Paquetes *pkg);
+    void check_files(Cola <Paquetes*> *aux);
 };
 
 #endif
