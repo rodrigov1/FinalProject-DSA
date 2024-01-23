@@ -4,7 +4,7 @@
 #include "../include/Lista.h"
 #include "../include/Pagina.h"
 #include "../include/Terminal.h"
-#include "../include/Paquetes.h"
+#include "../include/Paquete.h"
 
 using namespace std;
 
