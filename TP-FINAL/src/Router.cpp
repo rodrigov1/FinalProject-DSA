@@ -4,6 +4,7 @@
 #include "../include/Lista.h"
 #include "../include/Pagina.h"
 #include "../include/Terminal.h"
+#include "../include/Paquetes.h"
 
 using namespace std;
 
@@ -17,24 +18,43 @@ void Router::add_neighbors(Router *r)
     routers_vecinos->add(r);
 }
 
-void Router::divide_page(Pagina *p)
+void Router::divide_pages(Pagina *p)
 {
-    int n;
-    for (int i = 1; i < p->getSize(); i++)
+    int n = 1;
+    for (int i = 2; i < p->getSize(); i++)
     {
         if (p->getSize() % i == 0)
         {
             n = i;
         }
     }
+
     if (n == 1)
     {
+        n = p->getSize();
         cout << "El numero de paquetes es: " << p->getSize() << endl;
-        return;
-    }
-    else
-    {
+    } else {
         cout << "El numero de paquetes es: " << n << endl;
-        return;
     }
+
+    // se crean n paquetes y se encolan todos en la cola de salida
+    
+    for(int j = 0; j < n; j++) 
+    {
+        Paquetes *aux = new Paquetes(j,p,n);
+        outPackets.encolar(aux);
+    }
+
+    delete p;   // borrado del objeto pagina
+}
+
+void Router::receive_pages(Paquetes *pkg)
+{
+    inPackets.encolar(pkg);
+    check_files(&inPackets);
+}
+
+void Router::check_files(Cola <Paquetes*> *aux) 
+{
+    // aca se revisa si estan todos los paquetes
 }

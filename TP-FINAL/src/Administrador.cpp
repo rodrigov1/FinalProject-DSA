@@ -1,5 +1,4 @@
 #include <iostream>
-// #include "../include/Pagina.h"
 #include <fstream>
 #include <ctime>
 #include <cstdlib>

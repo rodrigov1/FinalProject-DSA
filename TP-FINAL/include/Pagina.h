@@ -13,7 +13,6 @@ private:
     int dest[2];
 
 public:
-    Pagina() { ; };
     Pagina(int id, int size, int origen[2], int dest[2])
     {
         this->id = id;
