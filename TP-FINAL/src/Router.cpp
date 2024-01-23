@@ -18,7 +18,7 @@ void Router::add_neighbors(Router *r)
     routers_vecinos->add(r);
 }
 
-void Router::divide_pages(Pagina *p)
+void Router::divide_page(Pagina *p)
 {
     int n = 1;
     for (int i = 2; i < p->getSize(); i++)
@@ -32,29 +32,27 @@ void Router::divide_pages(Pagina *p)
     if (n == 1)
     {
         n = p->getSize();
-        cout << "El numero de paquetes es: " << p->getSize() << endl;
-    } else {
-        cout << "El numero de paquetes es: " << n << endl;
+        // cout << "El numero de paquetes es: " << p->getSize() << endl;
     }
 
-    // se crean n paquetes y se encolan todos en la cola de salida
-    
-    for(int j = 0; j < n; j++) 
+    // Se crean n paquetes y se encolan todos en la cola de salida
+    for (int j = 0; j < n; j++)
     {
-        Paquetes *aux = new Paquetes(j,p,n);
+        Paquete *aux = new Paquete(j, p);
+        // cout << "El paquete " << aux->getId() << endl;
         outPackets.encolar(aux);
     }
 
-    delete p;   // borrado del objeto pagina
+    delete p; // borrado del objeto pagina
 }
 
-void Router::receive_pages(Paquetes *pkg)
+void Router::receive_pages(Paquete *pkg)
 {
     inPackets.encolar(pkg);
-    check_files(&inPackets);
+    // check_files(&inPackets);
 }
 
-void Router::check_files(Cola <Paquetes*> *aux) 
+/*void Router::check_files(Cola<Paquete *> *aux)
 {
     // aca se revisa si estan todos los paquetes
-}
+}*/

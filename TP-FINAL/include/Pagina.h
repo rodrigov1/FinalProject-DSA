@@ -8,7 +8,7 @@ class Pagina
 private:
     int id;
     int size;
-    bool state = 0;
+    bool arrived = 0;
     int orig[2];
     int dest[2];
 
@@ -26,6 +26,8 @@ public:
     int getId() { return id; };
     int *getDest() { return dest; };
     int *getOrigin() { return orig; };
+    bool getArrived() { return arrived; };
+    void setArrived() { arrived = 1; };
     int getSize() { return size; };
 };
 

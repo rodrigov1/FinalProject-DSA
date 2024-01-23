@@ -15,8 +15,8 @@ private:
     // Lista<Pagina *> *paginas_enviadas;
     // Lista<Pagina *> *paginas_recibidas;
 
-    Cola<Paquetes *> inPackets;
-    Cola<Paquetes *> outPackets;
+    Cola<Paquete *> inPackets;
+    Cola<Paquete *> outPackets;
 
 public:
     Router(int id)
@@ -32,9 +32,9 @@ public:
     // void setEnvio(Pagina *page) { paginas_enviadas->add(page); };
     Lista<Router *> *getNeighbors() { return routers_vecinos; };
     Lista<Terminal *> *getTerminals() { return terminales_conectados; };
-    void divide_pages(Pagina *p);
-    void receive_pages(Paquetes *pkg);
-    void check_files(Cola <Paquetes*> *aux);
+    void divide_page(Pagina *p);
+    void receive_pages(Paquete *pkg);
+    // void check_files(Cola<Paquete *> *aux);
 };
 
 #endif
