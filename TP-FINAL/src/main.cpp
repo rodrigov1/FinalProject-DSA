@@ -8,5 +8,6 @@ int main()
     admin->crear_pagina();
     admin->crear_pagina();
     admin->crear_pagina();
+    
     return 0;
 }
