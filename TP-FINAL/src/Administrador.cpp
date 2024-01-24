@@ -124,11 +124,13 @@ void Administrador::crear_pagina()
             {
                 // cout << "Pagina " << pagina->getId() << "recibida " << endl;
                 aux2->get_dato()->divide_page(pagina);
+                return;
             }
             else
             {
                 pagina->setArrived();
                 aux->get_dato()->recibir_pagina(pagina);
+                return;
             }
         }
         aux2 = aux2->get_next();
