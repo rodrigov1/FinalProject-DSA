@@ -48,8 +48,12 @@ void Router::divide_page(Pagina *p)
 
 void Router::receive_pages(Paquete *pkg)
 {
+    if(pkg->getDestino() != this->getId()) {
+    outPackets.encolar(pkg);
+    } else {
     inPackets.encolar(pkg);
     // check_files(&inPackets);
+    }
 }
 
 /*void Router::check_files(Cola<Paquete *> *aux)
