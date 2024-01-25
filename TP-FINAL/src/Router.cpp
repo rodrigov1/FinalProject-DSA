@@ -11,6 +11,7 @@ using namespace std;
 void Router::add_terminal(Terminal *t)
 {
     terminales_conectados->addFinal(t);
+    t->add_router(this);
 }
 
 void Router::add_neighbors(Router *r)
