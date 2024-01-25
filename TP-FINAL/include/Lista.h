@@ -29,7 +29,8 @@ public:
 };
 
 template <class T>
-class Lista {
+class Lista
+{
 private:
   Nodo<T> *czo;
   void addO(T d, Nodo<T> *ant);
@@ -65,6 +66,7 @@ public:
   T last(); // retorna el dato del ultimo nodo
   Nodo<T> *get_czo() { return czo; };
   void addFinal(T d); // Agrega un nodo al final de la lista
+  T search_id(int id);
 };
 
 template <class T>
@@ -268,6 +270,25 @@ void Lista<T>::addFinal(T d)
     }
     else
       this->resto()->addFinal(d);
+  }
+}
+template <class T>
+T Lista<T>::search_id(int id)
+{
+  if (this->esvacia())
+  {
+    return 0;
+  }
+  else
+  {
+    Nodo<T> *aux = this->get_czo();
+    int i = 0;
+    while (i != id)
+    {
+      aux = aux->get_next();
+      i++;
+    }
+    return aux->get_dato();
   }
 }
 template <class T>
