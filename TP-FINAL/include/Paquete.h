@@ -11,9 +11,10 @@ private:
     Pagina *page;
     int origen[2];
     int destino[2];
+    int size_pkg;
 
 public:
-    Paquete(int id, Pagina *page)
+    Paquete(int id, Pagina *page, int size_pkg)
     {
         this->id = id;
         this->page = page;
@@ -21,9 +22,11 @@ public:
         this->origen[1] = page->getOrigin()[1];
         this->destino[0] = page->getDest()[0];
         this->destino[1] = page->getDest()[1];
+        this->size_pkg = size_pkg;
     };
     ~Paquete();
     void setId();
+    int getSize() { return size_pkg; };
     int getId() { return id; };
     int *getOrigen() { return origen; };
     int *getDestino() { return destino; };

@@ -15,8 +15,8 @@ private:
     // Lista<Pagina *> *paginas_enviadas;
     // Lista<Pagina *> *paginas_recibidas;
 
-    Cola<Paquete *> inPackets;
-    Cola<Paquete *> outPackets;
+    Cola<Paquete *> *inPackets;
+    Cola<Paquete *> *outPackets;
 
 public:
     Router(int id)
@@ -24,6 +24,8 @@ public:
         this->id = id;
         routers_vecinos = new Lista<Router *>();
         terminales_conectados = new Lista<Terminal *>();
+        inPackets = new Cola<Paquete *>();
+        outPackets = new Cola<Paquete *>();
     };
     //~Router();
     void add_terminal(Terminal *t);
@@ -34,7 +36,9 @@ public:
     Lista<Terminal *> *getTerminals() { return terminales_conectados; };
     void receive_page(Pagina *p);
     void send_packet();
+    Cola<Paquete *> *getInPackets() { return inPackets; };
     void receive_packet(Paquete *pkg);
+    bool check_completion(Paquete *p);
     // void check_files(Cola<Paquete *> *aux);
 };
 

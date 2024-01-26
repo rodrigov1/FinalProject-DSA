@@ -106,7 +106,7 @@ void Administrador::crear_pagina()
     int destino[2] = {destino_r, destino_t};
     int size = rand() % 100;
     Pagina *pagina = new Pagina(id_paginas, size, origen, destino);
-    cout << "Pagina creada: " << pagina->getId() << " de tamaño " << pagina->getSize() << endl;
+    // cout << "Pagina creada: " << pagina->getId() << " de tamaño " << pagina->getSize() << endl;
     id_paginas++;
 
     if (origen != destino)
@@ -118,30 +118,4 @@ void Administrador::crear_pagina()
     {
         this->routers_disponibles->search_id(origen[0])->getTerminals()->search_id(origen[1])->recibir_pagina(pagina);
     }
-
-    // Nodo<Router *> *aux2 = this->routers_disponibles->get_czo();
-
-    // for (int i = 0; i < this->routers_disponibles->size(); i++) // Recorre la lista de router hasta encontrar el router origen
-    // {
-    //     if (pagina->getOrigin()[0] == aux2->get_dato()->getId())
-    //     {
-    //         Nodo<Terminal *> *aux = aux2->get_dato()->getTerminals()->get_czo();
-    //         while (aux->get_dato()->getIP()[1] != pagina->getOrigin()[1]) // Recorre la lista de terminales hasta encontrar el terminal origen
-    //         {
-    //             aux = aux->get_next();
-    //         }
-    //         if (pagina->getOrigin() != pagina->getDest())
-    //         {
-    //             aux2->get_dato()->divide_page(pagina);
-    //             return;
-    //         }
-    //         else
-    //         {
-    //             pagina->setArrived();
-    //             aux->get_dato()->recibir_pagina(pagina);
-    //             return;
-    //         }
-    //     }
-    //     aux2 = aux2->get_next();
-    // }
 }

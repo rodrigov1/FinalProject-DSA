@@ -11,7 +11,7 @@ using namespace std;
 void Router::add_terminal(Terminal *t)
 {
     terminales_conectados->addFinal(t);
-    t->add_router(this);
+    // t->add_router(this);
 }
 
 void Router::add_neighbors(Router *r)
@@ -22,26 +22,30 @@ void Router::add_neighbors(Router *r)
 void Router::receive_page(Pagina *p)
 {
     int n = 1;
+    int size = 0;
     for (int i = 2; i < p->getSize(); i++)
     {
         if (p->getSize() % i == 0)
         {
             n = i;
+            size = p->getSize() / i;
         }
     }
 
     if (n == 1)
     {
         n = p->getSize();
+        size = 1;
         // cout << "El numero de paquetes es: " << p->getSize() << endl;
     }
 
+    // cout << "Cantidad de paquetes: " << n << " de tamaño: " << size << endl;
     // Se crean n paquetes y se encolan todos en la cola de salida
     for (int j = 0; j < n; j++)
     {
-        Paquete *aux = new Paquete(j, p);
-        // cout << "El paquete " << aux->getId() << endl;
-        outPackets.encolar(aux);
+        Paquete *aux = new Paquete(j, p, size);
+        // cout << "Pkg " << aux->getId() << " de tamaño " << aux->getSize() << " creado" << endl;
+        outPackets->encolar(aux);
     }
 
     delete p; // borrado del objeto pagina
@@ -52,15 +56,36 @@ void Router::receive_packet(Paquete *pkg)
     // cout << "El paquete " << pkg->getId() << " llego al router " << this->getId() << endl;
     if (pkg->getDestino()[0] == this->getId())
     {
-        inPackets.encolar(pkg);
-        // call check_completion() to see if there are all the packets of a specific page
+        inPackets->encolar(pkg);
+        if (check_completion(pkg))
+        {
+            Pagina *p = pkg->getPage();
+            p->setArrived();
+            this->getTerminals()->search_id(pkg->getDestino()[1])->recibir_pagina(p);
+        }
     }
     else
     {
-        // cout << "El paquete " << pkg->getId() << " se envia al router " << pkg->getDestino()[0] << endl;
     }
 }
-/*void Router::check_files(Cola<Paquete *> *aux)
+
+bool Router::check_completion(Paquete *pkg)
 {
-    // aca se revisa si estan todos los paquetes
-}*/
+    Pagina *page = pkg->getPage();
+    int size = 0;
+    for (int i = 0; i < this->getInPackets()->sizeCola(); i++)
+    {
+        Nodo<Paquete *> *aux = this->getInPackets()->get_czo();
+        if (aux->get_dato()->getPage()->getId() == page->getId())
+        {
+            size++;
+        }
+        aux = aux->get_next();
+    }
+    size = size * pkg->getSize();
+    if (size == page->getSize())
+    {
+        return true;
+    }
+    return false;
+}
