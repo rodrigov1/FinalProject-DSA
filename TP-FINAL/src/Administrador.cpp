@@ -45,7 +45,7 @@ void Administrador::leer_config()
 
 void Administrador::crear_routers(int c)
 {
-    this->cant_routers = c;
+    cant_routers += c;
     for (int i = 0; i < c; i++)
     {
         Router *router = new Router(i);
@@ -56,11 +56,10 @@ void Administrador::crear_routers(int c)
 /*                                   Conector de terminales a routers           */
 void Administrador::conectar_terminales(int t)
 {
-    this->cant_terminals = t;
-    int routers = this->cant_routers;
-    Nodo<Router *> *aux = this->routers_disponibles->get_czo();
+    cant_terminals += t;
+    Nodo<Router *> *aux = routers_disponibles->get_czo();
 
-    for (int i = 0; i < routers; i++)
+    for (int i = 0; i < cant_routers; i++)
     {
         // Creo la cantidad "t" de terminales para cada router
         for (int j = 0; j < t; j++)
@@ -75,8 +74,8 @@ void Administrador::conectar_terminales(int t)
 
 void Administrador::print_r()
 {
-    Nodo<Router *> *aux = this->routers_disponibles->get_czo();
-    for (int i = 0; i < this->routers_disponibles->size(); i++)
+    Nodo<Router *> *aux = routers_disponibles->get_czo();
+    for (int i = 0; i < routers_disponibles->size(); i++)
     {
         cout << "Router: " << aux->get_dato()->getId() << endl;
         aux = aux->get_next();
@@ -85,8 +84,8 @@ void Administrador::print_r()
 
 void Administrador::print_t()
 {
-    Nodo<Terminal *> *aux = this->terminales_disponibles->get_czo();
-    for (int i = 0; i < this->terminales_disponibles->size(); i++)
+    Nodo<Terminal *> *aux = terminales_disponibles->get_czo();
+    for (int i = 0; i < terminales_disponibles->size(); i++)
     {
         cout << "Terminal: " << aux->get_dato()->getIP()[0] << ":" << aux->get_dato()->getIP()[1] << endl;
         aux = aux->get_next();
