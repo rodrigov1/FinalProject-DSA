@@ -63,26 +63,28 @@ void Router::receive_packet(Paquete *pkg)
             p->setArrived();
             this->getTerminals()->search_id(pkg->getDestino()[1])->recibir_pagina(p);
         }
-    }
-    else
-    {
+    } else {
+        outPackets->encolar(pkg);
     }
 }
 
 bool Router::check_completion(Paquete *pkg)
 {
     Pagina *page = pkg->getPage();
-    int size = 0;
+    int cant = 0;
+    Nodo<Paquete *> *aux = this->getInPackets()->get_czo();
+
     for (int i = 0; i < this->getInPackets()->sizeCola(); i++)
     {
-        Nodo<Paquete *> *aux = this->getInPackets()->get_czo();
         if (aux->get_dato()->getPage()->getId() == page->getId())
         {
-            size++;
+            cant++;
         }
         aux = aux->get_next();
     }
-    size = size * pkg->getSize();
+
+    int size = cant * pkg->getSize();
+
     if (size == page->getSize())
     {
         return true;
