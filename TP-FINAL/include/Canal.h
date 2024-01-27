@@ -21,10 +21,11 @@ public:
         peso = 1;
     };
     ~Canal();
-    int getOrigen() { return origen; };
-    int getDestino() { return destino; };
+    Router* getOrigen() { return origen; };
+    Router* getDestino() { return destino; };
     int getBw() { return bw; };
     int getPeso() { return peso; };
+    void send_package();
 };
 
 #endif

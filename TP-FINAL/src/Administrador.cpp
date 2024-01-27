@@ -10,6 +10,7 @@
 
 using namespace std;
 
+/* Lector del archivo configuracion.txt */
 void Administrador::leer_config()
 {
     srand(time(0)); // Seed the random number generator with the current time
@@ -43,17 +44,18 @@ void Administrador::leer_config()
     config_file.close();
 }
 
-void Administrador::crear_routers(int c)
+/* Creador de routers */
+void Administrador::crear_routers(int r)
 {
-    cant_routers += c;
-    for (int i = 0; i < c; i++)
+    cant_routers += r;
+    for (int i = 0; i < r; i++)
     {
         Router *router = new Router(i);
         routers_disponibles->addFinal(router);
     }
 }
 
-/*                                   Conector de terminales a routers           */
+/* Conector de terminales a routers */
 void Administrador::conectar_terminales(int t)
 {
     cant_terminals += t;
@@ -72,6 +74,7 @@ void Administrador::conectar_terminales(int t)
     }
 }
 
+/* Imprime los router disponibles */
 void Administrador::print_r()
 {
     Nodo<Router *> *aux = routers_disponibles->get_czo();
@@ -82,6 +85,7 @@ void Administrador::print_r()
     }
 }
 
+/* Imprime los terminales disponibles */
 void Administrador::print_t()
 {
     Nodo<Terminal *> *aux = terminales_disponibles->get_czo();
@@ -92,9 +96,7 @@ void Administrador::print_t()
     }
 }
 
-/**
- * Creates a new page and sends it to the appropriate terminal.
- */
+/* Creates a new page and sends it to the appropriate terminal */
 void Administrador::crear_pagina()
 {
     int origen_r = rand() % cant_routers;
@@ -117,4 +119,22 @@ void Administrador::crear_pagina()
     {
         this->routers_disponibles->search_id(origen[0])->getTerminals()->search_id(origen[1])->recibir_pagina(pagina);
     }
+}
+
+/* Establece las conexiones en la red de routers */
+void Administrador::establecer_conexion(int origen, int destino, int bw) 
+{
+    Router* aux1;
+    Router* aux2;
+
+    for(int i = 0; i < routers_disponibles->size(); i++) {
+        if(i == origen) {
+            aux1 = routers_disponibles->search_id(i);
+        } else if(i == destino) {
+            aux2 = routers_disponibles->search_id(i);
+        }
+    }
+
+    Canal* c = new Canal(aux1,aux2,bw);
+    canales->addFinal(c);
 }

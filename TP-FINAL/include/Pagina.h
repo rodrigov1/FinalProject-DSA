@@ -22,7 +22,7 @@ public:
         this->dest[0] = dest[0];
         this->dest[1] = dest[1];
     };
-    //~Pagina();
+    //~Pagina();         (tira error por alguna razon)
     int getId() { return id; };
     int *getDest() { return dest; };
     int *getOrigin() { return orig; };
