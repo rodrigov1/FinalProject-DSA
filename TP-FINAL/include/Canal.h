@@ -25,6 +25,7 @@ public:
     Router* getDestino() { return destino; };
     int getBw() { return bw; };
     int getPeso() { return peso; };
+    void send_package();
 };
 
 #endif
