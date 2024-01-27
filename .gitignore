@@ -6,3 +6,4 @@
 #Executables
 *.exe
 *.out
+*.elf
