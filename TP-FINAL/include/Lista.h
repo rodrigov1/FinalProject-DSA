@@ -7,6 +7,7 @@
 
 using namespace std;
 
+/* Codigo visto en clase de Nodos */
 template <class T>
 class Nodo
 {
@@ -28,6 +29,7 @@ public:
   bool es_vacio() { return next == nullptr; }
 };
 
+/* Codigo visto en clase de Listas */
 template <class T>
 class Lista
 {
@@ -195,8 +197,7 @@ Lista<T> *Lista<T>::copy(void)
 }
 
 template <class T>
-void Lista<T>::tomar(
-    int n)
+void Lista<T>::tomar(int n)
 { // deja "vivos" los n primeros nodos y borra el resto
   if (this->size() > n)
   {
@@ -272,12 +273,13 @@ void Lista<T>::addFinal(T d)
       this->resto()->addFinal(d);
   }
 }
+
 template <class T>
 T Lista<T>::search_id(int id)
 {
   if (this->esvacia())
   {
-    return 0;
+    return NULL;
   }
   else
   {
@@ -291,6 +293,7 @@ T Lista<T>::search_id(int id)
     return aux->get_dato();
   }
 }
+
 template <class T>
 bool Lista<T>::esta(T d)
 { // busca d en la lista
@@ -324,6 +327,7 @@ void Lista<T>::borrarD(T d, Nodo<T> *ant)
   }
 }
 
+/* Codigo visto en clase de Pilas */
 template <class T>
 class Pila : public Lista<T>
 {
@@ -335,6 +339,7 @@ public:
   bool pilavacia() { return this->esvacia(); };
 };
 
+/* Codigo visto en clase de Colas */
 template <class T>
 class Cola : public Lista<T>
 {

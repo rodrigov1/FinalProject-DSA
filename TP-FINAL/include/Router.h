@@ -5,8 +5,7 @@
 #include "Lista.h"
 #include "Paquete.h"
 
-class Router
-{
+class Router {
 private:
     int id;
     Lista<Router *> *routers_vecinos;
@@ -27,7 +26,7 @@ public:
         inPackets = new Cola<Paquete *>();
         outPackets = new Cola<Paquete *>();
     };
-    //~Router();
+    ~Router();
     void add_terminal(Terminal *t);
     void add_neighbors(Router *r);
     int getId() { return id; };
