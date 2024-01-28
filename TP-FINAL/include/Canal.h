@@ -2,27 +2,27 @@
 #define CANAL_H
 
 #include "Lista.h"
-#include "Router.h"
+// #include "Router.h"
 #define INFI 9999
 
-class Canal {
+class Canal
+{
 private:
-    Router *origen;
-    Router *destino;
+    int origen;
+    int destino;
     int bw;
     int peso = INFI;
 
 public:
-    Canal(Router *origen, Router *destino, int bw)
+    Canal(int orig, int dest, int bw)
     {
-        this->origen = origen;
-        this->destino = destino;
+        this->origen = orig;
+        this->destino = dest;
         this->bw = bw;
-        peso = 1;
     };
     ~Canal();
-    Router* getOrigen() { return origen; };
-    Router* getDestino() { return destino; };
+    int getOrigen() { return origen; };
+    int getDestino() { return destino; };
     int getBw() { return bw; };
     int getPeso() { return peso; };
     void send_package();

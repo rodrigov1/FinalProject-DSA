@@ -63,7 +63,9 @@ void Router::receive_packet(Paquete *pkg)
             p->setArrived();
             this->getTerminals()->search_id(pkg->getDestino()[1])->recibir_pagina(p);
         }
-    } else {
+    }
+    else
+    {
         outPackets->encolar(pkg);
     }
 }

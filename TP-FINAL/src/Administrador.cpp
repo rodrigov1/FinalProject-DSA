@@ -7,6 +7,7 @@
 #include "../include/Pagina.h"
 #include "../include/Terminal.h"
 #include "../include/Administrador.h"
+#include "../include/Canal.h"
 
 using namespace std;
 
@@ -31,16 +32,21 @@ void Administrador::leer_config()
 
     crear_routers(num_routers);         // crea los routers
     conectar_terminales(num_terminals); // llama al conector de terminales a routers
-    /*int origen, destino, ancho;
+
+    // Skip the next line
+    getline(config_file, line);
+    getline(config_file, line);
+
+    int origen, destino, bw;
     config_file >> origen;
-    while (!config_file.eof()) // mientras no sea el final del archivo
+
+    while (!config_file.eof())
     {
         config_file >> destino;
-        config_file >> ancho;
-        // establecer_conexion(origen, destino, ancho);
-        config_file >> origen; // lee el siguiente origen
+        config_file >> bw;
+        establecer_conexion(origen, destino, bw);
+        config_file >> origen;
     }
-    */
     config_file.close();
 }
 
@@ -122,19 +128,10 @@ void Administrador::crear_pagina()
 }
 
 /* Establece las conexiones en la red de routers */
-void Administrador::establecer_conexion(int origen, int destino, int bw) 
+void Administrador::establecer_conexion(int origen, int destino, int bw)
 {
-    Router* aux1;
-    Router* aux2;
-
-    for(int i = 0; i < routers_disponibles->size(); i++) {
-        if(i == origen) {
-            aux1 = routers_disponibles->search_id(i);
-        } else if(i == destino) {
-            aux2 = routers_disponibles->search_id(i);
-        }
-    }
-
-    Canal* c = new Canal(aux1,aux2,bw);
-    canales->addFinal(c);
+    Canal *c = new Canal(origen, destino, bw);
+    routers_disponibles->search_id(origen)->getCanales()->addFinal(c);
+    routers_disponibles->search_id(origen)->add_neighbors(routers_disponibles->search_id(destino));
+    canales_totales->addFinal(c);
 }

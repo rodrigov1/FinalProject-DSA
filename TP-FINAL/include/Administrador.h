@@ -11,9 +11,9 @@
 class Administrador
 {
 private:
-    Lista<Router*> *routers_disponibles = new Lista<Router*>();
-    Lista<Terminal*> *terminales_disponibles = new Lista<Terminal*>();
-    Lista<Canal*> *canales = new Lista<Canal*>();
+    Lista<Router *> *routers_disponibles = new Lista<Router *>();
+    Lista<Terminal *> *terminales_disponibles = new Lista<Terminal *>();
+    Lista<Canal *> *canales_totales = new Lista<Canal *>();
     int cant_terminals = 0;
     int cant_routers = 0;
     int id_paginas = 0;
