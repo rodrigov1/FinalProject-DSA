@@ -32,6 +32,7 @@ public:
     void print_r();
     void print_t(); // imprime las terminales
     void send_packets();
+    // void receive_packets();
 };
 
 #endif

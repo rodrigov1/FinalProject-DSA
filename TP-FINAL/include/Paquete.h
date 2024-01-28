@@ -24,7 +24,7 @@ public:
         this->destino[1] = page->getDest()[1];
         this->size_pkg = size_pkg;
     };
-    ~Paquete();
+    //~Paquete();
     void setId();
     int getSize() { return size_pkg; };
     int getId() { return id; };

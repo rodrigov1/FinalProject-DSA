@@ -128,7 +128,6 @@ void Router::print_packets()
 void Router::send_packet()
 {
     bool vecino = false;
-    int id_vecino = -1;
     if (outPackets->colavacia())
     {
         return;
@@ -141,38 +140,29 @@ void Router::send_packet()
             cout << "No hay canales disponibles" << endl;
             return;
         }
-        for (int j = 0; canales_ida->size(); j++)
+        if (aux->get_dato()->getDestino()[0] == this->getId())
         {
-            if (aux->get_dato()->getDestino()[0] == this->getId())
-            {
-                cout << "El paquete " << aux->get_dato()->getId() << " llego a su destino" << endl;
-                receive_packet(aux->get_dato());
-                outPackets->desencolar();
-                return;
-            }
-            else if (canales_ida->search_id(j)->getDestino() == aux->get_dato()->getDestino()[0])
-            {
-                vecino = true;
-                break;
-            }
-        }
-        if (vecino)
-        {
-            id_vecino = aux->get_dato()->getDestino()[0];
-            for (int k = 0; k < routers_vecinos->size(); k++)
-            {
-                if (routers_vecinos->search_id(k)->getId() == id_vecino)
-                {
-                    routers_vecinos->search_id(k)->receive_packet(aux->get_dato());
-                    outPackets->desencolar();
-                    break;
-                }
-            }
+            receive_packet(aux->get_dato());
+            outPackets->desencolar();
+            return;
         }
         else
         {
-            // Aca deberia ver por cual ruta enviar el paquete
-            cout << "No hay conexion directa con el router " << aux->get_dato()->getDestino()[0] << endl;
+            for (int i = 0; i < this->getCanales()->size(); i++)
+            {
+                if (this->getCanales()->search_id(i)->getDestino() == aux->get_dato()->getDestino()[0])
+                {
+                    this->getCanales()->search_id(i)->add_packet(aux->get_dato());
+                    outPackets->desencolar();
+                    vecino = true;
+                    break;
+                }
+            }
+            if (!vecino)
+            {
+                cout << "No hay conexion directa con el router " << aux->get_dato()->getDestino()[0] << endl;
+                return;
+            }
         }
     }
 }
