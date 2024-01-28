@@ -50,7 +50,7 @@ void Router::receive_page(Pagina *p)
         // cout << "Pkg " << aux->getId() << " de tamaño " << aux->getSize() << " creado" << endl;
         outPackets->encolar(aux);
     }
-    delete p;        // borrado del objeto pagina
+    // delete p;        // borrado del objeto pagina
     print_packets(); // Imprime los paquetes que se van a enviar, solo para debuggear
 }
 
@@ -110,4 +110,43 @@ void Router::print_packets()
         aux = aux->get_next();
     }
     cout << endl;
+}
+
+void Router::send_packet()
+{
+    bool vecino = false;
+    int id_vecino = -1;
+    if (outPackets->colavacia())
+    {
+        return;
+    }
+    else
+    {
+        Nodo<Paquete *> *aux = outPackets->get_czo();
+        for (int j = 0; canales_ida->size(); j++)
+        {
+            if (canales_ida->search_id(j)->getDestino() == aux->get_dato()->getDestino()[0])
+            {
+                vecino = true;
+                break;
+            }
+        }
+        if (vecino)
+        {
+            id_vecino = aux->get_dato()->getDestino()[0];
+            for (int k = 0; k < routers_vecinos->size(); k++)
+            {
+                if (routers_vecinos->search_id(k)->getId() == id_vecino)
+                {
+                    routers_vecinos->search_id(k)->receive_packet(aux->get_dato());
+                    outPackets->desencolar();
+                    break;
+                }
+            }
+        }
+        else
+        {
+            // Aca deberia ver por cual ruta enviar el paquete
+        }
+    }
 }
