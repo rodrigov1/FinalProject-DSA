@@ -37,12 +37,14 @@ public:
     // void setEnvio(Pagina *page) { paginas_enviadas->add(page); };
     // Lista<Router *> *getNeighbors() { return routers_vecinos; };
     Lista<Terminal *> *getTerminals() { return terminales_conectados; };
+    Lista<Router *> *getNeighbors() { return routers_vecinos; };
     void receive_page(Pagina *p);
     void send_packet();
     Cola<Paquete *> *getInPackets() { return inPackets; };
     Lista<Canal *> *getCanales() { return canales_ida; };
     void receive_packet(Paquete *pkg);
     bool check_completion(Paquete *p);
+    void print_packets();
     // void check_files(Cola<Paquete *> *aux);
 };
 

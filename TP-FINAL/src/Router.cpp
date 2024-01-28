@@ -6,6 +6,9 @@
 #include "../include/Terminal.h"
 #include "../include/Paquete.h"
 
+#define GREEN "\x1b[32m"
+#define RESET_COLOR "\x1b[0m"
+
 using namespace std;
 
 void Router::add_terminal(Terminal *t)
@@ -47,8 +50,8 @@ void Router::receive_page(Pagina *p)
         // cout << "Pkg " << aux->getId() << " de tamaño " << aux->getSize() << " creado" << endl;
         outPackets->encolar(aux);
     }
-
-    delete p; // borrado del objeto pagina
+    delete p;        // borrado del objeto pagina
+    print_packets(); // Imprime los paquetes que se van a enviar, solo para debuggear
 }
 
 void Router::receive_packet(Paquete *pkg)
@@ -92,4 +95,19 @@ bool Router::check_completion(Paquete *pkg)
         return true;
     }
     return false;
+}
+
+/* Prints packets to be send */
+void Router::print_packets()
+{
+    cout << GREEN << "Paquetes del Router " << this->getId() << RESET_COLOR << endl;
+    cout << "Num_paquete | Origen | Destino | Id_Pagina" << endl;
+    Nodo<Paquete *> *aux = outPackets->get_czo();
+    for (int i = 0; i < outPackets->size(); i++)
+    {
+        cout << aux->get_dato()->getId() << "              " << aux->get_dato()->getOrigen()[0] << ":" << aux->get_dato()->getOrigen()[1]
+             << "       " << aux->get_dato()->getDestino()[0] << ":" << aux->get_dato()->getDestino()[1] << "        " << aux->get_dato()->getPage()->getId() << endl;
+        aux = aux->get_next();
+    }
+    cout << endl;
 }
