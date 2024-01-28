@@ -136,9 +136,21 @@ void Router::send_packet()
     else
     {
         Nodo<Paquete *> *aux = outPackets->get_czo();
+        if (this->getCanales()->size() == 0)
+        {
+            cout << "No hay canales disponibles" << endl;
+            return;
+        }
         for (int j = 0; canales_ida->size(); j++)
         {
-            if (canales_ida->search_id(j)->getDestino() == aux->get_dato()->getDestino()[0])
+            if (aux->get_dato()->getDestino()[0] == this->getId())
+            {
+                cout << "El paquete " << aux->get_dato()->getId() << " llego a su destino" << endl;
+                receive_packet(aux->get_dato());
+                outPackets->desencolar();
+                return;
+            }
+            else if (canales_ida->search_id(j)->getDestino() == aux->get_dato()->getDestino()[0])
             {
                 vecino = true;
                 break;
@@ -160,6 +172,7 @@ void Router::send_packet()
         else
         {
             // Aca deberia ver por cual ruta enviar el paquete
+            cout << "No hay conexion directa con el router " << aux->get_dato()->getDestino()[0] << endl;
         }
     }
 }

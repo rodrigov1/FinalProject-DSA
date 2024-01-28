@@ -135,3 +135,13 @@ void Administrador::establecer_conexion(int origen, int destino, int bw)
     routers_disponibles->search_id(origen)->add_neighbors(routers_disponibles->search_id(destino));
     canales_totales->addFinal(c);
 }
+void Administrador::send_packets()
+{
+    Nodo<Router *> *aux = routers_disponibles->get_czo();
+    for (int i = 0; i < routers_disponibles->size(); i++)
+    {
+        aux->get_dato()->send_packet();
+        aux->get_dato()->print_packets();
+        aux = aux->get_next();
+    }
+}
