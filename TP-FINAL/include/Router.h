@@ -45,6 +45,7 @@ public:
     void receive_packet(Paquete *pkg);
     bool check_completion(Paquete *p);
     void print_packets();
+    Pagina *recreate_page(Paquete *p);
     // void check_files(Cola<Paquete *> *aux);
 };
 

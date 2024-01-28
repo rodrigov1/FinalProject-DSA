@@ -53,7 +53,6 @@ void Router::receive_page(Pagina *p)
     // delete p;        // borrado del objeto pagina
     print_packets(); // Imprime los paquetes que se van a enviar, solo para debuggear
 }
-
 void Router::receive_packet(Paquete *pkg)
 {
     // cout << "El paquete " << pkg->getId() << " llego al router " << this->getId() << endl;
@@ -62,9 +61,9 @@ void Router::receive_packet(Paquete *pkg)
         inPackets->encolar(pkg);
         if (check_completion(pkg))
         {
-            Pagina *p = pkg->getPage();
-            p->setArrived();
-            this->getTerminals()->search_id(pkg->getDestino()[1])->recibir_pagina(p);
+            int destino_t = pkg->getDestino()[1];
+            Pagina *page = recreate_page(pkg);
+            terminales_conectados->search_id(destino_t)->recibir_pagina(page);
         }
     }
     else
@@ -72,7 +71,21 @@ void Router::receive_packet(Paquete *pkg)
         outPackets->encolar(pkg);
     }
 }
-
+Pagina *Router::recreate_page(Paquete *pkg)
+{
+    Pagina *page = pkg->getPage();
+    Nodo<Paquete *> *aux = this->getInPackets()->get_czo();
+    for (int i = 0; i < this->getInPackets()->sizeCola(); i++)
+    {
+        if (aux->get_dato()->getPage()->getId() == page->getId())
+        {
+            this->getInPackets()->desencolar();
+        }
+        aux = aux->get_next();
+    }
+    page->setArrived();
+    return page;
+}
 bool Router::check_completion(Paquete *pkg)
 {
     Pagina *page = pkg->getPage();
