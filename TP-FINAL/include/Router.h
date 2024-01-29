@@ -6,8 +6,7 @@
 #include "Paquete.h"
 #include "Canal.h"
 
-class Router
-{
+class Router {
 private:
     int id;
     Lista<Router *> *routers_vecinos;

@@ -5,8 +5,7 @@
 #include "Pagina.h"
 #include "Lista.h"
 
-class Terminal
-{
+class Terminal {
 private:
     int ip[2];
     // Router *router_conectado;

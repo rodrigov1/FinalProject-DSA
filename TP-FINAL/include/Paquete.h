@@ -4,8 +4,7 @@
 
 using namespace std;
 
-class Paquete
-{
+class Paquete {
 private:
     int id;
     Pagina *page;

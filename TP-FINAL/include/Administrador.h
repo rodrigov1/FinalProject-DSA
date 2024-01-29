@@ -8,8 +8,7 @@
 #include "Pagina.h"
 #include "Canal.h"
 
-class Administrador
-{
+class Administrador {
 private:
     Lista<Router *> *routers_disponibles = new Lista<Router *>();
     Lista<Terminal *> *terminales_disponibles = new Lista<Terminal *>();

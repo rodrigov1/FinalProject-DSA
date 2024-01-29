@@ -120,14 +120,12 @@ void Administrador::crear_pagina()
     {
         // cout << "Pagina " << pagina->getId() << "recibida " << endl;
         this->routers_disponibles->search_id(origen[0])->receive_page(pagina);
-    }
-    else
-    {
+    } else {
         this->routers_disponibles->search_id(origen[0])->getTerminals()->search_id(origen[1])->recibir_pagina(pagina);
     }
 }
 
-/* Establece las conexiones en la red de routers */
+/* Establece las conexiones de la red de routers */
 void Administrador::establecer_conexion(int origen, int destino, int bw)
 {
     Canal *c = new Canal(origen, destino, bw);
@@ -135,6 +133,8 @@ void Administrador::establecer_conexion(int origen, int destino, int bw)
     routers_disponibles->search_id(origen)->add_neighbors(routers_disponibles->search_id(destino));
     canales_totales->addFinal(c);
 }
+
+/* Ejecuta el envio sistemico de paquetes */
 void Administrador::send_packets()
 {
     Nodo<Router *> *aux = routers_disponibles->get_czo();
