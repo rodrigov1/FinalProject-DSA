@@ -25,34 +25,39 @@ void Router::add_neighbors(Router *r)
 void Router::receive_page(Pagina *p)
 {
     int n = 1;
-    int size = 0;
-    for (int i = 2; i < p->getSize(); i++)
+    int size_pak = 0;
+    int size_pag = p->getSize();
+
+    // Busqueda del minimo comun multiplo
+    for (int i = 2; i < size_pag; i++)
     {
-        if (p->getSize() % i == 0)
+        if (size_pag % i == 0)
         {
             n = i;
-            size = p->getSize() / i;
+            size_pak = size_pag / i;
         }
     }
-
+    // (en caso de ser numero primo)
     if (n == 1)
     {
         n = p->getSize();
         size = 1;
-        // cout << "El numero de paquetes es: " << p->getSize() << endl;
     }
 
-    // cout << "Cantidad de paquetes: " << n << " de tamaño: " << size << endl;
+    // cout << "Cantidad de paquetes: " << n << " de tamaño: " << size_pak << endl;
+    
     // Se crean n paquetes y se encolan todos en la cola de salida
     for (int j = 0; j < n; j++)
     {
-        Paquete *aux = new Paquete(j, p, size);
+        Paquete *aux = new Paquete(j, p, size_pak);
         // cout << "Pkg " << aux->getId() << " de tamaño " << aux->getSize() << " creado" << endl;
         outPackets->encolar(aux);
     }
-    // delete p;        // borrado del objeto pagina
+    delete p;        // borrado del objeto pagina
     print_packets(); // Imprime los paquetes que se van a enviar, solo para debuggear
+
 }
+
 void Router::receive_packet(Paquete *pkg)
 {
     // cout << "El paquete " << pkg->getId() << " llego al router " << this->getId() << endl;
@@ -65,13 +70,12 @@ void Router::receive_packet(Paquete *pkg)
             Pagina *page = recreate_page(pkg);
             terminales_conectados->search_id(destino_t)->recibir_pagina(page);
         }
-    }
-    else
-    {
+    } else {
         outPackets->encolar(pkg);
     }
 }
-Pagina *Router::recreate_page(Paquete *pkg)
+
+Pagina* Router::recreate_page(Paquete *pkg)
 {
     Pagina *page = pkg->getPage();
     Nodo<Paquete *> *aux = this->getInPackets()->get_czo();
@@ -86,6 +90,7 @@ Pagina *Router::recreate_page(Paquete *pkg)
     page->setArrived();
     return page;
 }
+
 bool Router::check_completion(Paquete *pkg)
 {
     Pagina *page = pkg->getPage();
@@ -128,11 +133,7 @@ void Router::print_packets()
 void Router::send_packet()
 {
     bool vecino = false;
-    if (outPackets->colavacia())
-    {
-        return;
-    }
-    else
+    if (!outPackets->colavacia())
     {
         Nodo<Paquete *> *aux = outPackets->get_czo();
         if (this->getCanales()->size() == 0)
@@ -145,9 +146,7 @@ void Router::send_packet()
             receive_packet(aux->get_dato());
             outPackets->desencolar();
             return;
-        }
-        else
-        {
+        } else {
             for (int i = 0; i < this->getCanales()->size(); i++)
             {
                 if (this->getCanales()->search_id(i)->getDestino() == aux->get_dato()->getDestino()[0])

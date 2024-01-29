@@ -3,8 +3,7 @@
 
 using namespace std;
 
-class Pagina
-{
+class Pagina {
 private:
     int id;
     int size;

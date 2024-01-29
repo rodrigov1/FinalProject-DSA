@@ -6,8 +6,7 @@
 #include "Paquete.h"
 #define INFI 9999
 
-class Canal
-{
+class Canal {
 private:
     int origen;
     int destino;
