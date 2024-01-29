@@ -9,6 +9,9 @@
 #include "../include/Administrador.h"
 #include "../include/Canal.h"
 
+#define INFI 9999
+#define MAX_NODOS 10
+int TABLA_RUTEO[MAX_NODOS][MAX_NODOS];
 using namespace std;
 
 /* Lector del archivo configuracion.txt */
@@ -120,7 +123,9 @@ void Administrador::crear_pagina()
     {
         // cout << "Pagina " << pagina->getId() << "recibida " << endl;
         this->routers_disponibles->search_id(origen[0])->receive_page(pagina);
-    } else {
+    }
+    else
+    {
         this->routers_disponibles->search_id(origen[0])->getTerminals()->search_id(origen[1])->recibir_pagina(pagina);
     }
 }
@@ -143,5 +148,52 @@ void Administrador::send_packets()
         aux->get_dato()->send_packet();
         aux->get_dato()->print_packets();
         aux = aux->get_next();
+    }
+}
+
+/**
+ * Initializes the network by calculating the weights of the routers' connections.
+ * The weight represents the cost or distance between routers in the network.
+ *
+ * @param source The index of the source router.
+ */
+void Administrador::initialize_network(int source)
+{
+    int peso[cant_routers];
+    int aux = 0;
+
+    for (int i = 0; i < routers_disponibles->size(); i++) // Inicializa el arreglo de pesos
+    {
+        Router *router_actual = routers_disponibles->search_id(i);
+        if (i == source) // Analisis de peso para el router origen
+        {
+            peso[source] = 0;
+        }
+        else if (routers_disponibles->search_id(source)->es_vecino(i)) // Analisis de peso para los vecinos del router origen
+        {
+            for (int j = 0; j < router_actual->getCanales()->size(); j++)
+            {
+                Canal *canal_actual = router_actual->getCanales()->search_id(j);
+                if (canal_actual->getOrigen() == source && canal_actual->getDestino() == i)
+                {
+                    canal_actual->calcular_peso();
+                    aux = canal_actual->getPeso();
+                }
+                else
+                {
+                    aux = INFI;
+                }
+            }
+        }
+        else
+        {
+            aux = INFI;
+        }
+        peso[i] = aux; // Asigna el peso al arreglo
+    }
+
+    for (int i = 0; i < cant_routers; i++)
+    {
+        TABLA_RUTEO[source][i] = peso[i];
     }
 }

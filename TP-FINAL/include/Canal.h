@@ -6,7 +6,8 @@
 #include "Paquete.h"
 #define INFI 9999
 
-class Canal {
+class Canal
+{
 private:
     int origen;
     int destino;
@@ -27,7 +28,7 @@ public:
     int getDestino() { return destino; };
     int getBw() { return bw; };
     int getPeso() { return peso; };
-    void calcular_peso() { peso = buffer->size() / bw; }
+    void calcular_peso();
     void add_packet(Paquete *p); // Agrega un paquete al buffer
     // Paquete *transmit_packet();  // Transmite un paquete random del buffer
     void print_buffer();

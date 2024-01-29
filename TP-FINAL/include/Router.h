@@ -6,7 +6,8 @@
 #include "Paquete.h"
 #include "Canal.h"
 
-class Router {
+class Router
+{
 private:
     int id;
     Lista<Router *> *routers_vecinos;
@@ -46,6 +47,7 @@ public:
     void print_packets();
     Pagina *recreate_page(Paquete *p);
     // void check_files(Cola<Paquete *> *aux);
+    bool es_vecino(int id_r);
 };
 
 #endif

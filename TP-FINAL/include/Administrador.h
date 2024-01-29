@@ -8,7 +8,8 @@
 #include "Pagina.h"
 #include "Canal.h"
 
-class Administrador {
+class Administrador
+{
 private:
     Lista<Router *> *routers_disponibles = new Lista<Router *>();
     Lista<Terminal *> *terminales_disponibles = new Lista<Terminal *>();
@@ -32,6 +33,7 @@ public:
     void print_t(); // imprime las terminales
     void send_packets();
     // void receive_packets();
+    void initialize_network(int source);
 };
 
 #endif

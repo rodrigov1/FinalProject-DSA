@@ -8,6 +8,17 @@ void Canal::add_packet(Paquete *p)
     buffer->addFinal(p);
 }
 
+void Canal::calcular_peso()
+{
+    if (this->buffer->size() > 0)
+    {
+        peso = buffer->size() / bw;
+    }
+    else
+    {
+        peso = INFI;
+    }
+}
 // Paquete *Canal::transmit_packet()
 // {
 //     int random = rand() % buffer->size();

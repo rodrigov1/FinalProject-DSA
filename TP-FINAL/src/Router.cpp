@@ -41,11 +41,11 @@ void Router::receive_page(Pagina *p)
     if (n == 1)
     {
         n = p->getSize();
-        size = 1;
+        size_pak = 1;
     }
 
     // cout << "Cantidad de paquetes: " << n << " de tamaño: " << size_pak << endl;
-    
+
     // Se crean n paquetes y se encolan todos en la cola de salida
     for (int j = 0; j < n; j++)
     {
@@ -53,9 +53,8 @@ void Router::receive_page(Pagina *p)
         // cout << "Pkg " << aux->getId() << " de tamaño " << aux->getSize() << " creado" << endl;
         outPackets->encolar(aux);
     }
-    delete p;        // borrado del objeto pagina
+    // delete p;        // borrado del objeto pagina
     print_packets(); // Imprime los paquetes que se van a enviar, solo para debuggear
-
 }
 
 void Router::receive_packet(Paquete *pkg)
@@ -70,12 +69,14 @@ void Router::receive_packet(Paquete *pkg)
             Pagina *page = recreate_page(pkg);
             terminales_conectados->search_id(destino_t)->recibir_pagina(page);
         }
-    } else {
+    }
+    else
+    {
         outPackets->encolar(pkg);
     }
 }
 
-Pagina* Router::recreate_page(Paquete *pkg)
+Pagina *Router::recreate_page(Paquete *pkg)
 {
     Pagina *page = pkg->getPage();
     Nodo<Paquete *> *aux = this->getInPackets()->get_czo();
@@ -146,7 +147,9 @@ void Router::send_packet()
             receive_packet(aux->get_dato());
             outPackets->desencolar();
             return;
-        } else {
+        }
+        else
+        {
             for (int i = 0; i < this->getCanales()->size(); i++)
             {
                 if (this->getCanales()->search_id(i)->getDestino() == aux->get_dato()->getDestino()[0])
@@ -164,4 +167,18 @@ void Router::send_packet()
             }
         }
     }
+}
+
+bool Router::es_vecino(int id_r)
+{
+    Nodo<Router *> *aux = routers_vecinos->get_czo();
+    for (int i = 0; i < routers_vecinos->size(); i++)
+    {
+        if (aux->get_dato()->getId() == id_r)
+        {
+            return true;
+        }
+        aux = aux->get_next();
+    }
+    return false;
 }
