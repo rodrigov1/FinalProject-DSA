@@ -287,7 +287,7 @@ void Administrador::generate_network()
         init_network(i);
     }
     print_network();
-    // TEST CASE 1 (s = 0, t = 1)
+    // TEST CASE 1 (s = 0, t = 2)
     s = 0;
     t = 2;
     pdist = dijkstra(TABLA_RUTEO, s, t, P);
