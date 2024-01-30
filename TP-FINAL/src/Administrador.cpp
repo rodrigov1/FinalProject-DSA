@@ -8,6 +8,7 @@
 #include "../include/Terminal.h"
 #include "../include/Administrador.h"
 #include "../include/Canal.h"
+#include "../include/Ruta.h"
 
 using namespace std;
 #define BLUE "\033[36;1m"
@@ -268,9 +269,9 @@ int *Administrador::dijkstra(int C[][MAX_NODOS], int s, int t, int P[])
     return D;
 } // fin dijkstra
 
-void Administrador::camino(int P[], int s, int t, int route[])
+/* Recursive function to print the route from the source to the destination */
+void Administrador::camino(int P[], int s, int t, int route[], int &index)
 {
-    static int index = 0; // It's static so it doesn't reset every time the function is called recursively
     if (t == s)
     {
         route[index] = s;
@@ -278,34 +279,51 @@ void Administrador::camino(int P[], int s, int t, int route[])
     }
     else
     {
-        camino(P, s, P[t], route);
-        route[index] = t;
-        index++;
+        camino(P, s, P[t], route, index);
+        if (index < MAX_NODOS) // Check if index is within bounds
+        {
+            route[index] = t;
+            index++;
+        }
     }
-    route[index] = -1; // Marks the end of the array
 }
 
+/**
+ * Generates the network by initializing the routers and calculating the roads between them.
+ * Each router is initialized and the shortest road are calculated using Dijkstra's algorithm.
+ * The calculated roads are then added to the corresponding router.
+ */
 void Administrador::generate_network()
 {
     int *pdist, P[MAX_NODOS], s, t;
+
     for (int i = 0; i < routers_disponibles->size(); i++)
     {
         init_network(i);
     }
+
     print_network();
-    // TEST CASE 1 (s = 0, t = 2)
-    s = 0;
-    t = 3;
-    pdist = dijkstra(TABLA_RUTEO, s, t, P);
-    cout << "Distancia minima de " << s << " a " << t << " es " << pdist[t] << endl;
-    cout << "Camino: ";
-    int route[MAX_NODOS];
-    camino(P, s, t, route);
-    for (int i = 0; i < cant_routers; i++)
+
+    for (s = 0; s < MAX_NODOS; s++)
     {
-        if (route[i] == -1)
-            break;
-        cout << route[i] << " ";
+        int road[MAX_NODOS]; // Use a static array
+        int index = 0;       // Initialize index for the camino function
+        Ruta *c = new Ruta();
+        // cout << "CAMINOS DEL ROUTER: " << s << endl;
+        for (t = 0; t < MAX_NODOS; t++)
+        {
+            pdist = dijkstra(TABLA_RUTEO, s, t, P);
+            if (pdist[t] != INFI && pdist[t] > 1)
+            {
+                // cout << "Distancia minima de " << s << " a " << t << " es " << pdist[t] << endl;
+                camino(P, s, t, road, index);
+                c->setNext(road[1]);
+                c->setLast(road[index - 1]);
+                c->setDistancia(pdist[t]);
+                // cout << c->getNext() << " -> " << c->getLast() << endl;
+                index = 0; // Reset index for the next iteration of the loop
+            }
+        }
+        this->routers_disponibles->search_id(s)->getRutas()->addFinal(c); // Agrega la ruta al router correspondiente
     }
-    cout << endl;
 }

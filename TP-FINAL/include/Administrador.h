@@ -43,7 +43,7 @@ public:
     void generate_network();
     int *dijkstra(int C[][MAX_NODOS], int s, int t, int P[]);
     void print_network();
-    void camino(int P[], int s, int t, int route[]);
+    void camino(int P[], int s, int t, int *route, int &i);
 };
 
 #endif

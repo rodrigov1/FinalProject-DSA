@@ -5,6 +5,7 @@
 #include "Lista.h"
 #include "Paquete.h"
 #include "Canal.h"
+#include "Ruta.h"
 
 class Router
 {
@@ -19,6 +20,7 @@ private:
     Cola<Paquete *> *inPackets;
     Cola<Paquete *> *outPackets;
     Lista<Canal *> *canales_ida;
+    Lista<Ruta *> *rutas_disponibles;
 
 public:
     Router(int id)
@@ -29,6 +31,7 @@ public:
         terminales_conectados = new Lista<Terminal *>();
         inPackets = new Cola<Paquete *>();
         outPackets = new Cola<Paquete *>();
+        rutas_disponibles = new Lista<Ruta *>();
     };
     ~Router();
     void add_terminal(Terminal *t);
@@ -48,6 +51,7 @@ public:
     Pagina *recreate_page(Paquete *p);
     // void check_files(Cola<Paquete *> *aux);
     bool es_vecino(int id_r);
+    Lista<Ruta *> *getRutas() { return rutas_disponibles; };
 };
 
 #endif
