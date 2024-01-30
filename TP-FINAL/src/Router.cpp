@@ -150,7 +150,7 @@ void Router::send_packet()
         }
         else
         {
-            for (int i = 0; i < this->getCanales()->size(); i++)
+            for (int i = 0; i < this->getCanales()->size(); i++) // Busca si el destino es un vecino
             {
                 if (this->getCanales()->search_id(i)->getDestino() == aux->get_dato()->getDestino()[0])
                 {
@@ -160,10 +160,30 @@ void Router::send_packet()
                     break;
                 }
             }
-            if (!vecino)
+            if (!vecino) // Si no es vecino, busca si hay una ruta disponible
             {
-                cout << "No hay conexion directa con el router " << aux->get_dato()->getDestino()[0] << endl;
-                return;
+                if (this->getRutas()->size() == 0)
+                {
+                    cout << "No hay rutas disponibles" << endl;
+                    return;
+                }
+                for (int i = 0; i < this->getRutas()->size(); i++)
+                {
+                    if (this->getRutas()->search_id(i)->getLast() == aux->get_dato()->getDestino()[0]) // Busca si hay una ruta disponible con el destino del paquete
+                    {
+                        for (int j = 0; j < this->getCanales()->size(); j++)
+                        {
+                            if (this->getCanales()->search_id(j)->getOrigen() == this->getRutas()->search_id(i)->getNext()) // Busca el canal que conecta con el siguiente router de la ruta
+                            {
+                                this->getCanales()->search_id(j)->add_packet(aux->get_dato()); // Agrega el paquete al buffer del canal
+                                outPackets->desencolar();
+                                break;
+                            }
+                        }
+                        return; // Si encuentra una ruta, termina la funcion
+                    }
+                }
+                cout << "No hay ruta disponible para este paquete" << endl; // En caso de que no haya ruta disponible para el paquete
             }
         }
     }
