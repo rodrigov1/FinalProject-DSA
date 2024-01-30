@@ -268,15 +268,21 @@ int *Administrador::dijkstra(int C[][MAX_NODOS], int s, int t, int P[])
     return D;
 } // fin dijkstra
 
-void Administrador::camino(int P[], int s, int t)
+void Administrador::camino(int P[], int s, int t, int route[])
 {
+    static int index = 0; // It's static so it doesn't reset every time the function is called recursively
     if (t == s)
-        cout << s << "  ";
+    {
+        route[index] = s;
+        index++;
+    }
     else
     {
-        camino(P, s, P[t]);
-        cout << t << "  ";
+        camino(P, s, P[t], route);
+        route[index] = t;
+        index++;
     }
+    route[index] = -1; // Marks the end of the array
 }
 
 void Administrador::generate_network()
@@ -289,10 +295,17 @@ void Administrador::generate_network()
     print_network();
     // TEST CASE 1 (s = 0, t = 2)
     s = 0;
-    t = 2;
+    t = 3;
     pdist = dijkstra(TABLA_RUTEO, s, t, P);
     cout << "Distancia minima de " << s << " a " << t << " es " << pdist[t] << endl;
     cout << "Camino: ";
-    camino(P, s, t);
+    int route[MAX_NODOS];
+    camino(P, s, t, route);
+    for (int i = 0; i < cant_routers; i++)
+    {
+        if (route[i] == -1)
+            break;
+        cout << route[i] << " ";
+    }
     cout << endl;
 }
