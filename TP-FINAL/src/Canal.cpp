@@ -10,13 +10,14 @@ void Canal::add_packet(Paquete *p)
 
 void Canal::calcular_peso()
 {
-    if (this->buffer->size() > 0)
+    int size = buffer->size();
+    if (size == 0)
     {
-        peso = buffer->size() / bw;
+        peso = 1;
     }
     else
     {
-        peso = INFI;
+        peso = size / bw;
     }
 }
 // Paquete *Canal::transmit_packet()

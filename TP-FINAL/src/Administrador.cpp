@@ -13,6 +13,8 @@
 #define MAX_NODOS 10
 int TABLA_RUTEO[MAX_NODOS][MAX_NODOS];
 using namespace std;
+#define BLUE "\033[36;1m"
+#define RESET_COLOR "\x1b[0m"
 
 /* Lector del archivo configuracion.txt */
 void Administrador::leer_config()
@@ -160,40 +162,53 @@ void Administrador::send_packets()
 void Administrador::initialize_network(int source)
 {
     int peso[cant_routers];
-    int aux = 0;
+    int aux = -1;
 
     for (int i = 0; i < routers_disponibles->size(); i++) // Inicializa el arreglo de pesos
     {
-        Router *router_actual = routers_disponibles->search_id(i);
         if (i == source) // Analisis de peso para el router origen
         {
             peso[source] = 0;
         }
         else if (routers_disponibles->search_id(source)->es_vecino(i)) // Analisis de peso para los vecinos del router origen
         {
-            for (int j = 0; j < router_actual->getCanales()->size(); j++)
+            for (int j = 0; j < canales_totales->size(); j++)
             {
-                Canal *canal_actual = router_actual->getCanales()->search_id(j);
-                if (canal_actual->getOrigen() == source && canal_actual->getDestino() == i)
+                if (canales_totales->search_id(j)->getOrigen() == source && canales_totales->search_id(j)->getDestino() == i)
                 {
-                    canal_actual->calcular_peso();
-                    aux = canal_actual->getPeso();
-                }
-                else
-                {
-                    aux = INFI;
+                    canales_totales->search_id(j)->calcular_peso();
+                    aux = canales_totales->search_id(j)->getPeso();
+                    cout << "Peso del canal " << canales_totales->search_id(j)->getOrigen() << " a " << canales_totales->search_id(j)->getDestino() << " es " << canales_totales->search_id(j)->getPeso() << endl;
                 }
             }
+            peso[i] = aux;
         }
         else
         {
-            aux = INFI;
+
+            peso[i] = INFI;
         }
-        peso[i] = aux; // Asigna el peso al arreglo
     }
 
     for (int i = 0; i < cant_routers; i++)
     {
         TABLA_RUTEO[source][i] = peso[i];
+    }
+}
+void Administrador::print_network()
+{
+    for (int i = 0; i < routers_disponibles->size(); i++)
+    {
+        initialize_network(i);
+    }
+    cout << BLUE << "\nTABLA DE RUTAS" << RESET_COLOR << endl;
+    for (int i = 0; i < cant_routers; i++)
+    {
+        for (int j = 0; j < cant_routers; j++)
+        {
+            cout << "Router " << i << " a "
+                 << "Router " << j << " = " << TABLA_RUTEO[i][j] << endl;
+        }
+        cout << endl;
     }
 }

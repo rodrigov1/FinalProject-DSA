@@ -6,6 +6,7 @@ int main()
     Administrador *admin = new Administrador();
     admin->leer_config();
     admin->crear_pagina();
+    admin->print_network();
     // admin->crear_pagina();
     // admin->crear_pagina();
     int opcion = 0;

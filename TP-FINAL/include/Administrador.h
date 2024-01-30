@@ -34,6 +34,7 @@ public:
     void send_packets();
     // void receive_packets();
     void initialize_network(int source);
+    void print_network();
 };
 
 #endif

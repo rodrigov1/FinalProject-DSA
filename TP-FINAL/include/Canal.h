@@ -4,7 +4,6 @@
 #include "Lista.h"
 // #include "Router.h"
 #include "Paquete.h"
-#define INFI 9999
 
 class Canal
 {
@@ -12,7 +11,7 @@ private:
     int origen;
     int destino;
     int bw;
-    int peso = INFI;
+    int peso;
     Lista<Paquete *> *buffer;
 
 public:
