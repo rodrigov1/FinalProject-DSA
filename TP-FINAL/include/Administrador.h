@@ -8,6 +8,11 @@
 #include "Pagina.h"
 #include "Canal.h"
 
+#define INFI 9999
+#define MIEMBRO 1
+#define NO_MIEMBRO 0
+#define MAX_NODOS 5
+
 class Administrador
 {
 private:
@@ -15,6 +20,7 @@ private:
     Lista<Terminal *> *terminales_disponibles = new Lista<Terminal *>();
     Lista<Canal *> *canales_totales = new Lista<Canal *>();
     int cant_terminals = 0;
+    int TABLA_RUTEO[MAX_NODOS][MAX_NODOS];
     int cant_routers = 0;
     int id_paginas = 0;
 
@@ -33,8 +39,11 @@ public:
     void print_t(); // imprime las terminales
     void send_packets();
     // void receive_packets();
-    void initialize_network(int source);
+    void init_network(int source);
+    void generate_network();
+    int *dijkstra(int C[][MAX_NODOS], int s, int t, int P[]);
     void print_network();
+    void camino(int P[], int s, int t);
 };
 
 #endif

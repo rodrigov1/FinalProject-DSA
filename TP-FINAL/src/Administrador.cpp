@@ -9,9 +9,6 @@
 #include "../include/Administrador.h"
 #include "../include/Canal.h"
 
-#define INFI 9999
-#define MAX_NODOS 10
-int TABLA_RUTEO[MAX_NODOS][MAX_NODOS];
 using namespace std;
 #define BLUE "\033[36;1m"
 #define RESET_COLOR "\x1b[0m"
@@ -159,7 +156,7 @@ void Administrador::send_packets()
  *
  * @param source The index of the source router.
  */
-void Administrador::initialize_network(int source)
+void Administrador::init_network(int source)
 {
     int peso[cant_routers];
     int aux = -1;
@@ -178,7 +175,7 @@ void Administrador::initialize_network(int source)
                 {
                     canales_totales->search_id(j)->calcular_peso();
                     aux = canales_totales->search_id(j)->getPeso();
-                    cout << "Peso del canal " << canales_totales->search_id(j)->getOrigen() << " a " << canales_totales->search_id(j)->getDestino() << " es " << canales_totales->search_id(j)->getPeso() << endl;
+                    // cout << "Peso del canal " << canales_totales->search_id(j)->getOrigen() << " a " << canales_totales->search_id(j)->getDestino() << " es " << canales_totales->search_id(j)->getPeso() << endl;
                 }
             }
             peso[i] = aux;
@@ -197,10 +194,6 @@ void Administrador::initialize_network(int source)
 }
 void Administrador::print_network()
 {
-    for (int i = 0; i < routers_disponibles->size(); i++)
-    {
-        initialize_network(i);
-    }
     cout << BLUE << "\nTABLA DE RUTAS" << RESET_COLOR << endl;
     for (int i = 0; i < cant_routers; i++)
     {
@@ -211,4 +204,95 @@ void Administrador::print_network()
         }
         cout << endl;
     }
+}
+
+// C[i][j] Costo del arco de i a j
+// D[i] costo del camino m�nimo conocido hasta el
+//              momento de s a i
+//              inicialmente D[s]=0 y D[i]=INFI
+// S[i] conjunto de nodos cuya distancia minima a s es conocida
+//         y permanente, inicialmente S[] solo contiene a s
+//         S[i]=1 si i pertenece, 0 si i no pertenece
+// P[i] contiene el vertice que precede a i en el camino
+//            minimo encontrado hasta el momento
+int *Administrador::dijkstra(int C[][MAX_NODOS], int s, int t, int P[])
+{
+    static int D[MAX_NODOS];
+    int S[MAX_NODOS];
+    int actual, i, k, b;
+    int menordist, nuevadist;
+    // inicializaci�n
+    for (i = 0; i < MAX_NODOS; i++)
+    {
+        S[i] = NO_MIEMBRO;
+        D[i] = INFI;
+        P[i] = -1;
+    } // fin for
+    S[s] = MIEMBRO;
+    D[s] = 0;
+    actual = s;
+    b = 1;
+    k = 0;
+    while ((actual != t) && (b == 1))
+    {
+        b = 0;
+        menordist = INFI;
+        // printf("\n\n   D[%i]=%3i ",actual,D[actual]);
+        for (i = 0; i < MAX_NODOS; i++)
+        {
+            // cout<<"\n  i= "<<i;
+            if (S[i] == NO_MIEMBRO)
+            {
+                nuevadist = D[actual] + C[actual][i];
+                // printf("\n nuevadist=%3i D[%2i]=%3i ",nuevadist,i,D[i]);
+                if (nuevadist < D[i])
+                {
+                    D[i] = nuevadist; // actual es menor que la anterior
+                    P[i] = actual;
+                    b = 1;
+                } // fin if
+                // printf("\n menordist=%3i D[%2i]=%3i ",menordist,i,D[i]);
+                if (D[i] < menordist)
+                {
+                    menordist = D[i];
+                    k = i;
+                    b = 1; // guardo el nodo de la menor distancia
+                }          // fin if
+            }              // fin if
+        }                  // fin for
+
+        actual = k; // actual se ubica en el nodo de menor distancia
+        S[actual] = MIEMBRO;
+        // system("PAUSE");
+    } // fin while
+    return D;
+} // fin dijkstra
+
+void Administrador::camino(int P[], int s, int t)
+{
+    if (t == s)
+        cout << s << "  ";
+    else
+    {
+        camino(P, s, P[t]);
+        cout << t << "  ";
+    }
+}
+
+void Administrador::generate_network()
+{
+    int *pdist, P[MAX_NODOS], s, t;
+    for (int i = 0; i < routers_disponibles->size(); i++)
+    {
+        init_network(i);
+    }
+    print_network();
+    // TEST CASE 1 (s = 0, t = 1)
+    s = 0;
+    t = 2;
+    pdist = dijkstra(TABLA_RUTEO, s, t, P);
+    cout << "Distancia minima de " << s << " a " << t << " es " << pdist[t] << endl;
+    cout << "Camino: ";
+    camino(P, s, t);
+    cout << endl;
 }
