@@ -3,6 +3,9 @@
 
 using namespace std;
 
+/** Agrega el paquete al buffer del canal 
+ * @param p puntero tipo Paquete a agregar
+*/
 void Canal::add_packet(Paquete *p)
 {
     buffer->addFinal(p);

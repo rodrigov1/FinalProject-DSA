@@ -53,7 +53,9 @@ void Administrador::leer_config()
     config_file.close();
 }
 
-/* Creador de routers */
+/** Creador de routers 
+ * @param r cantidad de routers a crear
+*/
 void Administrador::crear_routers(int r)
 {
     cant_routers += r;
@@ -64,7 +66,9 @@ void Administrador::crear_routers(int r)
     }
 }
 
-/* Conector de terminales a routers */
+/** Conector de terminales a routers 
+ * @param t numero de terminales a crear y conectar
+*/
 void Administrador::conectar_terminales(int t)
 {
     cant_terminals += t;
@@ -130,7 +134,11 @@ void Administrador::crear_pagina()
     }
 }
 
-/* Establece las conexiones de la red de routers */
+/** Establece las conexiones de la red de routers 
+ * @param origen id del router de origen
+ * @param destino id del router de destino
+ * @param bw ancho de banda del canal
+*/
 void Administrador::establecer_conexion(int origen, int destino, int bw)
 {
     Canal *c = new Canal(origen, destino, bw);
@@ -193,6 +201,8 @@ void Administrador::init_network(int source)
         TABLA_RUTEO[source][i] = peso[i];
     }
 }
+
+/* Imprime la tabla de rutas */
 void Administrador::print_network()
 {
     cout << BLUE << "\nTABLA DE RUTAS" << RESET_COLOR << endl;
@@ -207,22 +217,27 @@ void Administrador::print_network()
     }
 }
 
-// C[i][j] Costo del arco de i a j
-// D[i] costo del camino m�nimo conocido hasta el
-//              momento de s a i
-//              inicialmente D[s]=0 y D[i]=INFI
-// S[i] conjunto de nodos cuya distancia minima a s es conocida
-//         y permanente, inicialmente S[] solo contiene a s
-//         S[i]=1 si i pertenece, 0 si i no pertenece
-// P[i] contiene el vertice que precede a i en el camino
-//            minimo encontrado hasta el momento
+/** C[i][j] Costo del arco de i a j
+*  D[i] costo del camino minimo conocido hasta el
+*             momento de s a i
+*              inicialmente D[s]=0 y D[i]=INFI
+*  S[i] conjunto de nodos cuya distancia minima a s es conocida
+*         y permanente, inicialmente S[] solo contiene a s
+*         S[i]=1 si i pertenece, 0 si i no pertenece
+*  P[i] contiene el vertice que precede a i en el camino
+*            minimo encontrado hasta el momento
+*  @param C[][MAX_NODOS] matriz de caminos
+*  @param s 
+*  @param t
+*  @param P[] arreglo
+*/
 int *Administrador::dijkstra(int C[][MAX_NODOS], int s, int t, int P[])
 {
     static int D[MAX_NODOS];
     int S[MAX_NODOS];
     int actual, i, k, b;
     int menordist, nuevadist;
-    // inicializaci�n
+    // inicializacion
     for (i = 0; i < MAX_NODOS; i++)
     {
         S[i] = NO_MIEMBRO;
@@ -269,7 +284,13 @@ int *Administrador::dijkstra(int C[][MAX_NODOS], int s, int t, int P[])
     return D;
 } // fin dijkstra
 
-/* Recursive function to print the route from the source to the destination */
+/** Recursive function to print the route from the source to the destination 
+ * @param P[] arreglo de pesos
+ * @param s
+ * @param t
+ * @param route[]
+ * @param index
+*/
 void Administrador::camino(int P[], int s, int t, int route[], int &index)
 {
     if (t == s)
