@@ -11,17 +11,26 @@
 
 using namespace std;
 
+/** Agrega una terminal a la lista del router 
+ * @param t puntero tipo Terminal
+*/
 void Router::add_terminal(Terminal *t)
 {
     terminales_conectados->addFinal(t);
     // t->add_router(this);
 }
 
+/** Agrega un router vecino a la lista del router
+ * @param r puntero tipo Router
+*/
 void Router::add_neighbors(Router *r)
 {
     routers_vecinos->addFinal(r);
 }
 
+/** Recibe una pagina y la separa en n paquetes 
+ * @param p puntero tipo Pagina a separar
+*/
 void Router::receive_page(Pagina *p)
 {
     int n = 1;
@@ -57,6 +66,9 @@ void Router::receive_page(Pagina *p)
     print_packets(); // Imprime los paquetes que se van a enviar, solo para debuggear
 }
 
+/** Decide el destino del paquete recibido por el router 
+ * @param pkg puntero tipo Paquete a decidir
+*/
 void Router::receive_packet(Paquete *pkg)
 {
     // cout << "El paquete " << pkg->getId() << " llego al router " << this->getId() << endl;
@@ -69,13 +81,14 @@ void Router::receive_packet(Paquete *pkg)
             Pagina *page = recreate_page(pkg);
             terminales_conectados->search_id(destino_t)->recibir_pagina(page);
         }
-    }
-    else
-    {
+    } else {
         outPackets->encolar(pkg);
     }
 }
 
+/** Recrea la pagina luego de juntar todos los paquetes necesarios 
+ * @param pkg puntero tipo Paquete de muestra
+*/
 Pagina *Router::recreate_page(Paquete *pkg)
 {
     Pagina *page = pkg->getPage();
@@ -92,6 +105,10 @@ Pagina *Router::recreate_page(Paquete *pkg)
     return page;
 }
 
+/** Comprueba si los paquetes que tienen de destino al router
+ *  son todos los necesarios para crear la pagina correspondiente
+ * @param pkg puntero tipo Paquete de muestra para chequear
+*/
 bool Router::check_completion(Paquete *pkg)
 {
     Pagina *page = pkg->getPage();
@@ -131,6 +148,7 @@ void Router::print_packets()
     cout << endl;
 }
 
+/* Envia el paquete al router vecino correspondiente */
 void Router::send_packet()
 {
     bool vecino = false;
@@ -204,6 +222,9 @@ void Router::send_packet()
     }
 }
 
+/** Retorna si un router es vecino o no 
+ * @param id_r id del router a comprobar
+*/
 bool Router::es_vecino(int id_r)
 {
     Nodo<Router *> *aux = routers_vecinos->get_czo();
