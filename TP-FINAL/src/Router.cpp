@@ -167,23 +167,38 @@ void Router::send_packet()
                     cout << "No hay rutas disponibles" << endl;
                     return;
                 }
+                int canal_optimo = 0;
+                int dist_actual = 0;
+                int dist_optima = 9999; // Inicializa la distancia optima en un numero grande
                 for (int i = 0; i < this->getRutas()->size(); i++)
                 {
                     if (this->getRutas()->search_id(i)->getLast() == aux->get_dato()->getDestino()[0]) // Busca si hay una ruta disponible con el destino del paquete
                     {
                         for (int j = 0; j < this->getCanales()->size(); j++)
                         {
-                            if (this->getCanales()->search_id(j)->getOrigen() == this->getRutas()->search_id(i)->getNext()) // Busca el canal que conecta con el siguiente router de la ruta
+                            if (this->getCanales()->search_id(j)->getDestino() == this->getRutas()->search_id(i)->getNext()) // Busca si hay un canal disponible con el primer nodo de la ruta
                             {
-                                this->getCanales()->search_id(j)->add_packet(aux->get_dato()); // Agrega el paquete al buffer del canal
-                                outPackets->desencolar();
+                                dist_actual = this->getRutas()->search_id(i)->getDistancia();
+                                canal_optimo = j;
                                 break;
                             }
                         }
-                        return; // Si encuentra una ruta, termina la funcion
+                    }
+                    if (dist_actual < dist_optima) // Busca la ruta mas corta para el destino del paquete
+                    {
+                        dist_optima = dist_actual;
                     }
                 }
-                cout << "No hay ruta disponible para este paquete" << endl; // En caso de que no haya ruta disponible para el paquete
+                if (dist_optima != 9999)
+                {
+                    this->getCanales()->search_id(canal_optimo)->add_packet(aux->get_dato()); // Agrega el paquete al buffer del canal
+                    outPackets->desencolar();
+                    return;
+                }
+                else
+                {
+                    cout << "No hay ruta disponible para este paquete" << endl; // En caso de que no haya ruta disponible para el paquete
+                }
             }
         }
     }
