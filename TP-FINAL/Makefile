@@ -1,6 +1,6 @@
 # Compiler, flags and directories
 CC = g++
-CFLAGS = -Wall -Wextra -pedantic -std=c++11 -I $(INC)
+CFLAGS = -Wall -g -Wextra -pedantic -std=c++11 -I $(INC)
 TARGET = tp
 SRCDIR = src
 
