@@ -17,9 +17,10 @@ private:
     // Lista<Pagina *> *paginas_enviadas;
     // Lista<Pagina *> *paginas_recibidas;
 
-    Cola<Paquete *> *inPackets;
-    Cola<Paquete *> *outPackets;
+    Lista<Paquete *> *inPackets;
+    Lista<Paquete *> *outPackets;
     Lista<Canal *> *canales_ida;
+    Lista<Canal *> *canales_vuelta;
     Lista<Ruta *> *rutas_disponibles;
 
 public:
@@ -28,8 +29,9 @@ public:
         this->id = id;
         routers_vecinos = new Lista<Router *>();
         canales_ida = new Lista<Canal *>();
+        canales_vuelta = new Lista<Canal *>();
         terminales_conectados = new Lista<Terminal *>();
-        inPackets = new Cola<Paquete *>();
+        inPackets = new Lista<Paquete *>();
         outPackets = new Cola<Paquete *>();
         rutas_disponibles = new Lista<Ruta *>();
     };
@@ -43,9 +45,10 @@ public:
     Lista<Router *> *getNeighbors() { return routers_vecinos; };
     void receive_page(Pagina *p);
     void send_packet();
-    Cola<Paquete *> *getInPackets() { return inPackets; };
-    Lista<Canal *> *getCanales() { return canales_ida; };
-    void receive_packet(Paquete *pkg);
+    Lista<Paquete *> *getInPackets() { return inPackets; };
+    Lista<Canal *> *getCanalesIda() { return canales_ida; };
+    Lista<Canal *> *getCanalesVuelta() { return canales_vuelta; };
+    void receive_packet();
     bool check_completion(Paquete *p);
     void print_packets();
     Pagina *recreate_page(Paquete *p);
