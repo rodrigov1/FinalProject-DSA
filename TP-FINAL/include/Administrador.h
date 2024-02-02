@@ -38,7 +38,7 @@ public:
     void print_r();
     void print_t(); // imprime las terminales
     void send_packets();
-    // void receive_packets();
+    void receive_packets();
     void init_network(int source);
     void generate_network();
     int *dijkstra(int C[][MAX_NODOS], int s, int t, int P[]);
