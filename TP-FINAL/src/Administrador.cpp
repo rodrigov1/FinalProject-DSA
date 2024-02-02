@@ -181,7 +181,7 @@ void Administrador::receive_packets()
  */
 void Administrador::init_network(int source)
 {
-    int peso[cant_routers];
+    int *peso = new int[cant_routers];
     int aux = -1;
 
     for (int i = 0; i < routers_disponibles->size(); i++) // Inicializa el arreglo de pesos
@@ -214,6 +214,7 @@ void Administrador::init_network(int source)
     {
         TABLA_RUTEO[source][i] = peso[i];
     }
+    delete[] peso;
 }
 
 /* Imprime la tabla de rutas */
