@@ -4,24 +4,27 @@
 
 using namespace std;
 
-class Paquete {
+class Paquete
+{
 private:
     int id;
-    Pagina *page;
+    int page_id;
     int origen[2];
     int destino[2];
     int size_pkg;
+    int size_pag;
 
 public:
-    Paquete(int id, Pagina *page, int size_pkg)
+    Paquete(int id, int origen[], int destino[], int page_id, int size_pkg, int size_pag)
     {
         this->id = id;
-        this->page = page;
-        this->origen[0] = page->getOrigin()[0];
-        this->origen[1] = page->getOrigin()[1];
-        this->destino[0] = page->getDest()[0];
-        this->destino[1] = page->getDest()[1];
+        this->origen[0] = origen[0];
+        this->origen[1] = origen[1];
+        this->destino[0] = destino[0];
+        this->destino[1] = destino[1];
+        this->page_id = page_id;
         this->size_pkg = size_pkg;
+        this->size_pag = size_pag;
     };
     //~Paquete();
     void setId();
@@ -29,7 +32,8 @@ public:
     int getId() { return id; };
     int *getOrigen() { return origen; };
     int *getDestino() { return destino; };
-    Pagina *getPage() { return page; };
+    int getPageId() { return page_id; };
+    int getSizePag() { return size_pag; };
 };
 
 #endif

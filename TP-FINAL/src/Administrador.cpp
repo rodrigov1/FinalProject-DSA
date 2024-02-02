@@ -53,9 +53,9 @@ void Administrador::leer_config()
     config_file.close();
 }
 
-/** Creador de routers 
+/** Creador de routers
  * @param r cantidad de routers a crear
-*/
+ */
 void Administrador::crear_routers(int r)
 {
     cant_routers += r;
@@ -66,9 +66,9 @@ void Administrador::crear_routers(int r)
     }
 }
 
-/** Conector de terminales a routers 
+/** Conector de terminales a routers
  * @param t numero de terminales a crear y conectar
-*/
+ */
 void Administrador::conectar_terminales(int t)
 {
     cant_terminals += t;
@@ -118,7 +118,9 @@ void Administrador::crear_pagina()
     int destino_r = rand() % cant_routers;
     int destino_t = rand() % cant_terminals;
     int destino[2] = {destino_r, destino_t};
-    int size = rand() % 100;
+    // int origen[2] = {0, 0};
+    // int destino[2] = {1, 2};
+    int size = rand() % 20;
     Pagina *pagina = new Pagina(id_paginas, size, origen, destino);
     // cout << "Pagina creada: " << pagina->getId() << " de tamaño " << pagina->getSize() << endl;
     id_paginas++;
@@ -134,15 +136,16 @@ void Administrador::crear_pagina()
     }
 }
 
-/** Establece las conexiones de la red de routers 
+/** Establece las conexiones de la red de routers
  * @param origen id del router de origen
  * @param destino id del router de destino
  * @param bw ancho de banda del canal
-*/
+ */
 void Administrador::establecer_conexion(int origen, int destino, int bw)
 {
     Canal *c = new Canal(origen, destino, bw);
-    routers_disponibles->search_id(origen)->getCanales()->addFinal(c);
+    routers_disponibles->search_id(origen)->getCanalesIda()->addFinal(c);
+    routers_disponibles->search_id(destino)->getCanalesVuelta()->addFinal(c);
     routers_disponibles->search_id(origen)->add_neighbors(routers_disponibles->search_id(destino));
     canales_totales->addFinal(c);
 }
@@ -155,6 +158,16 @@ void Administrador::send_packets()
     {
         aux->get_dato()->send_packet();
         aux->get_dato()->print_packets();
+        aux = aux->get_next();
+    }
+}
+
+void Administrador::receive_packets()
+{
+    Nodo<Router *> *aux = routers_disponibles->get_czo();
+    for (int i = 0; i < routers_disponibles->size(); i++)
+    {
+        aux->get_dato()->receive_packet();
         aux = aux->get_next();
     }
 }
@@ -218,19 +231,19 @@ void Administrador::print_network()
 }
 
 /** C[i][j] Costo del arco de i a j
-*  D[i] costo del camino minimo conocido hasta el
-*             momento de s a i
-*              inicialmente D[s]=0 y D[i]=INFI
-*  S[i] conjunto de nodos cuya distancia minima a s es conocida
-*         y permanente, inicialmente S[] solo contiene a s
-*         S[i]=1 si i pertenece, 0 si i no pertenece
-*  P[i] contiene el vertice que precede a i en el camino
-*            minimo encontrado hasta el momento
-*  @param C[][MAX_NODOS] matriz de caminos
-*  @param s 
-*  @param t
-*  @param P[] arreglo
-*/
+ *  D[i] costo del camino minimo conocido hasta el
+ *             momento de s a i
+ *              inicialmente D[s]=0 y D[i]=INFI
+ *  S[i] conjunto de nodos cuya distancia minima a s es conocida
+ *         y permanente, inicialmente S[] solo contiene a s
+ *         S[i]=1 si i pertenece, 0 si i no pertenece
+ *  P[i] contiene el vertice que precede a i en el camino
+ *            minimo encontrado hasta el momento
+ *  @param C[][MAX_NODOS] matriz de caminos
+ *  @param s
+ *  @param t
+ *  @param P[] arreglo
+ */
 int *Administrador::dijkstra(int C[][MAX_NODOS], int s, int t, int P[])
 {
     static int D[MAX_NODOS];
@@ -284,13 +297,13 @@ int *Administrador::dijkstra(int C[][MAX_NODOS], int s, int t, int P[])
     return D;
 } // fin dijkstra
 
-/** Recursive function to print the route from the source to the destination 
+/** Recursive function to print the route from the source to the destination
  * @param P[] arreglo de pesos
  * @param s
  * @param t
  * @param route[]
  * @param index
-*/
+ */
 void Administrador::camino(int P[], int s, int t, int route[], int &index)
 {
     if (t == s)
@@ -323,7 +336,7 @@ void Administrador::generate_network()
         init_network(i);
     }
 
-    print_network();
+    // print_network();
 
     for (s = 0; s < MAX_NODOS; s++)
     {

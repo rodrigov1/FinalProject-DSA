@@ -29,7 +29,8 @@ public:
     int getPeso() { return peso; };
     void calcular_peso();
     void add_packet(Paquete *p); // Agrega un paquete al buffer
-    // Paquete *transmit_packet();  // Transmite un paquete random del buffer
+    Paquete *transmit_packet();  // Transmite un paquete random del buffer
+    Lista<Paquete *> *getBuffer() { return buffer; };
     void print_buffer();
 };
 
