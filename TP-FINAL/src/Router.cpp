@@ -70,7 +70,7 @@ void Router::receive_page(Pagina *p)
         outPackets->addFinal(aux);
     }
     delete p;
-    print_packets(); // Imprime los paquetes que se van a enviar, solo para debuggear
+    // print_packets(); // Imprime los paquetes que se van a enviar, solo para debuggear
 }
 
 /** Decide el destino del paquete recibido por el router
@@ -192,6 +192,11 @@ bool Router::check_completion(Paquete *pkg)
 /* Prints packets to be send */
 void Router::print_packets()
 {
+    if (outPackets->esvacia())
+    {
+        // cout << "No hay paquetes para enviar" << endl;
+        return;
+    }
     cout << GREEN << "Paquetes del Router " << this->getId() << RESET_COLOR << endl;
     cout << "Num_paquete | Origen | Destino | Id_Pagina" << endl;
     Nodo<Paquete *> *aux = outPackets->get_czo();

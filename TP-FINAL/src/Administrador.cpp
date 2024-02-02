@@ -168,6 +168,7 @@ void Administrador::receive_packets()
     for (int i = 0; i < routers_disponibles->size(); i++)
     {
         aux->get_dato()->receive_packet();
+        aux->get_dato()->print_packets();
         aux = aux->get_next();
     }
 }
