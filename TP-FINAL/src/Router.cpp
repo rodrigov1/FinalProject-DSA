@@ -60,7 +60,6 @@ void Router::receive_page(Pagina *p)
     int destino[2] = {0, 0};
     destino[0] = p->getDest()[0];
     destino[1] = p->getDest()[1];
-    cout << "Pagina destino: " << destino[0] << ":" << destino[1] << endl;
     int page_id = p->getId();
 
     // Se crean n paquetes y se encolan todos en la cola de salida
@@ -70,7 +69,7 @@ void Router::receive_page(Pagina *p)
         outPackets->addFinal(aux);
     }
     delete p;
-    // print_packets(); // Imprime los paquetes que se van a enviar, solo para debuggear
+    print_packets(); // Imprime los paquetes que se van a enviar, solo para debuggear
 }
 
 /** Decide el destino del paquete recibido por el router
@@ -194,10 +193,10 @@ void Router::print_packets()
 {
     if (outPackets->esvacia())
     {
-        // cout << "No hay paquetes para enviar" << endl;
+        // cout << "- No hay paquetes para enviar -" << endl;
         return;
     }
-    cout << GREEN << "Paquetes del Router " << this->getId() << RESET_COLOR << endl;
+    cout << GREEN << "          Paquetes del Router " << this->getId() << RESET_COLOR << "      " << endl;
     cout << "Num_paquete | Origen | Destino | Id_Pagina" << endl;
     Nodo<Paquete *> *aux = outPackets->get_czo();
     for (int i = 0; i < outPackets->size(); i++)
@@ -212,7 +211,6 @@ void Router::print_packets()
 /* Envia el paquete al router vecino correspondiente */
 void Router::send_packet()
 {
-    bool vecino = false;
     if (!outPackets->esvacia())
     {
         Nodo<Paquete *> *aux = outPackets->get_czo();
@@ -229,54 +227,51 @@ void Router::send_packet()
         }
         else
         {
-            for (int i = 0; i < this->getCanalesIda()->size(); i++) // Busca si el destino es un vecino
+            for (int i = 0; i < routers_vecinos->size(); i++) // Busca si el destino es un router vecino
             {
-                if (this->getCanalesIda()->search_id(i)->getDestino() == aux->get_dato()->getDestino()[0])
+                int destino = aux->get_dato()->getDestino()[0];
+                if (es_vecino(destino))
                 {
-                    this->getCanalesIda()->search_id(i)->add_packet(aux->get_dato());
-                    outPackets->borrar();
-                    vecino = true;
-                    break;
-                }
-            }
-            if (!vecino) // Si no es vecino, busca si hay una ruta disponible
-            {
-                if (this->getRutas()->size() == 0)
-                {
-                    cout << "No hay rutas disponibles" << endl;
-                    return;
-                }
-                int canal_optimo = 0;
-                int dist_actual = 0;
-                int dist_optima = 9999; // Inicializa la distancia optima en un numero grande
-                for (int i = 0; i < this->getRutas()->size(); i++)
-                {
-                    if (this->getRutas()->search_id(i)->getLast() == aux->get_dato()->getDestino()[0]) // Busca si hay una ruta disponible con el destino del paquete
+                    for (int j = 0; j < canales_ida->size(); j++)
                     {
-                        for (int j = 0; j < this->getCanalesIda()->size(); j++)
+                        if (canales_ida->search_id(j)->getDestino() == destino)
                         {
-                            if (this->getCanalesIda()->search_id(j)->getDestino() == this->getRutas()->search_id(i)->getNext()) // Busca si hay un canal disponible con el primer nodo de la ruta
-                            {
-                                dist_actual = this->getRutas()->search_id(i)->getDistancia();
-                                canal_optimo = j;
-                                break;
-                            }
+                            canales_ida->search_id(j)->add_packet(aux->get_dato());
+                            outPackets->borrar();
+                            // cout << "\nPaquete enviado al router " << destino << endl;
+                            return;
                         }
                     }
-                    if (dist_actual < dist_optima) // Busca la ruta mas corta para el destino del paquete
+                }
+            }
+            if (rutas_disponibles->esvacia())
+            {
+                cout << "No hay rutas disponibles" << endl;
+                return;
+            }
+            int canal_optimo = 0;
+            int dist_actual = 0;
+            int dist_optima = 9999; // Inicializa la distancia optima en un numero grande
+            for (int i = 0; i < this->getRutas()->size(); i++)
+            {
+                if (aux->get_dato()->getDestino()[0] == this->getRutas()->search_id(i)->getLast())
+                {
+                    dist_actual = this->getRutas()->search_id(i)->getDistancia();
+                    if (dist_actual <= dist_optima)
                     {
                         dist_optima = dist_actual;
+                        canal_optimo = this->getRutas()->search_id(i)->getNext();
                     }
                 }
-                if (dist_optima != 9999)
+            }
+            for (int j = 0; j < canales_ida->size(); j++)
+            {
+                if (canales_ida->search_id(j)->getDestino() == canal_optimo)
                 {
-                    this->getCanalesIda()->search_id(canal_optimo)->add_packet(aux->get_dato()); // Agrega el paquete al buffer del canal
+                    canales_ida->search_id(j)->add_packet(aux->get_dato());
                     outPackets->borrar();
-                    return;
-                }
-                else
-                {
-                    cout << "No hay ruta disponible para este paquete" << endl; // En caso de que no haya ruta disponible para el paquete
+                    // cout << "\nPaquete enviado al router " << canal_optimo << endl;
+                    break;
                 }
             }
         }
@@ -298,4 +293,25 @@ bool Router::es_vecino(int id_r)
         aux = aux->get_next();
     }
     return false;
+}
+void Router::add_ruta(Ruta *r)
+{
+    rutas_disponibles->addFinal(r);
+}
+void Router::print_rutas()
+{
+    if (rutas_disponibles->esvacia())
+    {
+        cout << "No hay rutas disponibles" << endl;
+        return;
+    }
+    cout << GREEN << "Rutas disponibles del Router " << this->getId() << RESET_COLOR << endl;
+    cout << "Siguiente | Destino | Distancia_total" << endl;
+    Nodo<Ruta *> *aux = rutas_disponibles->get_czo();
+    for (int i = 0; i < rutas_disponibles->size(); i++)
+    {
+        cout << aux->get_dato()->getNext() << "          " << aux->get_dato()->getLast() << "          " << aux->get_dato()->getDistancia() << endl;
+        aux = aux->get_next();
+    }
+    cout << endl;
 }
