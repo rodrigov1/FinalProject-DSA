@@ -201,6 +201,7 @@ void Router::print_outPackets()
     }
     cout << endl;
 }
+
 /* Prints received packets */
 void Router::print_inPackets()
 {
@@ -233,6 +234,7 @@ void Router::print_inPackets()
     }
     cout << endl;
 }
+
 /* Envia el paquete al router vecino correspondiente */
 void Router::send_packet()
 {
@@ -319,10 +321,16 @@ bool Router::es_vecino(int id_r)
     }
     return false;
 }
+
+/** Agrega la ruta a la lista del Router 
+ * @param r puntero tipo Ruta
+*/
 void Router::add_ruta(Ruta *r)
 {
     rutas_disponibles->addFinal(r);
 }
+
+/* Imprime las rutas disponibles */
 void Router::print_rutas()
 {
     if (rutas_disponibles->esvacia())
