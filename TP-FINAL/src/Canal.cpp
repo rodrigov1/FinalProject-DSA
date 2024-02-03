@@ -11,28 +11,24 @@ void Canal::add_packet(Paquete *p)
     buffer->addFinal(p);
 }
 
+/* Refresca el valor del peso del Canal */
 void Canal::calcular_peso()
 {
     int size = buffer->size();
-    if (size == 0)
-    {
+    if (size == 0) {
         peso = 1;
-    }
-    else
-    {
+    } else {
         peso = size / bw;
     }
 }
+
+/* Transmite el paquete siguiente en la lista */
 Paquete *Canal::transmit_packet()
 {
-    Paquete *aux = NULL;
-    aux = buffer->get_czo()->get_dato();
-    if (aux != NULL)
-    {
+    Paquete *aux = buffer->get_czo()->get_dato();
+    if (aux != NULL) {
         return aux;
-    }
-    else
-    {
+    } else {
         return NULL;
     }
 }
