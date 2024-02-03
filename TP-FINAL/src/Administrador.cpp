@@ -157,7 +157,7 @@ void Administrador::send_packets()
     for (int i = 0; i < routers_disponibles->size(); i++)
     {
         aux->get_dato()->send_packet();
-        aux->get_dato()->print_packets();
+        aux->get_dato()->print_outPackets();
         aux = aux->get_next();
     }
 }
@@ -168,7 +168,10 @@ void Administrador::receive_packets()
     for (int i = 0; i < routers_disponibles->size(); i++)
     {
         aux->get_dato()->receive_packet();
-        aux->get_dato()->print_packets();
+        if (aux->get_dato()->getInPackets()->size() > 0)
+        {
+            aux->get_dato()->print_inPackets();
+        }
         aux = aux->get_next();
     }
 }

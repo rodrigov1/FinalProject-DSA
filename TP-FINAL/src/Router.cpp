@@ -69,7 +69,7 @@ void Router::receive_page(Pagina *p)
         outPackets->addFinal(aux);
     }
     delete p;
-    print_packets(); // Imprime los paquetes que se van a enviar, solo para debuggear
+    print_outPackets(); // Imprime los paquetes que se van a enviar, solo para debuggear
 }
 
 /** Decide el destino del paquete recibido por el router
@@ -138,29 +138,23 @@ Pagina *Router::recreate_page(Paquete *pkg)
     int page_id = pkg->getPageId();
     int origen[2] = {pkg->getOrigen()[0], pkg->getOrigen()[1]};
     int destino[2] = {pkg->getDestino()[0], pkg->getDestino()[1]};
-    // cout << "Destino: " << destino[0] << ":" << destino[1] << endl;
     int page_size = pkg->getSizePag();
-
+    int cant_pkg = page_size / pkg->getSize();
     Nodo<Paquete *> *aux = inPackets->get_czo();
-    // cout << "Recreando pagina " << page_id << " de tamaño: " << pkg->getSizePag() << endl;
-    for (int i = 0; i < inPackets->size(); i++)
+
+    for (int i = 0; i < cant_pkg; i++)
     {
-        if (aux->get_dato() != NULL)
+        if (aux->get_dato()->getPageId() == page_id)
         {
-            if (aux->get_dato()->getPageId() == page_id)
-            {
-                Nodo<Paquete *> *aux2 = aux;
-                aux = aux->get_next();
-                inPackets->borrarDato(aux2->get_dato()); // Delete the node
-            }
-            else
-            {
-                aux = aux->get_next();
-            }
+            Nodo<Paquete *> *aux2 = aux;
+            aux = aux->get_next();
+            cout << "Paquete " << aux2->get_dato()->getId() << " recibido" << endl;
+            delete aux2;
         }
     }
 
     Pagina *page = new Pagina(page_id, page_size, origen, destino);
+    page->setArrived();
     return page;
 }
 
@@ -189,7 +183,7 @@ bool Router::check_completion(Paquete *pkg)
 }
 
 /* Prints packets to be send */
-void Router::print_packets()
+void Router::print_outPackets()
 {
     if (outPackets->esvacia())
     {
@@ -207,7 +201,38 @@ void Router::print_packets()
     }
     cout << endl;
 }
-
+/* Prints received packets */
+void Router::print_inPackets()
+{
+    if (inPackets->esvacia())
+    {
+        // cout << "- No hay paquetes recibidos -" << endl;
+        return;
+    }
+    cout << GREEN << "          Paquetes del Router " << this->getId() << RESET_COLOR << "      " << endl;
+    cout << "Num_paquete | Origen | Destino | Id_Pagina | Progress (%)" << endl;
+    Nodo<Paquete *> *aux = inPackets->get_czo();
+    int actual = 0;
+    for (int i = 0; i < inPackets->size(); i++)
+    {
+        int size_pag = aux->get_dato()->getSizePag();
+        int size_pak = aux->get_dato()->getSize();
+        int total = size_pag / size_pak;
+        (actual != total) ? (++actual) : (actual = total);
+        cout << aux->get_dato()->getId() << "              " << aux->get_dato()->getOrigen()[0] << ":" << aux->get_dato()->getOrigen()[1]
+             << "       " << aux->get_dato()->getDestino()[0] << ":" << aux->get_dato()->getDestino()[1] << "        " << aux->get_dato()->getPageId() << "            [" << actual << "/" << total << "]" << endl;
+        Nodo<Paquete *> *aux2 = aux;
+        if (aux2->get_next() == NULL) // Si es el ultimo paquete de la lista
+        {
+            cout << endl;
+        }
+        else
+        {
+            aux = aux->get_next();
+        }
+    }
+    cout << endl;
+}
 /* Envia el paquete al router vecino correspondiente */
 void Router::send_packet()
 {
