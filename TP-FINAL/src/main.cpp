@@ -16,6 +16,7 @@ int main()
         cout << "Ingrese 2 para recibir paquetes" << endl;
         cout << "Ingrese 3 para salir" << endl;
         cin >> opcion;
+        cout << endl;
         if (opcion == 1)
         {
             admin->send_packets();

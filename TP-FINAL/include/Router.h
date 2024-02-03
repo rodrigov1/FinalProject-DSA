@@ -55,6 +55,8 @@ public:
     // void check_files(Cola<Paquete *> *aux);
     bool es_vecino(int id_r);
     Lista<Ruta *> *getRutas() { return rutas_disponibles; };
+    void add_ruta(Ruta *r);
+    void print_rutas();
 };
 
 #endif

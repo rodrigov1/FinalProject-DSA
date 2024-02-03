@@ -119,7 +119,7 @@ void Administrador::crear_pagina()
     int destino_t = rand() % cant_terminals;
     int destino[2] = {destino_r, destino_t};
     // int origen[2] = {0, 0};
-    // int destino[2] = {1, 2};
+    // int destino[2] = {2, 2};
     int size = rand() % 20;
     Pagina *pagina = new Pagina(id_paginas, size, origen, destino);
     // cout << "Pagina creada: " << pagina->getId() << " de tamaño " << pagina->getSize() << endl;
@@ -339,15 +339,14 @@ void Administrador::generate_network()
     }
 
     // print_network();
-
     for (s = 0; s < MAX_NODOS; s++)
     {
         int road[MAX_NODOS]; // Use a static array
         int index = 0;       // Initialize index for the camino function
-        Ruta *c = new Ruta();
         // cout << "CAMINOS DEL ROUTER: " << s << endl;
         for (t = 0; t < MAX_NODOS; t++)
         {
+            Ruta *c = new Ruta();
             pdist = dijkstra(TABLA_RUTEO, s, t, P);
             if (pdist[t] != INFI && pdist[t] > 1)
             {
@@ -357,9 +356,10 @@ void Administrador::generate_network()
                 c->setLast(road[index - 1]);
                 c->setDistancia(pdist[t]);
                 // cout << c->getNext() << " -> " << c->getLast() << endl;
+                this->routers_disponibles->search_id(s)->add_ruta(c);
                 index = 0; // Reset index for the next iteration of the loop
             }
         }
-        this->routers_disponibles->search_id(s)->getRutas()->addFinal(c); // Agrega la ruta al router correspondiente
+        this->routers_disponibles->search_id(s)->print_rutas();
     }
 }
