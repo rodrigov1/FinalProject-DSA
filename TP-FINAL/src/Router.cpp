@@ -166,6 +166,7 @@ bool Router::check_completion(Paquete *pkg)
 {
     int cant = 0;
     Nodo<Paquete *> *aux = this->getInPackets()->get_czo();
+
     for (int i = 0; i < this->getInPackets()->size(); i++)
     {
         if (aux->get_dato()->getPageId() == pkg->getPageId())
@@ -174,7 +175,9 @@ bool Router::check_completion(Paquete *pkg)
         }
         aux = aux->get_next();
     }
+
     int size = cant * pkg->getSize();
+    
     if (size == pkg->getSizePag())
     {
         return true;
