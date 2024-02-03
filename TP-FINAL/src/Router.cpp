@@ -193,10 +193,10 @@ void Router::print_packets()
 {
     if (outPackets->esvacia())
     {
-        // cout << "No hay paquetes para enviar" << endl;
+        // cout << "- No hay paquetes para enviar -" << endl;
         return;
     }
-    cout << GREEN << "Paquetes del Router " << this->getId() << RESET_COLOR << endl;
+    cout << GREEN << "          Paquetes del Router " << this->getId() << RESET_COLOR << "      " << endl;
     cout << "Num_paquete | Origen | Destino | Id_Pagina" << endl;
     Nodo<Paquete *> *aux = outPackets->get_czo();
     for (int i = 0; i < outPackets->size(); i++)
@@ -238,7 +238,7 @@ void Router::send_packet()
                         {
                             canales_ida->search_id(j)->add_packet(aux->get_dato());
                             outPackets->borrar();
-                            cout << "Paquete enviado al vecino " << destino << endl;
+                            // cout << "\nPaquete enviado al router " << destino << endl;
                             return;
                         }
                     }
@@ -270,7 +270,7 @@ void Router::send_packet()
                 {
                     canales_ida->search_id(j)->add_packet(aux->get_dato());
                     outPackets->borrar();
-                    cout << "Paquete enviado al router " << canal_optimo << endl;
+                    // cout << "\nPaquete enviado al router " << canal_optimo << endl;
                     break;
                 }
             }

@@ -1,41 +1,34 @@
 #include "../include/Lista.h"
 #include "../include/Administrador.h"
 
+#define BLUE "\033[36;1m"
+#define PURPLE "\033[35;1m"
+#define RESET_COLOR "\x1b[0m"
+
 int main()
 {
     Administrador *admin = new Administrador();
     admin->leer_config();
-    admin->crear_pagina();
-    admin->generate_network();
-    // admin->crear_pagina();
-    // admin->crear_pagina();
-    int opcion = 0;
-    while (opcion == 0)
+    int opcion = 1;
+    int crear = 1;
+    while (opcion == 1)
     {
-        cout << "Ingrese 1 para enviar paquetes" << endl;
-        cout << "Ingrese 2 para recibir paquetes" << endl;
-        cout << "Ingrese 3 para salir" << endl;
+        admin->generate_network();
+        if (crear == 1)
+        {
+            admin->crear_pagina();
+            admin->crear_pagina();
+            crear = 0;
+        }
+        cout << BLUE << "----------- ENVIO DE PAQUETES ------------" << RESET_COLOR << endl;
+        admin->send_packets();
+        cout << BLUE << "--------- RECEPCION DE PAQUETES ----------" << RESET_COLOR << endl;
+        admin->receive_packets();
+        cout << PURPLE << "------- ¿DESEA REPETIR EL PROCESO? -------" << RESET_COLOR << endl;
+        cout << "1. SI" << endl;
+        cout << "0. NO" << endl
+             << endl;
         cin >> opcion;
-        cout << endl;
-        if (opcion == 1)
-        {
-            admin->send_packets();
-            opcion = 0;
-        }
-        else if (opcion == 2)
-        {
-            admin->receive_packets();
-            opcion = 0;
-        }
-        else if (opcion == 3)
-        {
-            opcion = 1;
-        }
-        else
-        {
-            cout << "Ingrese una opcion valida" << endl;
-            opcion = 0;
-        }
     }
     return 0;
 }

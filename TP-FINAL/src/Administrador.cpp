@@ -360,6 +360,6 @@ void Administrador::generate_network()
                 index = 0; // Reset index for the next iteration of the loop
             }
         }
-        this->routers_disponibles->search_id(s)->print_rutas();
+        // this->routers_disponibles->search_id(s)->print_rutas();
     }
 }
