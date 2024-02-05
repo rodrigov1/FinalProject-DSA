@@ -26,7 +26,7 @@ public:
     int getOrigen() { return origen; };
     int getDestino() { return destino; };
     int getBw() { return bw; };
-    int getPeso() { return peso; };
+    int getPeso() { calcular_peso(); return peso; };
     void calcular_peso();
     void add_packet(Paquete *p); // Agrega un paquete al buffer
     Paquete *transmit_packet();  // Transmite un paquete random del buffer

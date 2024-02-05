@@ -162,6 +162,7 @@ void Administrador::send_packets()
     }
 }
 
+/* Ejecuta la recepcion de paquetes */
 void Administrador::receive_packets()
 {
     Nodo<Router *> *aux = routers_disponibles->get_czo();
@@ -184,40 +185,32 @@ void Administrador::receive_packets()
  */
 void Administrador::init_network(int source)
 {
-    int *peso = new int[cant_routers];
-    int aux = -1;
+    int peso;
+    int aux;
 
     for (int i = 0; i < routers_disponibles->size(); i++) // Inicializa el arreglo de pesos
     {
         if (i == source) // Analisis de peso para el router origen
         {
-            peso[source] = 0;
+            peso = 0;  // hacia si mismo
         }
         else if (routers_disponibles->search_id(source)->es_vecino(i)) // Analisis de peso para los vecinos del router origen
         {
-            for (int j = 0; j < canales_totales->size(); j++)
+            for (int j = 0; j < canales_totales->size(); j++)  // busco el canal correspondiente
             {
                 if (canales_totales->search_id(j)->getOrigen() == source && canales_totales->search_id(j)->getDestino() == i)
                 {
-                    canales_totales->search_id(j)->calcular_peso();
                     aux = canales_totales->search_id(j)->getPeso();
                     // cout << "Peso del canal " << canales_totales->search_id(j)->getOrigen() << " a " << canales_totales->search_id(j)->getDestino() << " es " << canales_totales->search_id(j)->getPeso() << endl;
                 }
             }
-            peso[i] = aux;
+            peso = aux;    // en caso de ser vecino 
+        } else {
+            peso = INFI;   // en caso de no ser vecino
         }
-        else
-        {
 
-            peso[i] = INFI;
-        }
+        TABLA_RUTEO[source][i] = peso;
     }
-
-    for (int i = 0; i < cant_routers; i++)
-    {
-        TABLA_RUTEO[source][i] = peso[i];
-    }
-    delete[] peso;
 }
 
 /* Imprime la tabla de rutas */
@@ -304,22 +297,19 @@ int *Administrador::dijkstra(int C[][MAX_NODOS], int s, int t, int P[])
 
 /** Recursive function to print the route from the source to the destination
  * @param P[] arreglo de pesos
- * @param s
- * @param t
- * @param route[]
- * @param index
+ * @param s origen
+ * @param t destino
+ * @param route[] ruta
+ * @param index indice
  */
 void Administrador::camino(int P[], int s, int t, int route[], int &index)
 {
-    if (t == s)
-    {
+    if (t == s) {
         route[index] = s;
         index++;
-    }
-    else
-    {
+    } else {
         camino(P, s, P[t], route, index);
-        if (index < MAX_NODOS) // Check if index is within bounds
+        if (index < MAX_NODOS) // Check if index is within boundries
         {
             route[index] = t;
             index++;
@@ -336,6 +326,7 @@ void Administrador::generate_network()
 {
     int *pdist, P[MAX_NODOS], s, t;
 
+    // inicializacion de la red
     for (int i = 0; i < routers_disponibles->size(); i++)
     {
         init_network(i);
