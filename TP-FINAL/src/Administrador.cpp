@@ -125,7 +125,7 @@ void Administrador::crear_pagina()
     // cout << "Pagina creada: " << pagina->getId() << " de tamaño " << pagina->getSize() << endl;
     id_paginas++;
 
-    if (origen != destino)
+    if (origen[0] != destino[0] || origen[1] != destino[1])
     {
         // cout << "Pagina " << pagina->getId() << "recibida " << endl;
         this->routers_disponibles->search_id(origen[0])->receive_page(pagina);
@@ -192,11 +192,11 @@ void Administrador::init_network(int source)
     {
         if (i == source) // Analisis de peso para el router origen
         {
-            peso = 0;  // hacia si mismo
+            peso = 0; // hacia si mismo
         }
         else if (routers_disponibles->search_id(source)->es_vecino(i)) // Analisis de peso para los vecinos del router origen
         {
-            for (int j = 0; j < canales_totales->size(); j++)  // busco el canal correspondiente
+            for (int j = 0; j < canales_totales->size(); j++) // busco el canal correspondiente
             {
                 if (canales_totales->search_id(j)->getOrigen() == source && canales_totales->search_id(j)->getDestino() == i)
                 {
@@ -204,9 +204,11 @@ void Administrador::init_network(int source)
                     // cout << "Peso del canal " << canales_totales->search_id(j)->getOrigen() << " a " << canales_totales->search_id(j)->getDestino() << " es " << canales_totales->search_id(j)->getPeso() << endl;
                 }
             }
-            peso = aux;    // en caso de ser vecino 
-        } else {
-            peso = INFI;   // en caso de no ser vecino
+            peso = aux; // en caso de ser vecino
+        }
+        else
+        {
+            peso = INFI; // en caso de no ser vecino
         }
 
         TABLA_RUTEO[source][i] = peso;
@@ -304,10 +306,13 @@ int *Administrador::dijkstra(int C[][MAX_NODOS], int s, int t, int P[])
  */
 void Administrador::camino(int P[], int s, int t, int route[], int &index)
 {
-    if (t == s) {
+    if (t == s)
+    {
         route[index] = s;
         index++;
-    } else {
+    }
+    else
+    {
         camino(P, s, P[t], route, index);
         if (index < MAX_NODOS) // Check if index is within boundries
         {
@@ -337,23 +342,23 @@ void Administrador::generate_network()
     {
         int road[MAX_NODOS]; // Use a static array
         int index = 0;       // Initialize index for the camino function
-        // cout << "CAMINOS DEL ROUTER: " << s << endl;
+        Lista<Ruta *> *tabla_rutas = new Lista<Ruta *>();
         for (t = 0; t < MAX_NODOS; t++)
         {
             Ruta *c = new Ruta();
             pdist = dijkstra(TABLA_RUTEO, s, t, P);
-            if (pdist[t] != INFI && pdist[t] > 1)
+            if (pdist[t] != INFI && pdist[t] > 0)
             {
                 // cout << "Distancia minima de " << s << " a " << t << " es " << pdist[t] << endl;
                 camino(P, s, t, road, index);
                 c->setNext(road[1]);
                 c->setLast(road[index - 1]);
                 c->setDistancia(pdist[t]);
-                // cout << c->getNext() << " -> " << c->getLast() << endl;
-                this->routers_disponibles->search_id(s)->add_ruta(c);
+                tabla_rutas->addFinal(c);
                 index = 0; // Reset index for the next iteration of the loop
             }
         }
-        // this->routers_disponibles->search_id(s)->print_rutas();
+        this->routers_disponibles->search_id(s)->add_tabla(tabla_rutas);
+        this->routers_disponibles->search_id(s)->print_rutas();
     }
 }

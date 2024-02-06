@@ -1,4 +1,3 @@
-#include "../include/Lista.h"
 #include "../include/Administrador.h"
 
 #define BLUE "\033[36;1m"
@@ -18,12 +17,15 @@ int main()
         {
             admin->crear_pagina();
             admin->crear_pagina();
+            admin->crear_pagina();
+            admin->crear_pagina();
+            admin->crear_pagina();
             crear = 0;
         }
         cout << BLUE << "----------- ENVIO DE PAQUETES ------------" << RESET_COLOR << endl;
         admin->send_packets();
         cout << BLUE << "--------- RECEPCION DE PAQUETES ----------" << RESET_COLOR << endl;
-        admin->receive_packets();
+        // admin->receive_packets();
         cout << PURPLE << "------- ¿DESEA REPETIR EL PROCESO? -------" << RESET_COLOR << endl;
         cout << "1. SI" << endl;
         cout << "0. NO" << endl
