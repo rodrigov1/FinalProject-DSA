@@ -21,7 +21,7 @@ private:
     Lista<Paquete *> *outPackets;
     Lista<Canal *> *canales_ida;
     Lista<Canal *> *canales_vuelta;
-    Lista<Ruta *> *rutas_disponibles;
+    Lista<Ruta *> *rutas_disponibles = new Lista<Ruta *>();
 
 public:
     Router(int id)
@@ -33,14 +33,11 @@ public:
         terminales_conectados = new Lista<Terminal *>();
         inPackets = new Lista<Paquete *>();
         outPackets = new Cola<Paquete *>();
-        rutas_disponibles = new Lista<Ruta *>();
     };
     ~Router();
     void add_terminal(Terminal *t);
     void add_neighbors(Router *r);
     int getId() { return id; };
-    // void setEnvio(Pagina *page) { paginas_enviadas->add(page); };
-    // Lista<Router *> *getNeighbors() { return routers_vecinos; };
     Lista<Terminal *> *getTerminals() { return terminales_conectados; };
     Lista<Router *> *getNeighbors() { return routers_vecinos; };
     void receive_page(Pagina *p);
@@ -53,10 +50,9 @@ public:
     void print_outPackets();
     void print_inPackets();
     Pagina *recreate_page(Paquete *p);
-    // void check_files(Cola<Paquete *> *aux);
     bool es_vecino(int id_r);
     Lista<Ruta *> *getRutas() { return rutas_disponibles; };
-    void add_ruta(Ruta *r);
+    void add_tabla(Lista<Ruta *> *tabla);
     void print_rutas();
     int ruta_optima(int destino);
     int canal_vecino(int destino);

@@ -1,5 +1,4 @@
 #include <iostream>
-#include <string>
 #include "../include/Router.h"
 #include "../include/Lista.h"
 #include "../include/Pagina.h"
@@ -265,8 +264,7 @@ void Router::send_packet()
         {
             Nodo<Paquete *> *aux = outPackets->get_czo();
             int destino = aux->get_dato()->getDestino()[0];
-            int canal_nh = canal_vecino(destino); // Busca si el destino es un router vecino y retorna el canal correspondiente
-            int canal_opt = ruta_optima(destino); // Busca el canal optimo de la ruta y retorna su id
+            int canal_opt = ruta_optima(destino); // Busca el canal optimo de la ruta, el cual tiene el menor peso
 
             if (destino == this->getId()) // Si el destino es el mismo router
             {
@@ -274,17 +272,7 @@ void Router::send_packet()
                 outPackets->borrar();
                 continue;
             }
-            else if (canal_nh != -1) // Si el destino es un router vecino
-            {
-                if (bw[canal_nh] > 0)
-                {
-                    canales_ida->search_id(canal_nh)->add_packet(aux->get_dato());
-                    outPackets->borrar();
-                    bw[canal_nh]--;
-                }
-                continue;
-            }
-            else if (canal_opt != -1) // Si el destino no es un router vecino pero hay una ruta disponible
+            else if (canal_opt != -1) // Si hay una ruta disponible al destino (sea vecino o no)
             {
                 if (bw[canal_opt] > 0)
                 {
@@ -324,18 +312,14 @@ bool Router::es_vecino(int id_r)
     return false;
 }
 
-/** Agrega la ruta a la lista del Router
- * @param r puntero tipo Ruta
- */
-void Router::add_ruta(Ruta *r)
+void Router::add_tabla(Lista<Ruta *> *tabla)
 {
-    rutas_disponibles->addFinal(r);
+    this->rutas_disponibles = tabla;
 }
-
 /* Imprime las rutas disponibles */
 void Router::print_rutas()
 {
-    if (rutas_disponibles->esvacia())
+    if (this->getRutas()->esvacia())
     {
         cout << "No hay rutas disponibles" << endl;
         return;
