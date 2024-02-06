@@ -58,6 +58,8 @@ public:
     Lista<Ruta *> *getRutas() { return rutas_disponibles; };
     void add_ruta(Ruta *r);
     void print_rutas();
+    int ruta_optima(int destino);
+    int canal_vecino(int destino);
 };
 
 #endif
