@@ -7,7 +7,7 @@
 
 using namespace std;
 
-/* Codigo visto en clase de Nodos */
+/* ---------- Codigo visto en clase de Nodos ---------- */
 template <class T>
 class Nodo
 {
@@ -29,7 +29,7 @@ public:
   bool es_vacio() { return next == nullptr; }
 };
 
-/* Codigo visto en clase de Listas */
+/* ---------- Codigo visto en clase de Listas ---------- */
 template <class T>
 class Lista
 {
@@ -327,7 +327,7 @@ void Lista<T>::borrarD(T d, Nodo<T> *ant)
   }
 }
 
-/* Codigo visto en clase de Pilas */
+/* ---------- Codigo visto en clase de Pilas ---------- */
 template <class T>
 class Pila : public Lista<T>
 {
@@ -339,7 +339,7 @@ public:
   bool pilavacia() { return this->esvacia(); };
 };
 
-/* Codigo visto en clase de Colas */
+/* ---------- Codigo visto en clase de Colas ---------- */
 template <class T>
 class Cola : public Lista<T>
 {
