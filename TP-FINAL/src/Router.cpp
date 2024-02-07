@@ -7,6 +7,7 @@
 
 #define GREEN "\x1b[32m"
 #define RESET_COLOR "\x1b[0m"
+#define INFI 9999
 
 using namespace std;
 
@@ -131,6 +132,7 @@ void Router::receive_packet()
 
 /** Recrea la pagina luego de juntar todos los paquetes necesarios
  * @param pkg puntero tipo Paquete de muestra
+ * @returns puntero tipo Pagina
  */
 Pagina *Router::recreate_page(Paquete *pkg)
 {
@@ -170,6 +172,7 @@ Pagina *Router::recreate_page(Paquete *pkg)
 /** Comprueba si los paquetes que tienen de destino al router
  *  son todos los necesarios para crear la pagina correspondiente
  * @param pkg puntero tipo Paquete de muestra para chequear
+ * @returns booleano
  */
 bool Router::check_completion(Paquete *pkg)
 {
@@ -297,25 +300,48 @@ void Router::send_packet()
 
 /** Retorna si un router es vecino o no
  * @param id_r id del router a comprobar
+ * @returns booleano
  */
 bool Router::es_vecino(int id_r)
 {
-    Nodo<Router *> *aux = routers_vecinos->get_czo();
-    for (int i = 0; i < routers_vecinos->size(); i++)
+    for(int i = 0; i < routers_vecinos->size(); i++)
     {
-        if (aux->get_dato()->getId() == id_r)
+        if(routers_vecinos->search_id(i)->getId() == id_r)
         {
             return true;
         }
-        aux = aux->get_next();
     }
     return false;
 }
 
+/** Retorna el id del router vecino en caso de existir 
+ * @param destino id del router destino
+ * @returns id del canal correspondiente al router vecino
+*/
+int Router::canal_vecino(int destino)
+{
+    if (es_vecino(destino))
+    {
+        for (int j = 0; j < canales_ida->size(); j++)
+        {
+            if (canales_ida->search_id(j)->getDestino() == destino)
+            {
+                return j; // Retorna el id del canal al router vecino
+            }
+        }
+    }
+
+    return -1; // El destino no es un router vecino
+}
+
+/** Agrega una tabla de routers disponibles al Router 
+ * @param tabla puntero tipo Lista de Rutas
+*/
 void Router::add_tabla(Lista<Ruta *> *tabla)
 {
     this->rutas_disponibles = tabla;
 }
+
 /* Imprime las rutas disponibles */
 void Router::print_rutas()
 {
@@ -335,11 +361,17 @@ void Router::print_rutas()
     cout << endl;
 }
 
+/** Calculo de la ruta optima del envio de paquetes 
+ * @param destino id del router destino
+ * @returns id del canal correspondiente al router vecino de la ruta optima
+*/
 int Router::ruta_optima(int destino)
 {
     int canal_optimo = 0;
     int dist_actual = 0;
-    int dist_optima = 9999; // Inicializa la distancia optima en un numero grande
+    int dist_optima = INFI; // Inicializa la distancia optima en un numero grande
+    
+    // Busca la ruta optima al destino
     for (int i = 0; i < this->getRutas()->size(); i++)
     {
         if (destino == this->getRutas()->search_id(i)->getLast())
@@ -352,6 +384,8 @@ int Router::ruta_optima(int destino)
             }
         }
     }
+
+    // Busca el canal correspondiente al router vecino de la ruta optima
     for (int j = 0; j < canales_ida->size(); j++)
     {
         if (canales_ida->search_id(j)->getDestino() == canal_optimo)
@@ -360,20 +394,4 @@ int Router::ruta_optima(int destino)
         }
     }
     return -1;
-}
-
-int Router::canal_vecino(int destino)
-{
-    if (es_vecino(destino))
-    {
-        for (int j = 0; j < canales_ida->size(); j++)
-        {
-            if (canales_ida->search_id(j)->getDestino() == destino)
-            {
-                return j; // Retorna el id del canal al router vecino
-            }
-        }
-    }
-
-    return -1; // El destino no es un router vecino
 }
