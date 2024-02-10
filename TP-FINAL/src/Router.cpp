@@ -72,61 +72,46 @@ void Router::receive_page(Pagina *p)
     print_outPackets(); // Imprime los paquetes que se van a enviar, solo para debuggear
 }
 
-/** Decide el destino del paquete recibido por el router
- * @param pkg puntero tipo Paquete a decidir
- */
+/* Decide el destino del paquete recibido por el router */
 void Router::receive_packet()
 {
     if (!canales_vuelta->esvacia())
     {
         for (int i = 0; i < canales_vuelta->size(); i++)
         {
-            int cant_pkg = canales_vuelta->search_id(i)->getBw();
-            while (cant_pkg > 0)
+            int cant_lim = canales_vuelta->search_id(i)->getBw();
+            while (cant_lim > 0)  // Mientras haya ancho de banda disponible
             {
                 Paquete *pkg = canales_vuelta->search_id(i)->transmit_packet();
                 if (pkg != NULL)
                 {
-                    if (pkg->getDestino()[0] == this->getId())
+                    if (pkg->getDestino()[0] == this->getId())  // Si el destino es el router actual
                     {
                         inPackets->addFinal(pkg);
                         canales_vuelta->search_id(i)->getBuffer()->borrarDato(pkg);
-                        cant_pkg--;
-                    }
-                    else
-                    {
+                        cant_lim--;
+                    } else {    // en caso que deba seguir de viaje el paquete
                         outPackets->addFinal(pkg);
                         canales_vuelta->search_id(i)->getBuffer()->borrarDato(pkg);
-                        cant_pkg--;
+                        cant_lim--;
                     }
-                }
-                else
-                {
-                    break;
+                } else {
+                    break;  // No quedan mas paquetes en el buffer del canal
                 }
             }
         }
     }
+
     if (!inPackets->esvacia())
     {
-        Nodo<Paquete *> *aux = inPackets->get_czo();
-        if (aux->get_dato()->getDestino()[0] == this->getId())
+        Paquete *aux = inPackets->cabeza();
+
+        if (check_completion(aux))
         {
-            if (check_completion(aux->get_dato()))
-            {
-                int destino_t = aux->get_dato()->getDestino()[1];
-                Pagina *page = recreate_page(aux->get_dato());
-                terminales_conectados->search_id(destino_t)->recibir_pagina(page);
-            }
+            int destino_t = aux->getDestino()[1];
+            Pagina *page = recreate_page(aux);
+            terminales_conectados->search_id(destino_t)->recibir_pagina(page);
         }
-        else
-        {
-            outPackets->addFinal(aux->get_dato());
-        }
-    }
-    else
-    {
-        return;
     }
 }
 
@@ -134,15 +119,16 @@ void Router::receive_packet()
  * @param pkg puntero tipo Paquete de muestra
  * @returns puntero tipo Pagina
  */
-Pagina *Router::recreate_page(Paquete *pkg)
+Pagina* Router::recreate_page(Paquete *pkg)
 {
     int page_id = pkg->getPageId();
     int origen[2] = {pkg->getOrigen()[0], pkg->getOrigen()[1]};
     int destino[2] = {pkg->getDestino()[0], pkg->getDestino()[1]};
     int page_size = pkg->getSizePag();
-    int cant_pkg = page_size / pkg->getSize();
+    //int cant_pkg = page_size / pkg->getSize();
     Nodo<Paquete *> *aux = inPackets->get_czo();
-    for (int i = 0; i < cant_pkg; i++)
+
+    /*for (int i = 0; i < cant_pkg; i++)
     {
         if (aux->get_dato()->getPageId() == page_id)
         {
@@ -151,18 +137,23 @@ Pagina *Router::recreate_page(Paquete *pkg)
             {
                 inPackets->borrarDato(aux2->get_dato());
                 break;
-            }
-            else
-            {
+            } else {
                 aux = aux->get_next();
                 inPackets->borrarDato(aux2->get_dato());
             }
-        }
-        else
-        {
+        } else {
             aux = aux->get_next();
         }
-    }
+    }*/
+
+    do {
+        if(aux->get_dato()->getPageId() == page_id)
+        {
+            inPackets->borrarDato(aux->get_dato());
+            //cout << "Se borro correctamente el dato: " << aux->get_dato()->getId() << endl;
+        }
+        aux = aux->get_next();
+    } while(aux != NULL);
 
     Pagina *page = new Pagina(page_id, page_size, origen, destino);
     page->setArrived();
