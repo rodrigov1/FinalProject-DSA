@@ -25,7 +25,7 @@ int main()
         cout << BLUE << "----------- ENVIO DE PAQUETES ------------" << RESET_COLOR << endl;
         admin->send_packets();
         cout << BLUE << "--------- RECEPCION DE PAQUETES ----------" << RESET_COLOR << endl;
-        // admin->receive_packets();
+        admin->receive_packets();
         cout << PURPLE << "------- ¿DESEA REPETIR EL PROCESO? -------" << RESET_COLOR << endl;
         cout << "1. SI" << endl;
         cout << "0. NO" << endl

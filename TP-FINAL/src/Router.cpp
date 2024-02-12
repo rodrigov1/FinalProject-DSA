@@ -125,39 +125,29 @@ Pagina* Router::recreate_page(Paquete *pkg)
     int origen[2] = {pkg->getOrigen()[0], pkg->getOrigen()[1]};
     int destino[2] = {pkg->getDestino()[0], pkg->getDestino()[1]};
     int page_size = pkg->getSizePag();
-    //int cant_pkg = page_size / pkg->getSize();
     Nodo<Paquete *> *aux = inPackets->get_czo();
-
-    /*for (int i = 0; i < cant_pkg; i++)
-    {
-        if (aux->get_dato()->getPageId() == page_id)
-        {
-            Nodo<Paquete *> *aux2 = aux;
-            if (aux2->get_next() == NULL)
-            {
-                inPackets->borrarDato(aux2->get_dato());
-                break;
-            } else {
-                aux = aux->get_next();
-                inPackets->borrarDato(aux2->get_dato());
-            }
-        } else {
-            aux = aux->get_next();
-        }
-    }*/
 
     do {
         if(aux->get_dato()->getPageId() == page_id)
         {
-            inPackets->borrarDato(aux->get_dato());
-            //cout << "Se borro correctamente el dato: " << aux->get_dato()->getId() << endl;
+            Nodo<Paquete*> *temp = aux;
+            aux = aux->get_next();
+            inPackets->borrarDato(temp->get_dato());
+        } else {
+            aux = aux->get_next();
         }
-        aux = aux->get_next();
-    } while(aux != NULL);
+    } while(aux->get_next() != NULL);
 
-    Pagina *page = new Pagina(page_id, page_size, origen, destino);
-    page->setArrived();
-    return page;
+    if(check_erasing(page_id))
+    {
+        cout << "Se han borrado todos los paquetes correctamente\n";
+        Pagina *page = new Pagina(page_id, page_size, origen, destino);
+        page->setArrived();
+        return page;
+    } else {
+        cout << "Error en la creacion de la pagina\n";
+        return NULL;
+    }
 }
 
 /** Comprueba si los paquetes que tienen de destino al router
@@ -385,4 +375,22 @@ int Router::ruta_optima(int destino)
         }
     }
     return -1;
+}
+
+/** Chequeo del borrado correcto de los paquetes 
+ * previo a la creacion de la pagina 
+ * @param id identificador de la pagina a chequear 
+ * @return booleano 
+ */
+bool Router :: check_erasing(int id) 
+{
+    Nodo<Paquete *> *aux = inPackets->get_czo();
+
+    for (int i = 0; i < inPackets->size(); i++) {
+        if (aux->get_dato()->getPageId() == id) {
+            return false;
+        }
+        aux = aux->get_next();
+    }
+    return true;
 }

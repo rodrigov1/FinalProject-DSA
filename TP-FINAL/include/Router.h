@@ -47,6 +47,7 @@ public:
     Lista<Canal *> *getCanalesVuelta() { return canales_vuelta; };
     void receive_packet();
     bool check_completion(Paquete *p);
+    bool check_erasing(int id);
     void print_outPackets();
     void print_inPackets();
     Pagina *recreate_page(Paquete *p);
