@@ -138,9 +138,16 @@ Pagina* Router::recreate_page(Paquete *pkg)
         }
     } while(aux->get_next() != NULL);
 
-    Pagina *page = new Pagina(page_id, page_size, origen, destino);
-    page->setArrived();
-    return page;
+    if(check_erasing(page_id))
+    {
+        cout << "Se han borrado todos los paquetes correctamente\n";
+        Pagina *page = new Pagina(page_id, page_size, origen, destino);
+        page->setArrived();
+        return page;
+    } else {
+        cout << "Error en la creacion de la pagina\n";
+        return NULL;
+    }
 }
 
 /** Comprueba si los paquetes que tienen de destino al router
@@ -368,4 +375,22 @@ int Router::ruta_optima(int destino)
         }
     }
     return -1;
+}
+
+/** Chequeo del borrado correcto de los paquetes 
+ * previo a la creacion de la pagina 
+ * @param id identificador de la pagina a chequear 
+ * @return booleano 
+ */
+bool Router :: check_erasing(int id) 
+{
+    Nodo<Paquete *> *aux = inPackets->get_czo();
+
+    for (int i = 0; i < inPackets->size(); i++) {
+        if (aux->get_dato()->getPageId() == id) {
+            return false;
+        }
+        aux = aux->get_next();
+    }
+    return true;
 }
