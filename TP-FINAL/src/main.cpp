@@ -4,23 +4,19 @@
 #define PURPLE "\033[35;1m"
 #define RESET_COLOR "\x1b[0m"
 
-int main()
-{
+int main() {
 	Administrador *admin = new Administrador();
 	admin->leer_config();
 	int opcion = 1;
 	int crear = 1;
-	while (opcion == 1)
-	{
+
+	while (opcion == 1) {
 		admin->generate_network();
-		if (crear == 1)
-		{
-			admin->crear_pagina();
-			admin->crear_pagina();
-			admin->crear_pagina();
-			admin->crear_pagina();
-			admin->crear_pagina();
-			admin->crear_pagina();
+		if (crear == 1) {
+			admin->administrar_pagina();
+			admin->administrar_pagina();
+			admin->administrar_pagina();
+			admin->administrar_pagina();
 			crear = 0;
 		}
 		cout << BLUE << "----------- ENVIO DE PAQUETES ------------" << RESET_COLOR << endl;
