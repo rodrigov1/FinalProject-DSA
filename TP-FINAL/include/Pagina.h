@@ -1,8 +1,7 @@
 #ifndef PAGINA_H
 #define PAGINA_H
 
-class Pagina
-{
+class Pagina {
   private:
 	int id;
 	int size;
@@ -11,8 +10,7 @@ class Pagina
 	int dest[2];
 
   public:
-	Pagina(int id, int size, int origen[2], int dest[2])
-	{
+	Pagina(int id, int size, int origen[2], int dest[2]) {
 		this->id = id;
 		this->size = size;
 		this->orig[0] = origen[0];
@@ -21,30 +19,12 @@ class Pagina
 		this->dest[1] = dest[1];
 	};
 	//~Pagina();         (tira error por alguna razon)
-	int getId()
-	{
-		return id;
-	};
-	int *getDest()
-	{
-		return dest;
-	};
-	int *getOrigin()
-	{
-		return orig;
-	};
-	bool getArrived()
-	{
-		return arrived;
-	};
-	void setArrived()
-	{
-		arrived = 1;
-	};
-	int getSize()
-	{
-		return size;
-	};
+	int getId() { return id; };
+	int *getDest() { return dest; };
+	int *getOrigin() { return orig; };
+	bool getArrived() { return arrived; };
+	void setArrived() { arrived = 1; };
+	int getSize() { return size; };
 };
 
 #endif

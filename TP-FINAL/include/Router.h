@@ -7,8 +7,7 @@
 #include "Ruta.h"
 #include "Terminal.h"
 
-class Router
-{
+class Router {
   private:
 	int id;
 	Lista<Router *> *routers_vecinos;
@@ -24,8 +23,7 @@ class Router
 	Lista<Ruta *> *rutas_disponibles = new Lista<Ruta *>();
 
   public:
-	Router(int id)
-	{
+	Router(int id) {
 		this->id = id;
 		routers_vecinos = new Lista<Router *>();
 		canales_ida = new Lista<Canal *>();
@@ -37,32 +35,14 @@ class Router
 	~Router();
 	void add_terminal(Terminal *t);
 	void add_neighbors(Router *r);
-	int getId()
-	{
-		return id;
-	};
-	Lista<Terminal *> *getTerminals()
-	{
-		return terminales_conectados;
-	};
-	Lista<Router *> *getNeighbors()
-	{
-		return routers_vecinos;
-	};
+	int getId() { return id; };
+	Lista<Terminal *> *getTerminals() { return terminales_conectados; };
+	Lista<Router *> *getNeighbors() { return routers_vecinos; };
 	void receive_page();
 	void send_packet();
-	Lista<Paquete *> *getInPackets()
-	{
-		return inPackets;
-	};
-	Lista<Canal *> *getCanalesIda()
-	{
-		return canales_ida;
-	};
-	Lista<Canal *> *getCanalesVuelta()
-	{
-		return canales_vuelta;
-	};
+	Lista<Paquete *> *getInPackets() { return inPackets; };
+	Lista<Canal *> *getCanalesIda() { return canales_ida; };
+	Lista<Canal *> *getCanalesVuelta() { return canales_vuelta; };
 	void receive_packet();
 	bool check_completion(Paquete *p);
 	bool check_erasing(int id);
@@ -70,10 +50,7 @@ class Router
 	void print_inPackets();
 	Pagina *recreate_page(Paquete *p);
 	bool es_vecino(int id_r);
-	Lista<Ruta *> *getRutas()
-	{
-		return rutas_disponibles;
-	};
+	Lista<Ruta *> *getRutas() { return rutas_disponibles; };
 	void add_tabla(Lista<Ruta *> *tabla);
 	void print_rutas();
 	int ruta_optima(int destino);
