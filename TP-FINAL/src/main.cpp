@@ -6,31 +6,31 @@
 
 int main()
 {
-    Administrador *admin = new Administrador();
-    admin->leer_config();
-    int opcion = 1;
-    int crear = 1;
-    while (opcion == 1)
-    {
-        admin->generate_network();
-        if (crear == 1)
-        {
-            admin->crear_pagina();
-            admin->crear_pagina();
-            admin->crear_pagina();
-            admin->crear_pagina();
-            admin->crear_pagina();
-            crear = 0;
-        }
-        cout << BLUE << "----------- ENVIO DE PAQUETES ------------" << RESET_COLOR << endl;
-        admin->send_packets();
-        cout << BLUE << "--------- RECEPCION DE PAQUETES ----------" << RESET_COLOR << endl;
-        admin->receive_packets();
-        cout << PURPLE << "------- ¿DESEA REPETIR EL PROCESO? -------" << RESET_COLOR << endl;
-        cout << "1. SI" << endl;
-        cout << "0. NO" << endl
-             << endl;
-        cin >> opcion;
-    }
-    return 0;
+	Administrador *admin = new Administrador();
+	admin->leer_config();
+	int opcion = 1;
+	int crear = 1;
+	while (opcion == 1)
+	{
+		admin->generate_network();
+		if (crear == 1)
+		{
+			admin->crear_pagina();
+			admin->crear_pagina();
+			admin->crear_pagina();
+			admin->crear_pagina();
+			admin->crear_pagina();
+			admin->crear_pagina();
+			crear = 0;
+		}
+		cout << BLUE << "----------- ENVIO DE PAQUETES ------------" << RESET_COLOR << endl;
+		admin->send_packets();
+		cout << BLUE << "--------- RECEPCION DE PAQUETES ----------" << RESET_COLOR << endl;
+		admin->receive_packets();
+		cout << PURPLE << "------- ¿DESEA REPETIR EL PROCESO? -------" << RESET_COLOR << endl;
+		cout << "1. SI" << endl;
+		cout << "0. NO" << endl << endl;
+		cin >> opcion;
+	}
+	return 0;
 }
