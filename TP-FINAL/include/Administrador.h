@@ -26,7 +26,7 @@ class Administrador {
   public:
 	Administrador(){};
 	~Administrador();
-	void administrar_pagina();
+	void administrar_paginas();
 	void crear_routers(int r);
 	int get_routers() { return cant_routers; }
 	int get_terminals() { return cant_terminals; }

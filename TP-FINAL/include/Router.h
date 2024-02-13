@@ -39,6 +39,7 @@ class Router {
 	Lista<Terminal *> *getTerminals() { return terminales_conectados; };
 	Lista<Router *> *getNeighbors() { return routers_vecinos; };
 	void receive_page();
+	void divide_packages(Nodo<Pagina*> *page, int num_pages);
 	void send_packet();
 	Lista<Paquete *> *getInPackets() { return inPackets; };
 	Lista<Canal *> *getCanalesIda() { return canales_ida; };

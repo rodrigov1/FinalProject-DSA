@@ -13,29 +13,34 @@ using namespace std;
 /** Agrega una terminal a la lista del router
  * @param t puntero tipo Terminal
  */
-void Router::add_terminal(Terminal *t) {
-	terminales_conectados->addFinal(t);
-	// t->add_router(this);
-}
+void Router::add_terminal(Terminal *t) { terminales_conectados->addFinal(t); }
 
 /** Agrega un router vecino a la lista del router
  * @param r puntero tipo Router
  */
 void Router::add_neighbors(Router *r) { routers_vecinos->addFinal(r); }
 
-/* Recibe cada una de las paginas, la divide en paquetes y los encola para su posterior envio
- */
+/** Recibe cada una de las paginas, las manda a dividir y a enviar */
 void Router::receive_page() {
 	for (int i = 0; i < terminales_conectados->size(); i++) {
 		Lista<Pagina *> *pages = terminales_conectados->search_id(i)->getPages();
+		
 		if (pages->esvacia()) {
 			continue;
 		}
+		divide_packages(pages->get_czo(), pages->size());
+	}
+	print_outPackets(); // Imprime los paquetes que se van a enviar, solo para debuggear
+}
 
-		Nodo<Pagina *> *aux = pages->get_czo();
-
-		for (int j = 0; j < pages->size(); j++) {
-			Pagina *p = aux->get_dato();
+/** Tarea de division de pagina en paquetes y su posterior envio 
+ * @param page puntero tipo Nodo de Pagina
+ * @param num_pages cantidad de paginas a enviar
+*/
+void Router::divide_packages(Nodo<Pagina*> *page, int num_pages) {
+	for (int j = 0; j < num_pages; j++) {
+			Pagina *p = page->get_dato();
+			
 			if (p->getArrived() == false) {
 				int n = 1;
 				int size_pak = 0;
@@ -67,15 +72,12 @@ void Router::receive_page() {
 					Paquete *aux = new Paquete(j, origen, destino, page_id, size_pak, size_pag);
 					outPackets->addFinal(aux);
 				}
-
 				delete p;
-			} else {
-				aux = aux->get_next();
 			}
-		}
+		page = page->get_next();
 	}
-	print_outPackets(); // Imprime los paquetes que se van a enviar, solo para debuggear
 }
+
 /* Decide el destino del paquete recibido por el router */
 void Router::receive_packet() {
 	if (!canales_vuelta->esvacia()) {

@@ -98,7 +98,7 @@ void Administrador::print_t() {
 }
 
 /* Creates a new page and sends it to the appropriate terminal */
-void Administrador::administrar_pagina() {
+void Administrador::administrar_paginas() {
 	int origen_r = rand() % cant_routers;
 	int origen_t = rand() % cant_terminals;
 	int origen[2] = {origen_r, origen_t};

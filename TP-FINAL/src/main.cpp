@@ -13,10 +13,10 @@ int main() {
 	while (opcion == 1) {
 		admin->generate_network();
 		if (crear == 1) {
-			admin->administrar_pagina();
-			admin->administrar_pagina();
-			admin->administrar_pagina();
-			admin->administrar_pagina();
+			admin->administrar_paginas();
+			admin->administrar_paginas();
+			admin->administrar_paginas();
+			admin->administrar_paginas();
 			crear = 0;
 		}
 		cout << BLUE << "----------- ENVIO DE PAQUETES ------------" << RESET_COLOR << endl;
