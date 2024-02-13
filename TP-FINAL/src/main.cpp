@@ -19,6 +19,7 @@ int main() {
 			admin->administrar_paginas();
 			crear = 0;
 		}
+		admin->print_packets();
 		cout << BLUE << "----------- ENVIO DE PAQUETES ------------" << RESET_COLOR << endl;
 		admin->send_packets();
 		cout << BLUE << "--------- RECEPCION DE PAQUETES ----------" << RESET_COLOR << endl;
