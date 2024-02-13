@@ -43,6 +43,7 @@ class Administrador {
 	int *dijkstra(int C[][MAX_NODOS], int s, int t, int P[]);
 	void print_network();
 	void camino(int P[], int s, int t, int *route, int &i);
+	void print_packets();
 };
 
 #endif
