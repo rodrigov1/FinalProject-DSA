@@ -98,7 +98,7 @@ void Administrador::print_t() {
 }
 
 /* Creates a new page and sends it to the appropriate terminal */
-void Administrador::administrar_pagina() {
+void Administrador::administrar_paginas() {
 	int origen_r = rand() % cant_routers;
 	int origen_t = rand() % cant_terminals;
 	int origen[2] = {origen_r, origen_t};
@@ -152,7 +152,6 @@ void Administrador::receive_packets() {
 /**
  * Initializes the network by calculating the weights of the routers' connections.
  * The weight represents the cost or distance between routers in the network.
- *
  * @param source The index of the source router.
  */
 void Administrador::init_network(int source) {
@@ -161,8 +160,7 @@ void Administrador::init_network(int source) {
 
 	for (int i = 0; i < routers_disponibles->size(); i++) // Inicializa el arreglo de pesos
 	{
-		if (i == source) // Analisis de peso para el router origen
-		{
+		if (i == source) { // Analisis de peso para el router origen
 			peso = 0;													 // hacia si mismo
 		} else if (routers_disponibles->search_id(source)->es_vecino(i)) // Analisis de peso para los vecinos del router origen
 		{
@@ -179,7 +177,6 @@ void Administrador::init_network(int source) {
 		} else {
 			peso = INFI; // en caso de no ser vecino
 		}
-
 		TABLA_RUTEO[source][i] = peso;
 	}
 }
@@ -205,10 +202,11 @@ void Administrador::print_network() {
  *         S[i]=1 si i pertenece, 0 si i no pertenece
  *  P[i] contiene el vertice que precede a i en el camino
  *            minimo encontrado hasta el momento
- *  @param C[][MAX_NODOS] matriz de caminos
- *  @param s
- *  @param t
- *  @param P[] arreglo
+ *  @param C[][] matriz de pesos
+ *  @param s origen
+ *  @param t destino
+ *  @param P[] arreglo de pesos
+ * @return D[] arreglo de distancias minimas
  */
 int *Administrador::dijkstra(int C[][MAX_NODOS], int s, int t, int P[]) {
 	static int D[MAX_NODOS];
