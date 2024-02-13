@@ -106,10 +106,8 @@ void Administrador::administrar_paginas() {
 	int destino_t = rand() % cant_terminals;
 	int destino[2] = {destino_r, destino_t};
 	int size = rand() % 20;
-	int num_terminal = destino_t + (destino_r * cant_terminals); // Calculo la posicion del terminal en la lista
-	// int origen[2] = {0, 0};
-	// int destino[2] = {2, 2};
-	// cout << "Pagina creada: " << pagina->getId() << " de tamaño " << pagina->getSize() << endl;
+	int num_terminal = origen_t + (origen_r * cant_terminals); // Calculo la posicion del terminal en la lista
+	/* cout << "Pagina creada en: " << origen[0] << ":" << origen[1] << " con destino a: " << destino[0] << ":" << destino[1] << endl; */
 	this->terminales_disponibles->search_id(num_terminal)->create_page(this->id_paginas, size, origen, destino);
 	id_paginas++;
 }
@@ -125,6 +123,15 @@ void Administrador::establecer_conexion(int origen, int destino, int bw) {
 	routers_disponibles->search_id(destino)->getCanalesVuelta()->addFinal(c);
 	routers_disponibles->search_id(origen)->add_neighbors(routers_disponibles->search_id(destino));
 	canales_totales->addFinal(c);
+}
+
+void Administrador::print_packets() {
+	Nodo<Router *> *aux = routers_disponibles->get_czo();
+	for (int i = 0; i < routers_disponibles->size(); i++) {
+		aux->get_dato()->receive_page();
+		aux->get_dato()->print_outPackets();
+		aux = aux->get_next();
+	}
 }
 
 /* Ejecuta el envio sistemico de paquetes */
@@ -160,7 +167,7 @@ void Administrador::init_network(int source) {
 
 	for (int i = 0; i < routers_disponibles->size(); i++) // Inicializa el arreglo de pesos
 	{
-		if (i == source) { // Analisis de peso para el router origen
+		if (i == source) {												 // Analisis de peso para el router origen
 			peso = 0;													 // hacia si mismo
 		} else if (routers_disponibles->search_id(source)->es_vecino(i)) // Analisis de peso para los vecinos del router origen
 		{

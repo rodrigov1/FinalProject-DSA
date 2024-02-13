@@ -24,56 +24,57 @@ void Router::add_neighbors(Router *r) { routers_vecinos->addFinal(r); }
 void Router::receive_page() {
 	for (int i = 0; i < terminales_conectados->size(); i++) {
 		Lista<Pagina *> *pages = terminales_conectados->search_id(i)->getPages();
-		
 		if (pages->esvacia()) {
 			continue;
+		} else {
+			divide_page(pages);
 		}
-		divide_packages(pages->get_czo(), pages->size());
 	}
-	print_outPackets(); // Imprime los paquetes que se van a enviar, solo para debuggear
 }
 
-/** Tarea de division de pagina en paquetes y su posterior envio 
+/** Tarea de division de pagina en paquetes y su posterior envio
  * @param page puntero tipo Nodo de Pagina
  * @param num_pages cantidad de paginas a enviar
-*/
-void Router::divide_packages(Nodo<Pagina*> *page, int num_pages) {
-	for (int j = 0; j < num_pages; j++) {
-			Pagina *p = page->get_dato();
-			
-			if (p->getArrived() == false) {
-				int n = 1;
-				int size_pak = 0;
-				int size_pag = p->getSize();
+ */
+void Router::divide_page(Lista<Pagina *> *paginas) {
+	Nodo<Pagina *> *page = paginas->get_czo();
 
-				// Busqueda del minimo comun multiplo
-				for (int i = 2; i < size_pag; i++) {
-					if (size_pag % i == 0) {
-						n = i;
-						size_pak = size_pag / i;
-					}
-				}
-				// (en caso de ser numero primo)
-				if (n == 1) {
-					n = p->getSize();
-					size_pak = 1;
-				}
-				// cout << "Cantidad de paquetes: " << n << " de tamaño: " << size_pak << endl;
-				int origen[2] = {0, 0};
-				origen[0] = p->getOrigin()[0];
-				origen[1] = p->getOrigin()[1];
-				int destino[2] = {0, 0};
-				destino[0] = p->getDest()[0];
-				destino[1] = p->getDest()[1];
-				int page_id = p->getId();
+	for (int j = 0; j < paginas->size(); j++) {
+		Pagina *p = page->get_dato();
 
-				// Se crean n paquetes y se encolan todos en la cola de salida
-				for (int j = 0; j < n; j++) {
-					Paquete *aux = new Paquete(j, origen, destino, page_id, size_pak, size_pag);
-					outPackets->addFinal(aux);
+		if (p->getArrived() == false) {
+			int n = 1;
+			int size_pak = 0;
+			int size_pag = p->getSize();
+
+			// Busqueda del minimo comun multiplo
+			for (int i = 2; i < size_pag; i++) {
+				if (size_pag % i == 0) {
+					n = i;
+					size_pak = size_pag / i;
 				}
-				delete p;
 			}
+			// (en caso de ser numero primo)
+			if (n == 1) {
+				n = p->getSize();
+				size_pak = 1;
+			}
+			// cout << "Cantidad de paquetes: " << n << " de tamaño: " << size_pak << endl;
+			int origen[2] = {0, 0};
+			origen[0] = p->getOrigin()[0];
+			origen[1] = p->getOrigin()[1];
+			int destino[2] = {0, 0};
+			destino[0] = p->getDest()[0];
+			destino[1] = p->getDest()[1];
+			int page_id = p->getId();
+
+			// Se crean n paquetes y se encolan todos en la cola de salida
+			for (int j = 0; j < n; j++) {
+				Paquete *aux = new Paquete(j, origen, destino, page_id, size_pak, size_pag);
+				outPackets->addFinal(aux);
+			}
+			delete p;
+		}
 		page = page->get_next();
 	}
 }
@@ -218,11 +219,6 @@ void Router::print_inPackets() {
 
 /* Envia el paquete al router vecino correspondiente */
 void Router::send_packet() {
-	static int first_time = 0; // Bandera para que solo se ejecute una vez
-	if (first_time == 0)
-		this->receive_page(); // Recibe las paginas y las separa en paquetes
-	first_time++;
-
 	int c_totales = canales_ida->size();
 	int *bw = new int[c_totales];
 
