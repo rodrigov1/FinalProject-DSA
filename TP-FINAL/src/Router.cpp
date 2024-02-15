@@ -280,7 +280,6 @@ int Router::canal_vecino(int destino) {
 			}
 		}
 	}
-
 	return -1; // El destino no es un router vecino
 }
 

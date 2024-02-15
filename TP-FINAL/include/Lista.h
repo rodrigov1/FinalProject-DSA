@@ -209,7 +209,7 @@ template <class T> T Lista<T>::search_id(int id) {
 	} else {
 		Nodo<T> *aux = this->get_czo();
 		int i = 0;
-		while (i != id) {
+		while (i != id && i < this->size()) {
 			aux = aux->get_next();
 			i++;
 		}
