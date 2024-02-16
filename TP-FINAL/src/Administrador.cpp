@@ -125,6 +125,7 @@ void Administrador::establecer_conexion(int origen, int destino, int bw) {
 	canales_totales->addFinal(c);
 }
 
+/** Imprime los paquetes en transito */
 void Administrador::print_packets() {
 	Nodo<Router *> *aux = routers_disponibles->get_czo();
 	for (int i = 0; i < routers_disponibles->size(); i++) {
