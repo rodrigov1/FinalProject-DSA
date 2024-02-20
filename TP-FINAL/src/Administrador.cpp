@@ -16,7 +16,16 @@ using namespace std;
 /* Lector del archivo configuracion.txt */
 void Administrador::leer_config() {
 	srand(time(0)); // Seed the random number generator with the current time
-	ifstream config_file("config.txt");
+	int opcion = 1;
+	string config_name;
+	cout << BLUE << "¿Qué archivo config.txt desea usar? 1 para config.txt y 2 para config2.txt" << RESET_COLOR << endl;
+	cin >> opcion;
+	if (opcion != 2) {
+		config_name = "config.txt";
+	} else {
+		config_name = "config2.txt";
+	}
+	ifstream config_file(config_name);
 	string line;
 	int num_routers, num_terminals;
 	// Skip the first line
@@ -55,6 +64,8 @@ void Administrador::leer_config() {
  */
 void Administrador::crear_routers(int r) {
 	cant_routers += r;
+	if (cant_routers > 256)
+		cant_routers = 256;
 	for (int i = 0; i < r; i++) {
 		Router *router = new Router(i);
 		routers_disponibles->addFinal(router);
@@ -67,7 +78,8 @@ void Administrador::crear_routers(int r) {
 void Administrador::conectar_terminales(int t) {
 	cant_terminals += t;
 	Nodo<Router *> *aux = routers_disponibles->get_czo();
-
+	if (cant_terminals > 256)
+		cant_terminals = 256;
 	for (int i = 0; i < cant_routers; i++) {
 		// Creo la cantidad "t" de terminales para cada router
 		for (int j = 0; j < t; j++) {
@@ -99,17 +111,23 @@ void Administrador::print_t() {
 
 /* Creates a new page and sends it to the appropriate terminal */
 void Administrador::administrar_paginas() {
-	int origen_r = rand() % cant_routers;
-	int origen_t = rand() % cant_terminals;
-	int origen[2] = {origen_r, origen_t};
-	int destino_r = rand() % cant_routers;
-	int destino_t = rand() % cant_terminals;
-	int destino[2] = {destino_r, destino_t};
-	int size = rand() % 20;
-	int num_terminal = origen_t + (origen_r * cant_terminals); // Calculo la posicion del terminal en la lista
-	/* cout << "Pagina creada en: " << origen[0] << ":" << origen[1] << " con destino a: " << destino[0] << ":" << destino[1] << endl; */
-	this->terminales_disponibles->search_id(num_terminal)->create_page(this->id_paginas, size, origen, destino);
-	id_paginas++;
+	int cant_pags = rand() % 10;
+	(cant_pags > 0) ? cant_pags++ : cant_pags;
+
+	cout << "Cantidad de paginas a crear: " << cant_pags << endl;
+	for (int i = 0; i < cant_pags; i++) {
+		int origen_r = rand() % cant_routers;
+		int origen_t = rand() % cant_terminals;
+		int origen[2] = {origen_r, origen_t};
+		int destino_r = rand() % cant_routers;
+		int destino_t = rand() % cant_terminals;
+		int destino[2] = {destino_r, destino_t};
+		int size = rand() % 50;
+		int num_terminal = origen_t + (origen_r * cant_terminals); // Calculo la posicion del terminal en la lista
+																   /* cout << "Pagina creada en: " << origen[0] << ":" << origen[1] << " con destino a: " << destino[0] << ":" << destino[1] << endl; */
+		this->terminales_disponibles->search_id(num_terminal)->create_page(this->id_paginas, size, origen, destino);
+		id_paginas++;
+	}
 }
 
 /** Establece las conexiones de la red de routers
