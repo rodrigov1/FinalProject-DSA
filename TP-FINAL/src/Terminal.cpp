@@ -9,6 +9,7 @@
  * @param page puntero tipo Pagina a enviar
  */
 void Terminal::recibir_pagina(Pagina *page) {
+	page->setArrived();
 	pages->addFinal(page);
 	cout << RED << "\n         " << this->getIP()[0] << "." << this->getIP()[1] << " recibio la pagina " << page->getId() << RESET_COLOR << endl << endl;
 }
