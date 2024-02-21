@@ -111,8 +111,8 @@ void Administrador::print_t() {
 
 /* Creates a new page and sends it to the appropriate terminal */
 void Administrador::administrar_paginas() {
-	int cant_pags = rand() % 10;
-	(cant_pags > 0) ? cant_pags++ : cant_pags;
+	int cant_pags = rand() % 3;
+	(cant_pags == 0) ? cant_pags++ : cant_pags;
 
 	cout << "Cantidad de paginas a crear: " << cant_pags << endl;
 	for (int i = 0; i < cant_pags; i++) {
@@ -122,7 +122,7 @@ void Administrador::administrar_paginas() {
 		int destino_r = rand() % cant_routers;
 		int destino_t = rand() % cant_terminals;
 		int destino[2] = {destino_r, destino_t};
-		int size = rand() % 50;
+		int size = rand() % 20;
 		int num_terminal = origen_t + (origen_r * cant_terminals); // Calculo la posicion del terminal en la lista
 																   /* cout << "Pagina creada en: " << origen[0] << ":" << origen[1] << " con destino a: " << destino[0] << ":" << destino[1] << endl; */
 		this->terminales_disponibles->search_id(num_terminal)->create_page(this->id_paginas, size, origen, destino);
@@ -334,5 +334,13 @@ void Administrador::generate_network() {
 		}
 		this->routers_disponibles->search_id(s)->add_tabla(tabla_rutas);
 		this->routers_disponibles->search_id(s)->print_rutas();
+	}
+}
+
+void Administrador::print_pagesArrived() {
+	Nodo<Router *> *aux = routers_disponibles->get_czo();
+	for (int i = 0; i < routers_disponibles->size(); i++) {
+		aux->get_dato()->pages_arrived();
+		aux = aux->get_next();
 	}
 }
