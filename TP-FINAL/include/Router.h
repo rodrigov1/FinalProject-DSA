@@ -49,6 +49,7 @@ class Router {
 	bool check_erasing(int id);
 	void print_outPackets();
 	void print_inPackets();
+	void pages_arrived();
 	Pagina *recreate_page(Paquete *p);
 	bool es_vecino(int id_r);
 	Lista<Ruta *> *getRutas() { return rutas_disponibles; };

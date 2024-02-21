@@ -23,15 +23,21 @@ int main() {
 		admin->send_packets();
 		cout << BLUE << "--------- RECEPCION DE PAQUETES ----------" << RESET_COLOR << endl;
 		admin->receive_packets();
-		cout << PURPLE << "------- ¿DESEA CREAR NUEVAS PAGINAS? -------" << RESET_COLOR << endl;
-		cout << "1. SI" << endl;
-		cout << "2. NO" << endl << endl;
-		cin >> opcion_pag;
-		crear = opcion_pag;
-		cout << PURPLE << "------- ¿DESEA REPETIR EL PROCESO? -------" << RESET_COLOR << endl;
+		/* cout << PURPLE << "------- ¿DESEA CREAR NUEVAS PAGINAS? -------" << RESET_COLOR << endl; */
+		/* cout << "1. SI" << endl; */
+		/* cout << "2. NO" << endl << endl; */
+		/* cin >> opcion_pag; */
+		/* crear = opcion_pag; */
+		/* cout << PURPLE << "------- ¿DESEA REPETIR EL PROCESO? -------" << RESET_COLOR << endl; */
+		/* cout << "1. SI" << endl; */
+		/* cout << "0. NO" << endl << endl; */
+		/* cin >> opcion; */
+		cout << PURPLE << "DESEA VER LAS PAGINAS QUE YA SE HAN RECIBIDO? " << RESET_COLOR << endl;
 		cout << "1. SI" << endl;
 		cout << "0. NO" << endl << endl;
-		cin >> opcion;
+		cin >> opcion_pag;
+		if (opcion_pag == 1)
+			admin->print_pagesArrived();
 		ciclos++;
 	}
 	return 0;

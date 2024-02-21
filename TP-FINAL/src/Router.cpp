@@ -67,13 +67,13 @@ void Router::divide_page(Lista<Pagina *> *paginas) {
 			destino[0] = p->getDest()[0];
 			destino[1] = p->getDest()[1];
 			int page_id = p->getId();
-
 			// Se crean n paquetes y se encolan todos en la cola de salida
 			for (int j = 0; j < n; j++) {
 				Paquete *aux = new Paquete(j, origen, destino, page_id, size_pak, size_pag);
 				outPackets->addFinal(aux);
 			}
-			delete p;
+			Pagina *aux = page->get_dato();
+			paginas->borrarDato(aux);
 		}
 		page = page->get_next();
 	}
@@ -140,7 +140,6 @@ Pagina *Router::recreate_page(Paquete *pkg) {
 	if (check_erasing(page_id)) {
 		cout << "Se han borrado todos los paquetes correctamente\n";
 		Pagina *page = new Pagina(page_id, page_size, origen, destino);
-		page->setArrived();
 		return page;
 	} else {
 		cout << "Error en la creacion de la pagina\n";
@@ -348,4 +347,21 @@ bool Router ::check_erasing(int id) {
 		aux = aux->get_next();
 	}
 	return true;
+}
+
+void Router::pages_arrived() {
+	cout << GREEN << "----------- Router " << this->getId() << " -----------" << RESET_COLOR << endl;
+	for (int i = 0; i < this->getTerminals()->size(); i++) {
+		Lista<Pagina *> *pages_terminals = this->getTerminals()->search_id(i)->getPages();
+		if (pages_terminals->esvacia()) {
+			continue;
+		}
+		cout << GREEN << "Terminal " << i << RESET_COLOR << endl;
+		for (int j = 0; j < pages_terminals->size(); j++) {
+			if (pages_terminals->search_id(j)->getArrived() == 1) {
+				cout << "Page " << pages_terminals->search_id(j)->getId() << " [" << pages_terminals->search_id(j)->getOrigin()[0] << ":" << pages_terminals->search_id(j)->getOrigin()[1] << " -> "
+					 << pages_terminals->search_id(j)->getDest()[0] << ":" << pages_terminals->search_id(j)->getDest()[1] << "] arrived" << endl;
+			}
+		}
+	}
 }
