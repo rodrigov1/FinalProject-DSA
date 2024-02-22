@@ -44,6 +44,7 @@ class Administrador {
 	void print_network();
 	void camino(int P[], int s, int t, int *route, int &i);
 	void print_packets();
+	void print_pagesArrived();
 };
 
 #endif
