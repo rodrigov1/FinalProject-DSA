@@ -10,6 +10,8 @@
 #include <iostream>
 
 using namespace std;
+
+#define PURPLE "\033[35;1m"
 #define BLUE "\033[36;1m"
 #define RESET_COLOR "\x1b[0m"
 
@@ -112,7 +114,9 @@ void Administrador::print_t() {
 /* Creates a new page and sends it to the appropriate terminal */
 void Administrador::administrar_paginas() {
 	int cant_pags = rand() % 3;
-	(cant_pags == 0) ? cant_pags++ : cant_pags;
+	if (cant_pags == 0) {
+		cant_pags++;
+	}
 
 	cout << "Cantidad de paginas a crear: " << cant_pags << endl;
 	for (int i = 0; i < cant_pags; i++) {
@@ -342,5 +346,33 @@ void Administrador::print_pagesArrived() {
 	for (int i = 0; i < routers_disponibles->size(); i++) {
 		aux->get_dato()->pages_arrived();
 		aux = aux->get_next();
+	}
+}
+
+int Administrador::menu() {
+	int opcion;
+	int continuar = 1;
+	cout << PURPLE << "---------------- MENU -------------" << RESET_COLOR << endl;
+	cout << "0. Detener simulacion" << endl;
+	cout << "1. Crear nuevas paginas" << endl;
+	cout << "2. Ver paginas que ya han sido recibidas" << endl;
+	cout << "3. Opcion 1 y 2" << endl;
+	cout << "4. Continuar" << endl << endl;
+	cin >> opcion;
+	switch (opcion) {
+	case 0:
+		return 0;
+	case 1:
+		this->administrar_paginas();
+		return continuar;
+	case 2:
+		this->print_pagesArrived();
+		return continuar;
+	case 3:
+		this->administrar_paginas();
+		this->print_pagesArrived();
+		return continuar;
+	default:
+		return continuar;
 	}
 }
