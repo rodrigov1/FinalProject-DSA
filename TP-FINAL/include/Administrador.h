@@ -45,6 +45,7 @@ class Administrador {
 	void camino(int P[], int s, int t, int *route, int &i);
 	void print_packets();
 	void print_pagesArrived();
+	int menu();
 };
 
 #endif

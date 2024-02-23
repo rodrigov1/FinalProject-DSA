@@ -196,24 +196,38 @@ void Router::print_inPackets() {
 	}
 	cout << GREEN << "          Paquetes del Router " << this->getId() << RESET_COLOR << "      " << endl;
 	cout << "Num_paquete | Origen | Destino | Id_Pagina | Progress (%)" << endl;
-	Nodo<Paquete *> *aux = inPackets->get_czo();
-	int actual = 0;
-	for (int i = 0; i < inPackets->size(); i++) {
-		int size_pag = aux->get_dato()->getSizePag();
-		int size_pak = aux->get_dato()->getSize();
-		int total = size_pag / size_pak;
-		(actual != total) ? (++actual) : (actual = total);
-		cout << aux->get_dato()->getId() << "              " << aux->get_dato()->getOrigen()[0] << ":" << aux->get_dato()->getOrigen()[1] << "       " << aux->get_dato()->getDestino()[0] << ":"
-			 << aux->get_dato()->getDestino()[1] << "        " << aux->get_dato()->getPageId() << "            [" << actual << "/" << total << "]" << endl;
-		Nodo<Paquete *> *aux2 = aux;
-		if (aux2->get_next() == NULL) // Si es el ultimo paquete de la lista
-		{
-			cout << endl;
-		} else {
-			aux = aux->get_next();
-		}
+
+	int size = inPackets->size();
+	int *paginas_recorridas = new int[size];
+	for (int i = 0; i < size; i++) { // Initialize the array
+		paginas_recorridas[i] = 0;
 	}
-	cout << endl;
+
+	Nodo<Paquete *> *aux = inPackets->get_czo();
+	for (int i = 0; i < size; i++) {
+		int page_id = aux->get_dato()->getPageId();
+		if (paginas_recorridas[page_id] == 0) {
+			int size_pag = aux->get_dato()->getSizePag();
+			int size_pak = aux->get_dato()->getSize();
+			int total = size_pag / size_pak;
+			int actual = 0;
+			int id_pkg = 0;
+			int origen_r = aux->get_dato()->getOrigen()[0];
+			int origen_t = aux->get_dato()->getOrigen()[1];
+			int destino_r = aux->get_dato()->getDestino()[0];
+			int destino_t = aux->get_dato()->getDestino()[1];
+			cant_paquetes(page_id);
+			for (int j = 0; j < this->cant_paquetes(page_id); j++) {
+				actual++;
+				cout << id_pkg << "              " << origen_r << ":" << origen_t << "       " << destino_r << ":" << destino_t << "         " << page_id << "           " << actual << "/" << total
+					 << endl;
+				id_pkg++;
+			}
+			paginas_recorridas[page_id] = 1; // Flag that the packets from this page have been printed
+		}
+		aux = aux->get_next();
+	}
+	delete[] paginas_recorridas;
 }
 
 /* Envia el paquete al router vecino correspondiente */
@@ -297,7 +311,7 @@ void Router::print_rutas() {
 	cout << "Siguiente | Destino | Distancia_total" << endl;
 	Nodo<Ruta *> *aux = rutas_disponibles->get_czo();
 	for (int i = 0; i < rutas_disponibles->size(); i++) {
-		cout << aux->get_dato()->getNext() << "          " << aux->get_dato()->getLast() << "          " << aux->get_dato()->getDistancia() << endl;
+		cout << "    " << aux->get_dato()->getNext() << "          " << aux->get_dato()->getLast() << "          " << aux->get_dato()->getDistancia() << endl;
 		aux = aux->get_next();
 	}
 	cout << endl;
@@ -364,4 +378,16 @@ void Router::pages_arrived() {
 			}
 		}
 	}
+}
+
+int Router::cant_paquetes(int id_pag) {
+	Nodo<Paquete *> *aux = inPackets->get_czo();
+	int cant_paquetes = 0;
+	for (int i = 0; i < inPackets->size(); i++) {
+		if (aux->get_dato()->getPageId() == id_pag) {
+			cant_paquetes++;
+		}
+		aux = aux->get_next();
+	}
+	return cant_paquetes;
 }
