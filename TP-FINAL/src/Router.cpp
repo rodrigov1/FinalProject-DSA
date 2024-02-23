@@ -83,25 +83,24 @@ void Router::divide_page(Lista<Pagina *> *paginas) {
 void Router::receive_packet() {
 	if (!canales_vuelta->esvacia()) {
 		for (int i = 0; i < canales_vuelta->size(); i++) {
-			int cant_lim = canales_vuelta->search_id(i)->getBw();
-			while (cant_lim > 0) // Mientras haya ancho de banda disponible
-			{
-				Paquete *pkg = canales_vuelta->search_id(i)->transmit_packet();
+			int cant_lim = 2;
+			do {
+				Paquete *pkg = canales_vuelta->search_id(i)->transmit_packet(); // Esto bien
 				if (pkg != NULL) {
 					if (pkg->getDestino()[0] == this->getId()) // Si el destino es el router actual
 					{
 						inPackets->addFinal(pkg);
-						canales_vuelta->search_id(i)->getBuffer()->borrarDato(pkg);
+						canales_vuelta->search_id(i)->getBuffer()->borrar();
 						cant_lim--;
 					} else { // en caso que deba seguir de viaje el paquete
 						outPackets->addFinal(pkg);
-						canales_vuelta->search_id(i)->getBuffer()->borrarDato(pkg);
+						canales_vuelta->search_id(i)->getBuffer()->borrar();
 						cant_lim--;
 					}
 				} else {
 					break; // No quedan mas paquetes en el buffer del canal
 				}
-			}
+			} while (cant_lim != 0);
 		}
 	}
 
@@ -241,19 +240,20 @@ void Router::send_packet() {
 
 	for (int k = 0; k < outPackets->size(); k++) {
 		if (!outPackets->esvacia()) {
-			Nodo<Paquete *> *aux = outPackets->get_czo();
-			int destino = aux->get_dato()->getDestino()[0];
+			Nodo<Paquete *> *pkg_actual = outPackets->get_czo();
+			int destino = pkg_actual->get_dato()->getDestino()[0];
 			int canal_destino = get_canalRuta(destino); // Busca el canal correspondiente en la ruta
+			Paquete *pkg_aux = pkg_actual->get_dato();
 
 			if (destino == this->getId()) // Si el destino es el mismo router
 			{
-				inPackets->addFinal(aux->get_dato());
+				inPackets->addFinal(pkg_aux);
 				outPackets->borrar();
 				continue;
 			} else if (canal_destino != -1) // Si hay una ruta disponible a ese destino, ya sea este vecino o no
 			{
 				if (bw[canal_destino] > 0) {
-					canales_ida->search_id(canal_destino)->add_packet(aux->get_dato());
+					canales_ida->search_id(canal_destino)->add_packet(pkg_aux);
 					outPackets->borrar();
 					bw[canal_destino]--;
 				}

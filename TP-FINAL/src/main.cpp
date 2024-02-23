@@ -24,10 +24,6 @@ int main() {
 			admin->print_packets();
 			print_inicial = 0;
 		}
-		cout << BLUE << "----------- ENVIO DE PAQUETES ------------" << RESET_COLOR << endl;
-		admin->send_packets();
-		cout << BLUE << "--------- RECEPCION DE PAQUETES ----------" << RESET_COLOR << endl;
-		admin->receive_packets();
 		opcion = admin->menu();
 		ciclos++;
 	}
