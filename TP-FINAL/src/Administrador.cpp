@@ -177,9 +177,7 @@ void Administrador::receive_packets() {
 	cout << BLUE << "--------- RECEPCION DE PAQUETES ----------" << RESET_COLOR << endl;
 	for (int i = 0; i < routers_disponibles->size(); i++) {
 		aux->get_dato()->receive_packet();
-		if (aux->get_dato()->getInPackets()->size() > 0) {
-			aux->get_dato()->print_inPackets();
-		}
+		aux->get_dato()->print_inPackets();
 		aux = aux->get_next();
 	}
 }
@@ -369,7 +367,8 @@ int Administrador::menu() {
 		cout << "2. Simular envio de paquetes" << endl;
 		cout << "3. Simular recepcion de paquetes" << endl;
 		cout << "4. Ver paginas que ya han sido recibidas" << endl;
-		cout << "5. Continuar" << endl << endl;
+		cout << "5. Continuar" << endl;
+		cout << "6. Imprimir buffers de los canales" << endl;
 		cin >> opcion;
 		switch (opcion) {
 		case 0:
@@ -385,14 +384,23 @@ int Administrador::menu() {
 			break; // Add break to exit the switch statement
 		case 4:
 			this->print_pagesArrived();
-			esperar = 1; // Set esperar to 1 to continue the loop
-			break;		 // Add break to exit the switch statement
+			break; // Add break to exit the switch statement
 		case 5:
 			esperar = 0;
 			break; // Add break to exit the switch statement
+		case 6:
+			this->print_buffers();
+			break;
 		default:
 			cout << "Opcion invalida. Por favor, elija una opcion valida." << endl;
 		}
 	}
 	return 1;
+}
+
+void Administrador::print_buffers() {
+	for (int i = 0; i < this->canales_totales->size(); i++) {
+		Canal *aux = this->canales_totales->search_id(i);
+		cout << "\nCantidad de paquetes del canal " << aux->getOrigen() << " a " << aux->getDestino() << ": " << aux->getBuffer()->size() << endl;
+	}
 }
