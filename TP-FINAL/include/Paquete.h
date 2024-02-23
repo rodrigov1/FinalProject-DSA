@@ -1,5 +1,6 @@
 #ifndef PAQUETE_H
 #define PAQUETE_H
+
 #include "Pagina.h"
 
 class Paquete {
@@ -23,7 +24,6 @@ class Paquete {
 		this->size_pag = size_pag;
 	};
 	//~Paquete();
-	void setId();
 	int getSize() { return size_pkg; };
 	int getId() { return id; };
 	int *getOrigen() { return origen; };
