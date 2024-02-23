@@ -198,7 +198,7 @@ void Router::print_inPackets() {
 	cout << "Num_paquete | Origen | Destino | Id_Pagina | Progress (%)" << endl;
 
 	int size = inPackets->size();
-	int paginas_recorridas[size];
+	int *paginas_recorridas = new int[size];
 	for (int i = 0; i < size; i++) { // Initialize the array
 		paginas_recorridas[i] = 0;
 	}
@@ -227,6 +227,7 @@ void Router::print_inPackets() {
 		}
 		aux = aux->get_next();
 	}
+	delete[] paginas_recorridas;
 }
 
 /* Envia el paquete al router vecino correspondiente */
