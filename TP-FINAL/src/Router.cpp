@@ -230,6 +230,7 @@ void Router::print_inPackets() {
 	delete[] paginas_recorridas;
 }
 
+// TODO: Revisar el uso de la distancia optima, me parece q no haria falta
 /* Envia el paquete al router vecino correspondiente */
 void Router::send_packet() {
 	int c_totales = canales_ida->size();
@@ -243,22 +244,23 @@ void Router::send_packet() {
 		if (!outPackets->esvacia()) {
 			Nodo<Paquete *> *aux = outPackets->get_czo();
 			int destino = aux->get_dato()->getDestino()[0];
-			int canal_opt = ruta_optima(destino); // Busca el canal optimo de la ruta, el cual tiene el menor peso
+			int canal_destino = get_canalRuta(destino); // Busca el canal correspondiente en la ruta
 
 			if (destino == this->getId()) // Si el destino es el mismo router
 			{
 				inPackets->addFinal(aux->get_dato());
 				outPackets->borrar();
 				continue;
-			} else if (canal_opt != -1) // Si hay una ruta disponible al destino (sea vecino o no)
+			} else if (canal_destino != -1) // Si hay una ruta disponible a ese destino, ya sea este vecino o no
 			{
-				if (bw[canal_opt] > 0) {
-					canales_ida->search_id(canal_opt)->add_packet(aux->get_dato());
+				if (bw[canal_destino] > 0) {
+					canales_ida->search_id(canal_destino)->add_packet(aux->get_dato());
 					outPackets->borrar();
-					bw[canal_opt]--;
+					bw[canal_destino]--;
 				}
 			} else {
 				cout << "No hay ruta disponible\n";
+				/* outPackets->borrar(); */
 				break;
 			}
 		} else {
@@ -317,32 +319,27 @@ void Router::print_rutas() {
 	cout << endl;
 }
 
-/** Calculo de la ruta optima del envio de paquetes
+/** Calculo el siguiente canal correspondiente al sig router en la ruta (si existe)
  * @param destino id del router destino
- * @returns id del canal correspondiente al router vecino de la ruta optima
+ * @returns id del canal al router siguiente en la Ruta
  */
-int Router::ruta_optima(int destino) {
-	int canal_optimo = 0;
-	int dist_actual = 0;
-	int dist_optima = INFI; // Inicializa la distancia optima en un numero grande
+int Router::get_canalRuta(int destino) {
+	int router_sig;
 
-	// Busca la ruta optima al destino
+	// Analiza la ruta
 	for (int i = 0; i < this->getRutas()->size(); i++) {
 		if (destino == this->getRutas()->search_id(i)->getLast()) {
-			dist_actual = this->getRutas()->search_id(i)->getDistancia();
-			if (dist_actual <= dist_optima) {
-				dist_optima = dist_actual;
-				canal_optimo = this->getRutas()->search_id(i)->getNext();
-			}
+			router_sig = this->getRutas()->search_id(i)->getNext();
 		}
 	}
 
-	// Busca el canal correspondiente al router vecino de la ruta optima
+	// Busca el canal correspondiente al router vecino siguiente en la ruta
 	for (int j = 0; j < canales_ida->size(); j++) {
-		if (canales_ida->search_id(j)->getDestino() == canal_optimo) {
-			return j; // Retorna el id del canal correspondiente al router vecino de la ruta optima
+		if (canales_ida->search_id(j)->getDestino() == router_sig) {
+			return j; // Retorna el id del canal correspondiente al router siguiente en la Ruta
 		}
 	}
+
 	return -1;
 }
 

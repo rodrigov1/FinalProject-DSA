@@ -10,15 +10,25 @@ int main() {
 	int opcion = 1;
 	int crear = 1;
 	int ciclos = 0;
+	int print_inicial = 1;
 	while (opcion == 1) {
+<<<<<<< HEAD
+		if (ciclos % 2 == 0) {
+			cout << "El administrador toma el control" << endl;
+=======
 		if (ciclos % 2 == 0)
 		cout << "El administrador toma el control" << endl;
+>>>>>>> 2030bd7ee871ae97e74e8ac9b66a9c212ee08026
 			admin->generate_network();
+		}
 		if (crear == 1) {
 			admin->administrar_paginas();
 			crear = 0;
 		}
-		admin->print_packets();
+		if (print_inicial) {
+			admin->print_packets();
+			print_inicial = 0;
+		}
 		cout << BLUE << "----------- ENVIO DE PAQUETES ------------" << RESET_COLOR << endl;
 		admin->send_packets();
 		cout << BLUE << "--------- RECEPCION DE PAQUETES ----------" << RESET_COLOR << endl;
