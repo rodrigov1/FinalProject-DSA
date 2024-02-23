@@ -83,7 +83,8 @@ void Router::divide_page(Lista<Pagina *> *paginas) {
 void Router::receive_packet() {
 	if (!canales_vuelta->esvacia()) {
 		for (int i = 0; i < canales_vuelta->size(); i++) {
-			int cant_lim = 2;
+			int cant_lim = this->canales_vuelta->search_id(i)->getBw();
+			int cont = 0;
 			do {
 				Paquete *pkg = canales_vuelta->search_id(i)->transmit_packet(); // Esto bien
 				if (pkg != NULL) {
@@ -91,16 +92,16 @@ void Router::receive_packet() {
 					{
 						inPackets->addFinal(pkg);
 						canales_vuelta->search_id(i)->getBuffer()->borrar();
-						cant_lim--;
+						cont++;
 					} else { // en caso que deba seguir de viaje el paquete
 						outPackets->addFinal(pkg);
 						canales_vuelta->search_id(i)->getBuffer()->borrar();
-						cant_lim--;
+						cont++;
 					}
 				} else {
 					break; // No quedan mas paquetes en el buffer del canal
 				}
-			} while (cant_lim != 0);
+			} while (cant_lim != cont);
 		}
 	}
 
