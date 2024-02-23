@@ -9,7 +9,6 @@
   - Lo mismo que el caso anterior
 - [x] Cuando se envia una pagina de una terminal, se envia de a segmentos llamados paquetes
 
-----------------------------------------------------------------------------------------------------------
 
 # Router 
 
@@ -31,7 +30,6 @@
   elegir aquella que tiene la menor carga de trafico. Una vez determinada la mejor ruta, 
   todos los paquetes se envian al router vecino que conforma el camino elegido
 
-----------------------------------------------------------------------------------------------------------
 
 # Terminal 
 

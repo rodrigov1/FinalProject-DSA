@@ -287,8 +287,8 @@ int *Administrador::dijkstra(int C[][MAX_NODOS], int s, int t, int P[]) {
 	return D;
 } // fin dijkstra
 
-/** Recursive function to print the route from the source to the destination
- * @param P[] arreglo de pesos
+/** Recursive function that stores the route from the source to the destination
+ * @param P[] arreglo de predecesores
  * @param s origen
  * @param t destino
  * @param route[] ruta
@@ -360,7 +360,6 @@ void Administrador::print_pagesArrived() {
 int Administrador::menu() {
 	int opcion;
 	int esperar = 1;
-	int continuar = 1;
 	while (esperar == 1) {
 		cout << PURPLE << "---------------- MENU -------------" << RESET_COLOR << endl;
 		cout << "0. Detener simulacion" << endl;
@@ -370,15 +369,20 @@ int Administrador::menu() {
 		cin >> opcion;
 		switch (opcion) {
 		case 0:
-			esperar = 0;
+			return 0;
 		case 1:
 			this->administrar_paginas();
+			break; // Add break to exit the switch statement
 		case 2:
 			this->print_pagesArrived();
-			esperar = 1;
+			esperar = 1; // Set esperar to 1 to continue the loop
+			break;		 // Add break to exit the switch statement
 		case 3:
 			esperar = 0;
+			break; // Add break to exit the switch statement
+		default:
+			cout << "Opcion invalida. Por favor, elija una opcion valida." << endl;
 		}
 	}
-	return continuar;
+	return 1;
 }
