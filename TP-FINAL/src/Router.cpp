@@ -230,7 +230,6 @@ void Router::print_inPackets() {
 	delete[] paginas_recorridas;
 }
 
-// TODO: Revisar el uso de la distancia optima, me parece q no haria falta
 /* Envia el paquete al router vecino correspondiente */
 void Router::send_packet() {
 	int c_totales = canales_ida->size();
