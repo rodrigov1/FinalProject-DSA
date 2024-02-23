@@ -113,12 +113,12 @@ void Administrador::print_t() {
 
 /* Creates a new page and sends it to the appropriate terminal */
 void Administrador::administrar_paginas() {
-	int cant_pags = rand() % 3;
+	int cant_pags = rand() % 5;
 	if (cant_pags == 0) {
 		cant_pags++;
 	}
+	cout << "Cantidad de paginas creadas: " << cant_pags << "\n" << endl;
 
-	cout << "Cantidad de paginas a crear: " << cant_pags << endl;
 	for (int i = 0; i < cant_pags; i++) {
 		int origen_r = rand() % cant_routers;
 		int origen_t = rand() % cant_terminals;

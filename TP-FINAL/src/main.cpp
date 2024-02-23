@@ -12,6 +12,7 @@ int main() {
 	int ciclos = 0;
 	while (opcion == 1) {
 		if (ciclos % 2 == 0)
+		cout << "El administrador toma el control" << endl;
 			admin->generate_network();
 		if (crear == 1) {
 			admin->administrar_paginas();
