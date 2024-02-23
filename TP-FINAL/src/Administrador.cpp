@@ -68,7 +68,7 @@ void Administrador::crear_routers(int r) {
 	cant_routers += r;
 	if (cant_routers > 256)
 		cant_routers = 256;
-	for (int i = 0; i < r; i++) {
+	for (int i = 0; i < cant_routers; i++) {
 		Router *router = new Router(i);
 		routers_disponibles->addFinal(router);
 	}
@@ -84,7 +84,7 @@ void Administrador::conectar_terminales(int t) {
 		cant_terminals = 256;
 	for (int i = 0; i < cant_routers; i++) {
 		// Creo la cantidad "t" de terminales para cada router
-		for (int j = 0; j < t; j++) {
+		for (int j = 0; j < cant_terminals; j++) {
 			Terminal *te = new Terminal(i, j);
 			aux->get_dato()->add_terminal(te);
 			terminales_disponibles->addFinal(te); // Lista de todos los terminales que ve el administrador
@@ -113,12 +113,12 @@ void Administrador::print_t() {
 
 /* Creates a new page and sends it to the appropriate terminal */
 void Administrador::administrar_paginas() {
-	int cant_pags = rand() % 3;
+	int cant_pags = rand() % 5;
 	if (cant_pags == 0) {
 		cant_pags++;
 	}
+	cout << "Cantidad de paginas creadas: " << cant_pags << "\n" << endl;
 
-	cout << "Cantidad de paginas a crear: " << cant_pags << endl;
 	for (int i = 0; i < cant_pags; i++) {
 		int origen_r = rand() % cant_routers;
 		int origen_t = rand() % cant_terminals;
@@ -127,6 +127,9 @@ void Administrador::administrar_paginas() {
 		int destino_t = rand() % cant_terminals;
 		int destino[2] = {destino_r, destino_t};
 		int size = rand() % 20;
+		if (size == 0) {
+			size++;
+		}
 		int num_terminal = origen_t + (origen_r * cant_terminals); // Calculo la posicion del terminal en la lista
 																   /* cout << "Pagina creada en: " << origen[0] << ":" << origen[1] << " con destino a: " << destino[0] << ":" << destino[1] << endl; */
 		this->terminales_disponibles->search_id(num_terminal)->create_page(this->id_paginas, size, origen, destino);
@@ -312,7 +315,7 @@ void Administrador::camino(int P[], int s, int t, int route[], int &index) {
  */
 void Administrador::generate_network() {
 	int *pdist, P[MAX_NODOS], s, t;
-
+	static int first = 1;
 	// inicializacion de la red
 	for (int i = 0; i < routers_disponibles->size(); i++) {
 		init_network(i);
@@ -323,22 +326,27 @@ void Administrador::generate_network() {
 		int road[MAX_NODOS]; // Use a static array
 		int index = 0;		 // Initialize index for the camino function
 		Lista<Ruta *> *tabla_rutas = new Lista<Ruta *>();
+
 		for (t = 0; t < MAX_NODOS; t++) {
 			Ruta *c = new Ruta();
-			pdist = dijkstra(TABLA_RUTEO, s, t, P);
+			pdist = dijkstra(TABLA_RUTEO, s, t, P); // Con esto, se calcula la ruta más corta
 			if (pdist[t] != INFI && pdist[t] > 0) {
 				// cout << "Distancia minima de " << s << " a " << t << " es " << pdist[t] << endl;
 				camino(P, s, t, road, index);
-				c->setNext(road[1]);
-				c->setLast(road[index - 1]);
+				c->setNext(road[1]);		 // Aca guardo el siguiente router de la ruta
+				c->setLast(road[index - 1]); // Aca guardo el destino
 				c->setDistancia(pdist[t]);
 				tabla_rutas->addFinal(c);
 				index = 0; // Reset index for the next iteration of the loop
 			}
 		}
+
 		this->routers_disponibles->search_id(s)->add_tabla(tabla_rutas);
-		this->routers_disponibles->search_id(s)->print_rutas();
+		if (first == 1)
+			this->routers_disponibles->search_id(s)->print_rutas();
+		/* delete tabla_rutas; */
 	}
+	first = 0;
 }
 
 void Administrador::print_pagesArrived() {
@@ -351,28 +359,26 @@ void Administrador::print_pagesArrived() {
 
 int Administrador::menu() {
 	int opcion;
+	int esperar = 1;
 	int continuar = 1;
-	cout << PURPLE << "---------------- MENU -------------" << RESET_COLOR << endl;
-	cout << "0. Detener simulacion" << endl;
-	cout << "1. Crear nuevas paginas" << endl;
-	cout << "2. Ver paginas que ya han sido recibidas" << endl;
-	cout << "3. Opcion 1 y 2" << endl;
-	cout << "4. Continuar" << endl << endl;
-	cin >> opcion;
-	switch (opcion) {
-	case 0:
-		return 0;
-	case 1:
-		this->administrar_paginas();
-		return continuar;
-	case 2:
-		this->print_pagesArrived();
-		return continuar;
-	case 3:
-		this->administrar_paginas();
-		this->print_pagesArrived();
-		return continuar;
-	default:
-		return continuar;
+	while (esperar == 1) {
+		cout << PURPLE << "---------------- MENU -------------" << RESET_COLOR << endl;
+		cout << "0. Detener simulacion" << endl;
+		cout << "1. Crear nuevas paginas" << endl;
+		cout << "2. Ver paginas que ya han sido recibidas" << endl;
+		cout << "3. Continuar" << endl << endl;
+		cin >> opcion;
+		switch (opcion) {
+		case 0:
+			esperar = 0;
+		case 1:
+			this->administrar_paginas();
+		case 2:
+			this->print_pagesArrived();
+			esperar = 1;
+		case 3:
+			esperar = 0;
+		}
 	}
+	return continuar;
 }

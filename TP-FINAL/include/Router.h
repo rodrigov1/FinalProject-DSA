@@ -55,7 +55,7 @@ class Router {
 	Lista<Ruta *> *getRutas() { return rutas_disponibles; };
 	void add_tabla(Lista<Ruta *> *tabla);
 	void print_rutas();
-	int ruta_optima(int destino);
+	int get_canalRuta(int destino);
 	int canal_vecino(int destino);
 	int cant_paquetes(int id_pag); // Cuantos paquetes tiene el router con id = id_pag
 };
