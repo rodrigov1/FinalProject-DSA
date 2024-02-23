@@ -46,6 +46,7 @@ class Administrador {
 	void print_packets();
 	void print_pagesArrived();
 	int menu();
+	void print_buffers();
 };
 
 #endif

@@ -113,7 +113,7 @@ void Administrador::print_t() {
 
 /* Creates a new page and sends it to the appropriate terminal */
 void Administrador::administrar_paginas() {
-	int cant_pags = rand() % 5;
+	int cant_pags = rand() % 1;
 	if (cant_pags == 0) {
 		cant_pags++;
 	}
@@ -163,6 +163,7 @@ void Administrador::print_packets() {
 /* Ejecuta el envio sistemico de paquetes */
 void Administrador::send_packets() {
 	Nodo<Router *> *aux = routers_disponibles->get_czo();
+	cout << BLUE << "----------- ENVIO DE PAQUETES ------------" << RESET_COLOR << endl;
 	for (int i = 0; i < routers_disponibles->size(); i++) {
 		aux->get_dato()->send_packet();
 		aux->get_dato()->print_outPackets();
@@ -173,11 +174,10 @@ void Administrador::send_packets() {
 /* Ejecuta la recepcion de paquetes */
 void Administrador::receive_packets() {
 	Nodo<Router *> *aux = routers_disponibles->get_czo();
+	cout << BLUE << "--------- RECEPCION DE PAQUETES ----------" << RESET_COLOR << endl;
 	for (int i = 0; i < routers_disponibles->size(); i++) {
 		aux->get_dato()->receive_packet();
-		if (aux->get_dato()->getInPackets()->size() > 0) {
-			aux->get_dato()->print_inPackets();
-		}
+		aux->get_dato()->print_inPackets();
 		aux = aux->get_next();
 	}
 }
@@ -287,8 +287,8 @@ int *Administrador::dijkstra(int C[][MAX_NODOS], int s, int t, int P[]) {
 	return D;
 } // fin dijkstra
 
-/** Recursive function to print the route from the source to the destination
- * @param P[] arreglo de pesos
+/** Recursive function that stores the route from the source to the destination
+ * @param P[] arreglo de predecesores
  * @param s origen
  * @param t destino
  * @param route[] ruta
@@ -360,25 +360,47 @@ void Administrador::print_pagesArrived() {
 int Administrador::menu() {
 	int opcion;
 	int esperar = 1;
-	int continuar = 1;
 	while (esperar == 1) {
 		cout << PURPLE << "---------------- MENU -------------" << RESET_COLOR << endl;
 		cout << "0. Detener simulacion" << endl;
 		cout << "1. Crear nuevas paginas" << endl;
-		cout << "2. Ver paginas que ya han sido recibidas" << endl;
-		cout << "3. Continuar" << endl << endl;
+		cout << "2. Simular envio de paquetes" << endl;
+		cout << "3. Simular recepcion de paquetes" << endl;
+		cout << "4. Ver paginas que ya han sido recibidas" << endl;
+		cout << "5. Continuar" << endl;
+		cout << "6. Imprimir buffers de los canales" << endl;
 		cin >> opcion;
 		switch (opcion) {
 		case 0:
-			esperar = 0;
+			return 0;
 		case 1:
 			this->administrar_paginas();
+			break;
 		case 2:
-			this->print_pagesArrived();
-			esperar = 1;
+			this->send_packets();
+			break;
 		case 3:
+			this->receive_packets();
+			break; // Add break to exit the switch statement
+		case 4:
+			this->print_pagesArrived();
+			break; // Add break to exit the switch statement
+		case 5:
 			esperar = 0;
+			break; // Add break to exit the switch statement
+		case 6:
+			this->print_buffers();
+			break;
+		default:
+			cout << "Opcion invalida. Por favor, elija una opcion valida." << endl;
 		}
 	}
-	return continuar;
+	return 1;
+}
+
+void Administrador::print_buffers() {
+	for (int i = 0; i < this->canales_totales->size(); i++) {
+		Canal *aux = this->canales_totales->search_id(i);
+		cout << "\nCantidad de paquetes del canal " << aux->getOrigen() << " a " << aux->getDestino() << ": " << aux->getBuffer()->size() << endl;
+	}
 }
