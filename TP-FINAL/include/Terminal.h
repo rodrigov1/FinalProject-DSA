@@ -1,7 +1,6 @@
 #ifndef TERMINAL_H
 #define TERMINAL_H
 
-// #include "Router.h"
 #include "Lista.h"
 #include "Pagina.h"
 

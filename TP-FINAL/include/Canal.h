@@ -2,11 +2,9 @@
 #define CANAL_H
 
 #include "Lista.h"
-// #include "Router.h"
 #include "Paquete.h"
 
-class Canal
-{
+class Canal {
 private:
     int origen;
     int destino;
@@ -31,7 +29,6 @@ public:
     void add_packet(Paquete *p); // Agrega un paquete al buffer
     Paquete *transmit_packet();  // Transmite un paquete random del buffer
     Lista<Paquete *> *getBuffer() { return buffer; };
-    void print_buffer();
 };
 
 #endif
