@@ -84,24 +84,22 @@ void Router::receive_packet() {
 	if (!canales_vuelta->esvacia()) {
 		for (int i = 0; i < canales_vuelta->size(); i++) {
 			int cant_lim = this->canales_vuelta->search_id(i)->getBw();
-			int cont = 0;
-			do {
+			
+			for(int j = 0; j < cant_lim; j++){
 				Paquete *pkg = canales_vuelta->search_id(i)->transmit_packet(); // Esto bien
 				if (pkg != NULL) {
 					if (pkg->getDestino()[0] == this->getId()) // Si el destino es el router actual
 					{
 						inPackets->addFinal(pkg);
 						canales_vuelta->search_id(i)->getBuffer()->borrar();
-						cont++;
 					} else { // en caso que deba seguir de viaje el paquete
 						outPackets->addFinal(pkg);
 						canales_vuelta->search_id(i)->getBuffer()->borrar();
-						cont++;
 					}
 				} else {
 					break; // No quedan mas paquetes en el buffer del canal
 				}
-			} while (cant_lim != cont);
+			}
 		}
 	}
 
@@ -246,13 +244,11 @@ void Router::send_packet() {
 			int canal_destino = get_canalRuta(destino); // Busca el canal correspondiente en la ruta
 			Paquete *pkg_aux = pkg_actual->get_dato();
 
-			if (destino == this->getId()) // Si el destino es el mismo router
-			{
+			if (destino == this->getId()) { // Si el destino es el mismo router
 				inPackets->addFinal(pkg_aux);
 				outPackets->borrar();
 				continue;
-			} else if (canal_destino != -1) // Si hay una ruta disponible a ese destino, ya sea este vecino o no
-			{
+			} else if (canal_destino != -1) { // Si hay una ruta disponible a ese destino, ya sea este vecino o no
 				if (bw[canal_destino] > 0) {
 					canales_ida->search_id(canal_destino)->add_packet(pkg_aux);
 					outPackets->borrar();
